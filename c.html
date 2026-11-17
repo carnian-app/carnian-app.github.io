@@ -33,6 +33,11 @@ h2{font:700 21px system-ui;margin:18px 12px 6px}
 var HE=/^(he|iw)/i.test(navigator.language||''),T=function(h,e){return HE?h:e;};document.documentElement.dir=HE?'rtl':'ltr';
 var PKG='com.sesmoments.ama',PLAY='https://play.google.com/store/apps/details?id='+PKG,id=+(new URLSearchParams(location.search).get('id')||0);
 var $=function(i){return document.getElementById(i);};
+/* owner 2026-11-17: whoever gets the link (WhatsApp, e-mail, any of the 13 platforms) watches the whole piece INSIDE Carnian:
+   on Android the page opens the app straight away; without the app it stays here (web=1) */
+var WEB=new URLSearchParams(location.search).get('web')==='1';
+if(id&&!WEB&&/Android/i.test(navigator.userAgent)){var back=location.origin+location.pathname+'?id='+id+'&web=1';
+  setTimeout(function(){location.href='intent://c/'+id+'#Intent;scheme=carnian;package='+PKG+';S.browser_fallback_url='+encodeURIComponent(back)+';end';},300);}
 $('a').textContent=T('ז׳אנר חדש בהשראת ג׳וזפה ארצ׳ימבולדו: שוזרים עד 12 יצירות מכל הפלטפורמות לכוריאוגרפיה אחת.','A new genre inspired by Giuseppe Arcimboldo: up to 12 works from every platform, woven into one choreography.');
 $('o').textContent=T('פתח ב־Carnian','Open in Carnian');$('d').textContent=T('הורד את Carnian ← צור כוריאוגרפיה משלך','Get Carnian → make your own choreography');
 $('d').href=PLAY;$('o').href='intent://c/'+id+'#Intent;scheme=carnian;package='+PKG+';S.browser_fallback_url='+encodeURIComponent(PLAY)+';end';
@@ -53,19 +58,25 @@ var k=0,tm=null,paused=false,cur=null,left=0,startAt=0;
 function plat(u){return /tiktok\.com/.test(u)?'TikTok':/instagram\.com/.test(u)?'Instagram':/spotify\.com/.test(u)?'Spotify':/facebook\.com|fb\.watch/.test(u)?'Facebook':/youtu/.test(u)?'YouTube':'';}
 function L(){return (B&&B.items||[]).filter(function(i){return i.t!=='m';});}
 function arm(sec){clearTimeout(tm);left=sec;startAt=Date.now();if(!paused)tm=setTimeout(function(){go(1);},sec*1000);}
-function show(){var it=L()[k];cur=it;if(!it)return;var hasM=(B.items||[]).some(function(i){return i.t==='m';});var e=emb(it.u,hasM);var d=Math.max(4,Math.min(180,it.d||15));
+function show(){var it=L()[k];cur=it;if(!it)return;var hasM=(B.items||[]).some(function(i){return i.t==='m';});var e=emb(it.u,hasM);var d=it.full?(yt(it.u)?0:600):Math.max(4,Math.min(600,it.d||15));
  $('pn').textContent=(k+1)+' / '+L().length;$('ctl').style.display='flex';
  if(e){$('s').innerHTML='<iframe allow="autoplay; encrypted-media; fullscreen" src="'+e+'"></iframe>';
    /* the clock for a YouTube part starts only when the video really plays, so a slow start or an ad does not eat its time */
-   if(yt(it.u)){clearTimeout(tm);it._wait=true;setTimeout(function(){if(cur===it&&it._wait){it._wait=false;arm(d);}},12000);}else arm(d);}
+   if(yt(it.u)){clearTimeout(tm);it._wait=true;setTimeout(function(){if(cur===it&&it._wait){it._wait=false;if(d)arm(d);}},12000);}else arm(d);}
  else{var pl=plat(it.u)||'🌐';$('s').innerHTML='<div class="cv"><b>'+({TikTok:'🎵',Instagram:'📷',Spotify:'🎧',Facebook:'📘'}[pl]||'🌐')+'</b><div>'+pl+'</div><a target="_blank" rel="noopener" href="'+it.u.replace(/"/g,'')+'">'+T('צפה בחלק הזה ב־','Watch this part on ')+pl+' ↗</a><small style="opacity:.6;max-width:80%">'+T(pl+' לא מאפשרת לנגן אותו בתוך אתר אחר. באפליקציית Carnian הוא מתנגן.',pl+' does not let it play inside another site. In the Carnian app it plays.')+'</small></div>';arm(d);}}
 function go(n){var c=L().length;if(!c)return;k=(k+n+c)%c;show();}
 addEventListener('message',function(e){if(!/youtube/.test(e.origin))return;var fr=$('s').querySelector('iframe');if(!fr||e.source!==fr.contentWindow)return;var d;try{d=typeof e.data==='string'?JSON.parse(e.data):e.data;}catch(x){return;}
  var st=d&&d.info&&(d.info.playerState!=null?d.info.playerState:null);if(d&&d.event==='onStateChange')st=d.info;
- if(st===1&&cur&&cur._wait){cur._wait=false;arm(Math.max(4,Math.min(180,cur.d||15)));}
- if(st===0&&cur&&yt(cur.u))go(1);});
+ if(st===1){clearTimeout(endT);endT=null;}
+ if(st===1&&cur&&cur._wait){cur._wait=false;if(!cur.full)arm(Math.max(4,Math.min(600,cur.d||15)));}
+ /* an ad ending also says "ended": move on only if the player stays ended for 3 seconds */
+ if(st===0&&cur&&yt(cur.u)&&!endT){var c0=cur;endT=setTimeout(function(){endT=null;if(cur===c0)go(1);},3000);}});
+var endT=null;
 setInterval(function(){var f=$('s').querySelector('iframe');if(f&&/youtube/.test(f.src))try{f.contentWindow.postMessage(JSON.stringify({event:'listening',id:1}),'*');}catch(e){}},1500);
-$('nx').onclick=function(){go(1);};$('pv').onclick=function(){go(-1);};
+$('nx').onclick=function(){go(1);};
+/* owner 2026-11-17: after watching a part on its own platform, coming back continues the piece from that part */
+document.addEventListener('visibilitychange',function(){if(!cur)return;if(document.hidden){if(!paused){clearTimeout(tm);left=Math.max(1,left-(Date.now()-startAt)/1000);away=true;}}else if(away){away=false;arm(Math.min(left||5,8));}});
+var away=false;$('pv').onclick=function(){go(-1);};
 $('pz').onclick=function(){paused=!paused;$('pz').textContent=paused?'▶':'⏸';if(paused){clearTimeout(tm);left=Math.max(1,left-(Date.now()-startAt)/1000);}else arm(left||5);};
 function step(){show();}
 $('p').onclick=function(){if(!B)return;var m=(B.items||[]).filter(function(i){return i.t==='m';})[0];

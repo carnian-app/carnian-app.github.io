@@ -1,0 +1,56 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carnian · Art Styling Choreography</title>
+<meta property="og:title" content="🎨 Carnian · Art Styling Choreography">
+<meta property="og:description" content="A new genre inspired by Giuseppe Arcimboldo: up to 12 worlds, one piece.">
+<style>
+body{margin:0;background:#04161f;color:#f5ead2;font:400 15px/1.5 system-ui,sans-serif;text-align:center}
+h1{font:600 34px Georgia,serif;letter-spacing:.12em;margin:22px 0 0}
+.tg{font:400 12px serif;letter-spacing:.14em;opacity:.75}
+h2{font:700 21px system-ui;margin:18px 12px 6px}
+.cs span{display:inline-block;border:1px solid #f5ead244;border-radius:12px;padding:2px 9px;margin:2px;font-size:12px}
+.by{opacity:.8;font-size:13px;margin:8px}
+.st{position:relative;width:100%;max-width:520px;margin:12px auto;aspect-ratio:9/12;background:#000;border-radius:14px;overflow:hidden}
+.st iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.st .cv{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#000c center/cover}
+.st .cv b{font-size:58px}.st a{color:#f3d48a}
+.pl{background:#f3d48a;color:#04161f;border:0;border-radius:50%;width:84px;height:84px;font-size:34px}
+.w{font-style:italic;margin:6px 14px}
+.ab{opacity:.75;font-size:13px;max-width:520px;margin:10px auto;padding:0 14px}
+.bt{display:block;max-width:420px;margin:10px auto;padding:13px;border-radius:24px;font:700 16px system-ui;text-decoration:none}
+.b1{background:#f3d48a;color:#04161f}.b2{border:1px solid #f3d48a;color:#f3d48a}
+.cr{opacity:.5;font-size:11px;margin:20px 0}
+</style></head><body>
+<h1>Carnian</h1><div class="tg">The Art Choreograph Styling</div>
+<h2 id="t">…</h2><div class="cs" id="c"></div><div class="by" id="b"></div>
+<div class="st" id="s"><div class="cv"><button class="pl" id="p">▶</button></div></div>
+<div class="w" id="w"></div>
+<div class="ab" id="a"></div>
+<a class="bt b1" id="o"></a><a class="bt b2" id="d"></a>
+<div class="cr">© 2026 Carnian · Meir Ofer Vald, Israel</div>
+<script>
+var HE=/^(he|iw)/i.test(navigator.language||''),T=function(h,e){return HE?h:e;};document.documentElement.dir=HE?'rtl':'ltr';
+var PKG='com.sesmoments.ama',PLAY='https://play.google.com/store/apps/details?id='+PKG,id=+(new URLSearchParams(location.search).get('id')||0);
+var $=function(i){return document.getElementById(i);};
+$('a').textContent=T('ז׳אנר חדש בהשראת ג׳וזפה ארצ׳ימבולדו: שוזרים עד 12 יצירות מכל הפלטפורמות לכוריאוגרפיה אחת.','A new genre inspired by Giuseppe Arcimboldo: up to 12 works from every platform, woven into one choreography.');
+$('o').textContent=T('פתח ב־Carnian','Open in Carnian');$('d').textContent=T('הורד את Carnian ← צור כוריאוגרפיה משלך','Get Carnian → make your own choreography');
+$('d').href=PLAY;$('o').href='intent://c/'+id+'#Intent;scheme=carnian;package='+PKG+';S.browser_fallback_url='+encodeURIComponent(PLAY)+';end';
+function yt(u){var m=/(?:youtu\.be\/|v=|shorts\/|embed\/|live\/)([\w-]{11})/.exec(u||'');return m?m[1]:'';}
+function emb(u,mute){var y=yt(u);if(y)return 'https://www.youtube-nocookie.com/embed/'+y+'?autoplay=1&playsinline=1&rel=0'+(mute?'&mute=1':'');
+ var m=/tiktok\.com\/.*video\/(\d+)/.exec(u);if(m)return 'https://www.tiktok.com/player/v1/'+m[1]+'?autoplay=1'+(mute?'&muted=1':'');
+ m=/instagram\.com\/(p|reel|reels|tv)\/([\w-]+)/.exec(u);if(m)return 'https://www.instagram.com/'+(m[1]=='p'?'p':'reel')+'/'+m[2]+'/embed';
+ m=/open\.spotify\.com\/(track|album|playlist|episode|show)\/(\w+)/.exec(u);if(m)return 'https://open.spotify.com/embed/'+m[1]+'/'+m[2];return '';}
+var B=null;
+fetch('https://tlvugvpvoenhzdheutxi.supabase.co/rest/v1/rpc/sono_board_public',{method:'POST',headers:{'apikey':'sb_publishable_jS2gJUk3gES0iQIJ0MEsyw_VXo7R8jS','Content-Type':'application/json'},body:JSON.stringify({p_id:id})})
+.then(function(r){return r.json();}).then(function(b){if(!b||!b.ok){$('t').textContent=T('היצירה לא נמצאה','Piece not found');return;}B=b;
+ var nm='Carnian#'+(b.num||'')+'-Art Styling';$('t').textContent='🎨 '+(b.title||nm);document.title=(b.title||nm)+' · Carnian';
+ $('c').innerHTML=(b.cats||[]).map(function(c){var n=c.name||(HE?c.he:c.en)||'';return '<span>'+(c.emoji||'')+' '+n.replace(/</g,'')+'</span>';}).join('');
+ $('b').textContent=T('יצירה של ','A piece by ')+nm+' · ❤️ '+(b.votes|0);if(b.words)$('w').textContent=b.words;
+ var v=(b.items||[]).filter(function(i){return i.t!=='m';})[0];var th=v&&(v.th||(yt(v.u)?'https://i.ytimg.com/vi/'+yt(v.u)+'/hqdefault.jpg':''));if(th)document.querySelector('.cv').style.backgroundImage='url('+th+')';})
+.catch(function(){$('t').textContent=T('אין חיבור כרגע','No connection right now');});
+var k=0,tm=null;
+function step(){if(!B)return;var L=(B.items||[]).filter(function(i){return i.t!=='m';});if(!L.length)return;var it=L[k%L.length];k++;var hasM=(B.items||[]).some(function(i){return i.t==='m';});var e=emb(it.u,hasM);
+ $('s').innerHTML=e?'<iframe allow="autoplay; encrypted-media; fullscreen" src="'+e+'"></iframe>':'<div class="cv"><b>🌐</b><a target="_blank" rel="noopener" href="'+it.u.replace(/"/g,'')+'">'+T('פתח את החלק','Open this part')+' ↗</a></div>';
+ clearTimeout(tm);tm=setTimeout(step,Math.max(4,Math.min(180,it.d||15))*1000);}
+$('p').onclick=function(){if(!B)return;var m=(B.items||[]).filter(function(i){return i.t==='m';})[0];
+ if(m&&yt(m.u)){var f=document.createElement('iframe');f.allow='autoplay';f.style.cssText='position:fixed;width:1px;height:1px;opacity:0;left:-9px';f.src='https://www.youtube-nocookie.com/embed/'+yt(m.u)+'?autoplay=1&loop=1&playlist='+yt(m.u);document.body.appendChild(f);}step();};
+</script></body></html>

@@ -51,7 +51,8 @@ fetch('https://tlvugvpvoenhzdheutxi.supabase.co/rest/v1/rpc/sono_board_public',{
 .then(function(r){return r.json();}).then(function(b){if(!b||!b.ok){$('t').textContent=T('היצירה לא נמצאה','Piece not found');return;}B=b;
  var nm='Carnian#'+(b.num||'')+'-Art Styling';$('t').textContent='🎨 '+(b.title||nm);document.title=(b.title||nm)+' · Carnian';
  $('c').innerHTML=(b.cats||[]).map(function(c){var n=c.name||(HE?c.he:c.en)||'';return '<span>'+(c.emoji||'')+' '+n.replace(/</g,'')+'</span>';}).join('');
- $('b').textContent=T('יצירה של ','A piece by ')+nm+' · ❤️ '+(b.votes|0);if(b.words)$('w').textContent=b.words;
+ var at=b.at?new Date(b.at):null,ds=(at&&!isNaN(at))?' · '+at.getDate()+'.'+(at.getMonth()+1)+'.'+at.getFullYear()+' · '+('0'+at.getHours()).slice(-2)+':'+('0'+at.getMinutes()).slice(-2):'';
+ $('b').textContent=T('יצירה של ','A piece by ')+nm+ds+' · ❤️ '+(b.votes|0);if(b.words)$('w').textContent=b.words;
  var v=(b.items||[]).filter(function(i){return i.t!=='m';})[0];var th=v&&(v.th||(yt(v.u)?'https://i.ytimg.com/vi/'+yt(v.u)+'/hqdefault.jpg':''));if(th)document.querySelector('.cv').style.backgroundImage='url('+th+')';})
 .catch(function(){$('t').textContent=T('אין חיבור כרגע','No connection right now');});
 var k=0,tm=null,paused=false,cur=null,left=0,startAt=0;

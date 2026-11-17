@@ -36,8 +36,8 @@ $('o').textContent=T('פתח ב־Carnian','Open in Carnian');$('d').textContent=
 $('d').href=PLAY;$('o').href='intent://c/'+id+'#Intent;scheme=carnian;package='+PKG+';S.browser_fallback_url='+encodeURIComponent(PLAY)+';end';
 function yt(u){var m=/(?:youtu\.be\/|v=|shorts\/|embed\/|live\/)([\w-]{11})/.exec(u||'');return m?m[1]:'';}
 function emb(u,mute){var y=yt(u);if(y)return 'https://www.youtube-nocookie.com/embed/'+y+'?autoplay=1&playsinline=1&rel=0'+(mute?'&mute=1':'');
- var m=/tiktok\.com\/.*video\/(\d+)/.exec(u);if(m)return 'https://www.tiktok.com/player/v1/'+m[1]+'?autoplay=1'+(mute?'&muted=1':'');
- m=/instagram\.com\/(p|reel|reels|tv)\/([\w-]+)/.exec(u);if(m)return 'https://www.instagram.com/'+(m[1]=='p'?'p':'reel')+'/'+m[2]+'/embed';
+ var m=/tiktok\.com\/.*video\/(\d+)/.exec(u);if(m)return 'https://www.tiktok.com/embed/v2/'+m[1]+'?autoplay=1'+(mute?'&muted=1':'');/* owner 2026-11-17: player/v1 refused this page ("authentication failed"); embed/v2 is TikTok's public embed */
+ m=/instagram\.com\/(p|reel|reels|tv)\/([\w-]+)/.exec(u);if(m)return 'https://www.instagram.com/'+(m[1]=='p'?'p':'reel')+'/'+m[2]+'/embed/captioned/';
  m=/open\.spotify\.com\/(track|album|playlist|episode|show)\/(\w+)/.exec(u);if(m)return 'https://open.spotify.com/embed/'+m[1]+'/'+m[2];return '';}
 var B=null;
 fetch('https://tlvugvpvoenhzdheutxi.supabase.co/rest/v1/rpc/sono_board_public',{method:'POST',headers:{'apikey':'sb_publishable_jS2gJUk3gES0iQIJ0MEsyw_VXo7R8jS','Content-Type':'application/json'},body:JSON.stringify({p_id:id})})

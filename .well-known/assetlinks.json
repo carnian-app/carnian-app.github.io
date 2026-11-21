@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.sesmoments.sentio",
+      "sha256_cert_fingerprints": ["11:DB:80:EF:41:15:0C:45:7E:28:09:22:6C:73:7A:CE:A6:10:10:2A:7A:8F:2F:79:A5:BD:77:C8:74:B3:E9:C7"]
+    }
+  }
+]

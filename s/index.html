@@ -281,6 +281,28 @@ input:focus,textarea:focus{outline:2px solid #E8B865;outline-offset:1px}
     } else if(n<60) setTimeout(function(){gis(n+1);},250);
   })(0);
 
+  // in-app browsers (Instagram / Facebook / TikTok…) block Google sign-in: offer to reopen in the real browser
+  (function(){
+    var ua=navigator.userAgent||'';
+    if(!/Instagram|FBAN|FBAV|FB_IAB|FBIOS|musical_ly|BytedanceWebview|TikTok|Snapchat|Line\//i.test(ua))return;
+    var he=(LANG==='he');
+    var android=/Android/i.test(ua);
+    var box=document.createElement('div');
+    box.style.cssText='display:flex;flex-direction:column;gap:8px';
+    if(android){
+      var a=document.createElement('a');a.className='btn';
+      a.href='intent://'+location.host+location.pathname+location.search+'#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url='+encodeURIComponent(location.href)+';end';
+      a.textContent=he?'✉️ פתחו בכרום כדי לכתוב ולשלוח':'✉️ Open in Chrome to write & send';
+      box.appendChild(a);
+    }
+    var p=document.createElement('p');p.className='small';p.style.cssText='margin:0;color:#E8B865';
+    p.textContent=android
+      ?(he?'הכניסה עם Google לא עובדת בתוך אינסטגרם/פייסבוק/טיקטוק.':'Google sign-in does not work inside Instagram / Facebook / TikTok.')
+      :(he?'הכניסה עם Google לא עובדת כאן. לחצו על ⋯ למעלה ← "פתח בדפדפן" (Safari).':'Google sign-in does not work here. Tap ⋯ at the top → "Open in browser" (Safari).');
+    box.appendChild(p);
+    var g=$('gbtn');g.parentNode.insertBefore(box,g);
+  })();
+
   // home screen: a quiet offer on the writing screen only, never while reading a letter
   var standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
   var deferred=null;

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מילים אל לב · Sentio Ergo Sum</title>
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<meta property="og:title" content="מילים אל לב">
+<meta property="og:description" content="Sentio Ergo Sum · נפתח פעם אחת">
+<meta property="og:image" content="https://carnian-app.github.io/s/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0E0D0B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#0E0D0B;color:#EFE9DC;font-family:'Heebo',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:440px;min-height:100dvh;margin:0 auto;padding:48px 26px 28px;display:flex;flex-direction:column;gap:20px}
+.serif{font-family:'Frank Ruhl Libre',serif}
+.top{display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-size:19px}
+.muted{color:#A39C8C}
+h1{margin:0;font-weight:400;font-size:28px;line-height:1.35}
+label{font-size:13px;color:#B8B0A0}
+input,textarea{width:100%;border-radius:12px;border:1px solid #3A352D;background:#17150F;color:#EFE9DC}
+input{height:48px;padding:0 14px;font:500 17px 'Heebo',sans-serif}
+textarea{min-height:260px;flex-grow:1;resize:vertical;padding:16px;font:400 19px/1.65 'Frank Ruhl Libre',serif}
+input::placeholder,textarea::placeholder{color:#8C8577}
+input:focus,textarea:focus{outline:2px solid #E8B865;outline-offset:1px}
+.field{display:flex;flex-direction:column;gap:8px}
+.grow{flex-grow:1;display:flex;flex-direction:column;gap:8px}
+.btn{height:56px;border:0;border-radius:28px;background:#E8B865;color:#1A1408;font:700 17px 'Heebo',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;text-decoration:none;width:100%}
+.btn:disabled{opacity:.6;cursor:default}
+.ghost{background:transparent;color:#E8B865;border:1px solid #3A352D}
+.wax{border-radius:50%;background:#8E1F1A;box-shadow:inset 0 0 0 2px #B5372F;display:inline-flex;align-items:center;justify-content:center;font-family:'Frank Ruhl Libre',serif;font-weight:700;color:#F3D7C7}
+.small{font-size:12px;line-height:1.6}
+.center{flex-grow:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;text-align:center}
+.seal{width:140px;height:140px;border:0;font-size:36px;letter-spacing:2px;box-shadow:inset 0 0 0 8px #A4302A,0 6px 26px rgba(232,184,101,.2);cursor:pointer;animation:pulse 2.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:inset 0 0 0 8px #A4302A,0 6px 22px rgba(232,184,101,.12)}50%{box-shadow:inset 0 0 0 8px #A4302A,0 6px 38px rgba(232,184,101,.38)}}
+@media (prefers-reduced-motion:reduce){.seal{animation:none}}
+.seal.break{animation:crack .7s ease forwards}
+@keyframes crack{to{transform:scale(1.25) rotate(-8deg);opacity:0}}
+.paper{padding:26px 22px;border-radius:16px;background:#F3ECDD;color:#2A2418;font-family:'Frank Ruhl Libre',serif;font-size:20px;line-height:1.8;white-space:pre-wrap;word-break:break-word;animation:fade 1.2s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+.link{direction:ltr;text-align:left;font-size:14px;padding:12px;border-radius:10px;background:#17150F;border:1px solid #3A352D;word-break:break-all;color:#CFC6B4}
+.err{color:#F0A28A;font-size:14px;min-height:20px}
+.help{border:1px solid #5A3A2A;background:#1C1410;border-radius:14px;padding:18px;line-height:1.7}
+.help a{color:#E8B865}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main class="wrap" id="app">
+
+<!-- 1 · write -->
+<section id="write" class="grow" hidden>
+  <div class="top">
+    <div class="brand serif">
+      <svg width="20" height="28" viewBox="0 0 22 30" fill="none" stroke="#E8B865" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2c3 4 5 6.5 5 9.5a5 5 0 0 1-10 0C6 8.5 8 6 11 2z"/><path d="M11 16v3"/><rect x="6" y="19" width="10" height="10" rx="1.5"/></svg>
+      Sentio Ergo Sum
+    </div>
+    <span class="small muted">SES Moments</span>
+  </div>
+  <h1 class="serif">מילים מלב</h1>
+  <div class="field">
+    <label for="to">אל</label>
+    <input id="to" maxlength="60" autocomplete="off" placeholder="שם">
+  </div>
+  <div class="field">
+    <label for="phone">טלפון לשליחה בוואטסאפ (לא חובה)</label>
+    <input id="phone" inputmode="tel" dir="ltr" autocomplete="off" placeholder="05X-XXXXXXX">
+  </div>
+  <div class="grow">
+    <label for="words">המילים</label>
+    <textarea id="words" maxlength="6000" placeholder="כתוב מה שעל הלב. בלי להתנצל."></textarea>
+  </div>
+  <div class="small muted">
+    חד־כיווני. אין תשובה, אין "נקרא", אין ארכיון.<br>
+    נקרא פעם אחת ונעלם. אם לא נפתח, נמחק אחרי 7 ימים.
+  </div>
+  <div class="err" id="err" role="alert"></div>
+  <button class="btn" id="send" type="button"><span class="wax" style="width:26px;height:26px;font-size:8px">SES</span>חתום ושלח</button>
+  <p class="small muted" style="text-align:center;margin:0">קשה מאוד עכשיו? ער״ן 1201, בכל שעה.</p>
+</section>
+
+<!-- 1b · gentle stop -->
+<section id="care" class="center" hidden>
+  <div class="help">
+    <p class="serif" style="font-size:20px;margin:0 0 10px">נשמע שכואב לך מאוד עכשיו.</p>
+    <p style="margin:0 0 12px">את המילים האלה לא שולחים הלאה. אבל אתה לא צריך להחזיק אותן לבד.</p>
+    <p style="margin:0">ער״ן: <a href="tel:1201">1201</a>, בכל שעה<br>סה״ר, צ׳אט: <a href="https://sahar.org.il" target="_blank" rel="noopener">sahar.org.il</a><br>במצב חירום: <a href="tel:101">101</a></p>
+  </div>
+  <button class="btn ghost" id="back" type="button">חזרה למכתב</button>
+</section>
+
+<!-- 2 · sent -->
+<section id="sent" class="center" hidden>
+  <span class="wax" style="width:96px;height:96px;font-size:26px;box-shadow:inset 0 0 0 6px #A4302A">SES</span>
+  <p class="serif" style="font-size:24px;margin:0">נחתם אל <span id="sentTo"></span></p>
+  <div class="link" id="link"></div>
+  <a class="btn" id="wa" target="_blank" rel="noopener">שלח בוואטסאפ</a>
+  <button class="btn ghost" id="copy" type="button">העתק קישור</button>
+  <p class="small muted" style="margin:0">ברגע שיישבר החותם, המכתב נמחק. אם לא ייפתח, הוא נמחק אחרי 7 ימים.</p>
+</section>
+
+<!-- 3 · sealed letter -->
+<section id="sealed" class="center" hidden>
+  <p class="serif" style="font-size:24px;line-height:1.5;margin:0">מילים מלב אל לב</p>
+  <button class="wax seal" id="seal" type="button" aria-label="שבור את החותם">SES</button>
+  <span style="font-size:15px;color:#E8B865">הפריבילגיה</span>
+  <span class="small muted">המכתב ייפתח פעם אחת בלבד.<br>אחרי שתסגור את הדף, המילים ייעלמו.</span>
+</section>
+
+<!-- 3b · open -->
+<section id="open" class="grow" hidden>
+  <div style="display:flex;align-items:center;gap:12px">
+    <span class="wax" style="width:34px;height:34px;font-size:10px;background:#5A1512;box-shadow:inset 0 0 0 3px #7A2620;color:#D9B3A3">SES</span>
+    <span style="font-size:13px;color:#E8B865">המילים האלה יישמרו רק בלב שלך.</span>
+  </div>
+  <div class="paper" id="paper"></div>
+  <div style="text-align:center" class="small muted">
+    <div class="serif" style="font-size:15px;color:#CFC6B4">Sentio Ergo Sum</div>
+    אין כאן כפתור תשובה. זה זרם חד־כיווני של לב.
+  </div>
+</section>
+
+<!-- 4 · gone -->
+<section id="gone" class="center" hidden>
+  <svg width="64" height="120" viewBox="0 0 64 120" fill="none" stroke="#8C8577" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="נר כבוי"><path d="M32 46c-6-6 6-10 0-16s6-10 0-16"/><path d="M32 52v8"/><rect x="18" y="60" width="28" height="56" rx="3"/></svg>
+  <p class="serif" style="font-size:30px;margin:0">מילים חיות בסתר</p>
+  <a class="btn ghost" href="./" style="max-width:280px">גם לך יש מה שעל הלב?</a>
+  <span class="serif small" style="color:#6E685C">Sentio Ergo Sum · SES Moments</span>
+</section>
+
+</main>
+<script>
+(function(){
+  var SB='https://tlvugvpvoenhzdheutxi.supabase.co/rest/v1/rpc/';
+  var KEY='sb_publishable_jS2gJUk3gES0iQIJ0MEsyw_VXo7R8jS';
+  function rpc(fn,body){return fetch(SB+fn,{method:'POST',headers:{'apikey':KEY,'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){if(!r.ok)throw j;return j;});});}
+  function $(i){return document.getElementById(i);}
+  function show(id){['write','care','sent','sealed','open','gone'].forEach(function(s){$(s).hidden=(s!==id);});window.scrollTo(0,0);}
+
+  // gentle safety net: signs of self-harm stop the letter and show help instead
+  var CARE=/(להתאבד|אתאבד|התאבדות|לשים קץ|לא רוצה לחיות|לא רוצה יותר לחיות|רוצה למות|לפגוע בעצמי|אפגע בעצמי|לחתוך את עצמי|kill myself|suicide|end my life|want to die|hurt myself)/i;
+  // threats against the reader are not sent
+  var HARM=/(אהרוג אותך|אני אהרוג|ארצח אותך|תמות|אשרוף לך|i will kill you|i'll kill you)/i;
+
+  var t=new URLSearchParams(location.search).get('t');
+  if(t){
+    // replace the address so the token is not left in history
+    try{history.replaceState(null,'',location.pathname);}catch(e){}
+    rpc('ses_peek',{p_token:t}).then(function(ok){show(ok?'sealed':'gone');}).catch(function(){show('gone');});
+    $('seal').onclick=function(){
+      var s=$('seal');s.disabled=true;s.classList.add('break');
+      rpc('ses_open',{p_token:t}).then(function(r){
+        t=null;
+        setTimeout(function(){
+          if(!r){show('gone');return;}
+          $('paper').textContent=(r.to?r.to+',\n\n':'')+r.body;
+          show('open');
+        },650);
+      }).catch(function(){show('gone');});
+    };
+    // when the reader leaves, the words leave too
+    window.addEventListener('pagehide',function(){var p=$('paper');if(p)p.textContent='';});
+    return;
+  }
+
+  show('write');
+  $('back').onclick=function(){show('write');};
+  $('send').onclick=function(){
+    var to=$('to').value.trim(),words=$('words').value.trim(),err=$('err');err.textContent='';
+    if(!to){err.textContent='למי המילים?';return;}
+    if(!words){err.textContent='עוד לא נכתבו מילים.';return;}
+    if(CARE.test(words)){show('care');return;}
+    if(HARM.test(words)){err.textContent='מילים של איום לא נשלחות. אפשר לכתוב את הכאב, בלי לפגוע.';return;}
+    var b=$('send');b.disabled=true;
+    rpc('ses_send',{p_to:to,p_body:words}).then(function(tok){
+      var url=location.origin+location.pathname+'?t='+encodeURIComponent(tok);
+      $('sentTo').textContent=to;$('link').textContent=url;
+      var msg='מילים אל לב 🕯️\n'+url;
+      var ph=$('phone').value.replace(/[^0-9+]/g,'');
+      if(ph){ph=ph.replace(/^\+/,'');if(ph.charAt(0)==='0')ph='972'+ph.slice(1);}
+      $('wa').href='https://wa.me/'+(ph||'')+'?text='+encodeURIComponent(msg);
+      $('copy').onclick=function(){try{navigator.clipboard.writeText(url);$('copy').textContent='הקישור הועתק';}catch(e){}};
+      $('words').value='';
+      show('sent');
+    }).catch(function(e){
+      b.disabled=false;
+      var m=(e&&e.message)||'';
+      err.textContent=/rate_limit/.test(m)?'נשלחו כבר כמה מכתבים בשעה האחרונה. אפשר לנסות שוב מאוחר יותר.':'השליחה לא הצליחה. נסה שוב.';
+    });
+  };
+})();
+</script>
+</body>
+</html>

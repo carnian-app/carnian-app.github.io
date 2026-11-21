@@ -283,7 +283,7 @@ input:focus,textarea:focus{outline:2px solid #E8B865;outline-offset:1px}
       if(r&&r.token){
         var url=location.origin+location.pathname+'?t='+encodeURIComponent(r.token);
         $('sentTo').textContent=to;$('link').textContent=url;
-        var msg=T('to_heart')+' 🕯️\n'+url;
+        var msg=T('to_heart')+'\n'+url;
         var ph=$('phone').value.replace(/[^0-9+]/g,'');
         if(ph){if(ph.indexOf('00')===0)ph=ph.slice(2);ph=ph.replace(/^\+/,'');if(ph.charAt(0)==='0'&&CC==='IL')ph='972'+ph.slice(1);}
         $('wa').href='https://wa.me/'+(ph||'')+'?text='+encodeURIComponent(msg);

@@ -144,10 +144,40 @@ input:focus,textarea:focus{outline:2px solid #E8B865;outline-offset:1px}
   function $(i){return document.getElementById(i);}
   function show(id){['write','care','sent','sealed','open','gone'].forEach(function(s){$(s).hidden=(s!==id);});window.scrollTo(0,0);}
 
-  // gentle safety net: signs of self-harm stop the letter and show help instead
-  var CARE=/(להתאבד|אתאבד|התאבדות|לשים קץ|לא רוצה לחיות|לא רוצה יותר לחיות|רוצה למות|לפגוע בעצמי|אפגע בעצמי|לחתוך את עצמי|kill myself|suicide|end my life|want to die|hurt myself)/i;
-  // threats against the reader are not sent
-  var HARM=/(אהרוג אותך|אני אהרוג|ארצח אותך|תמות|אשרוף לך|i will kill you|i'll kill you)/i;
+  // gentle safety net (no AI, nothing leaves the phone): signs of self-harm stop the letter and show help instead;
+  // threats against the reader are not sent. Text is normalised first (no niqqud, one space, lower case).
+  function norm(s){return ' '+s.replace(/[֑-ׇ]/g,'').replace(/[’‘`´]/g,"'").replace(/[\s‏‎]+/g,' ').toLowerCase()+' ';}
+  var B='(?:^|[^\\u05D0-\\u05EAa-z\\u0600-\\u06FF\\u0400-\\u04FF])',E='(?=$|[^\\u05D0-\\u05EAa-z\\u0600-\\u06FF\\u0400-\\u04FF])';
+  function words(list){return new RegExp(B+'(?:'+list.join('|')+')'+E,'i');}
+  var CARE=words([
+    // עברית
+    'להתאבד','אתאבד','התאבדות','מתאבד','מתאבדת','אובדני','אובדנית','מחשבות אובדניות',
+    'לשים קץ ל?חיי','לשים קץ ל?חיים','לשים לזה סוף','לגמור עם הכל','לגמור עם החיים','לסיים את החיים','לסיים את חיי',
+    'לא רוצה (?:יותר )?לחיות','אין לי (?:בשביל|למה) (?:מה )?לחיות','אין טעם לחיות','אין טעם (?:ב|ל)חיים',
+    'רוצה למות','רוצה (?:כבר )?להיעלם (?:לתמיד|מהעולם)','הלוואי (?:ש)?(?:אמות|הייתי מת|הייתי מתה|לא הייתי נולד|לא הייתי נולדת)',
+    'לפגוע בעצמי','אפגע בעצמי','פוגע בעצמי','פוגעת בעצמי','לחתוך את עצמי','חותך את עצמי','חותכת את עצמי',
+    'לקפוץ מ(?:ה)?גג','לבלוע (?:את )?כל הכדורים','לבלוע כדורים','לא אהיה (?:פה|כאן) (?:מחר|יותר)','זה המכתב האחרון שלי',
+    // English
+    'kill myself','killing myself','suicide','suicidal','end my life','end it all','take my (?:own )?life',
+    'want(?:s)? to die','wanna die','better off dead','no reason to live','don\'t want to live','do not want to live',
+    'hurt myself','hurting myself','cut myself','cutting myself','self[- ]harm','won\'t be here tomorrow',
+    // العربية
+    'انتحار','أنتحر','انتحر','اقتل نفسي','أقتل نفسي','أريد أن أموت','اريد ان اموت',
+    // русский
+    'покончить с собой','суицид','хочу умереть','убить себя'
+  ]);
+  var HARM=words([
+    // עברית
+    'אהרוג אותך','אני אהרוג','אני ארצח','ארצח אותך','אחסל אותך','אשרוף (?:לך|אותך)','אפגע בך','אני אפגע בך',
+    'אני אדאג שתמות','(?:ש)?תמות','(?:ש)?תמותי','תמותו','אני יודע איפה את(?:ה)? גר(?:ה)?','אני יודעת איפה את(?:ה)? גר(?:ה)?',
+    // English
+    'i(?:\'ll| will| am going to|\'m going to|m gonna| gonna) kill you','i(?:\'ll| will) hurt you','you will die','hope you die',
+    'i know where you live',
+    // العربية
+    'سأقتلك','ساقتلك','سوف أقتلك',
+    // русский
+    'убью тебя','я тебя убью'
+  ]);
 
   var t=new URLSearchParams(location.search).get('t');
   if(t){
@@ -176,8 +206,9 @@ input:focus,textarea:focus{outline:2px solid #E8B865;outline-offset:1px}
     var to=$('to').value.trim(),words=$('words').value.trim(),err=$('err');err.textContent='';
     if(!to){err.textContent='למי המילים?';return;}
     if(!words){err.textContent='עוד לא נכתבו מילים.';return;}
-    if(CARE.test(words)){show('care');return;}
-    if(HARM.test(words)){err.textContent='מילים של איום לא נשלחות. אפשר לכתוב את הכאב, בלי לפגוע.';return;}
+    var nw=norm(words+' '+to);
+    if(CARE.test(nw)){show('care');return;}
+    if(HARM.test(nw)){err.textContent='מילים של איום לא נשלחות. אפשר לכתוב את הכאב, בלי לפגוע.';return;}
     var b=$('send');b.disabled=true;
     rpc('ses_send',{p_to:to,p_body:words}).then(function(tok){
       var url=location.origin+location.pathname+'?t='+encodeURIComponent(tok);

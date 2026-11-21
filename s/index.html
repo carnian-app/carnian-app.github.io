@@ -14,6 +14,7 @@
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0E0D0B">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
@@ -65,6 +66,10 @@ input:focus,textarea:focus{outline:2px solid #E8B865;outline-offset:1px}
     <span class="small muted">SES Moments</span>
   </div>
   <h1 class="serif">מילים מלב</h1>
+  <div id="signin" class="field" style="gap:12px">
+    <p style="margin:0;line-height:1.6">כדי לשלוח, מתחברים פעם אחת עם Google.<br><span class="small muted">השם והמייל שלך לא נשמרים ולא מוצגים לאף אחד, גם לא לנמען.</span></p>
+    <div id="gbtn" style="min-height:44px"></div>
+  </div>
   <div class="field">
     <label for="to">אל</label>
     <input id="to" maxlength="60" autocomplete="off" placeholder="שם">
@@ -81,6 +86,7 @@ input:focus,textarea:focus{outline:2px solid #E8B865;outline-offset:1px}
     חד־כיווני. אין תשובה, אין "נקרא", אין ארכיון.<br>
     נקרא פעם אחת ונעלם. אם לא נפתח, נמחק אחרי 7 ימים.
   </div>
+  <p class="small" style="margin:0;color:#E8B865">מילים מלב בלבד. מכתב של איום או השפלה לא יישלח, והשולח לא יוכל לשלוח עוד לעולם.</p>
   <div class="err" id="err" role="alert"></div>
   <button class="btn" id="send" type="button"><span class="wax" style="width:26px;height:26px;font-size:8px">SES</span>חתום ושלח</button>
   <p class="small muted" style="text-align:center;margin:0">קשה מאוד עכשיו? ער״ן 1201, בכל שעה.</p>
@@ -94,6 +100,13 @@ input:focus,textarea:focus{outline:2px solid #E8B865;outline-offset:1px}
     <p style="margin:0">ער״ן: <a href="tel:1201">1201</a>, בכל שעה<br>סה״ר, צ׳אט: <a href="https://sahar.org.il" target="_blank" rel="noopener">sahar.org.il</a><br>במצב חירום: <a href="tel:101">101</a></p>
   </div>
   <button class="btn ghost" id="back" type="button">חזרה למכתב</button>
+</section>
+
+<!-- 1c · blocked -->
+<section id="blocked" class="center" hidden>
+  <svg width="64" height="120" viewBox="0 0 64 120" fill="none" stroke="#8C8577" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 46c-6-6 6-10 0-16s6-10 0-16"/><path d="M32 52v8"/><rect x="18" y="60" width="28" height="56" rx="3"/></svg>
+  <p class="serif" style="font-size:24px;margin:0">המכתב לא נשלח.</p>
+  <p class="muted" style="margin:0;line-height:1.7">מכתב של איום או השפלה הוא לא מילים מלב.<br>מהחשבון הזה לא ניתן לשלוח עוד מכתבים.</p>
 </section>
 
 <!-- 2 · sent -->
@@ -142,10 +155,10 @@ input:focus,textarea:focus{outline:2px solid #E8B865;outline-offset:1px}
   var KEY='sb_publishable_jS2gJUk3gES0iQIJ0MEsyw_VXo7R8jS';
   function rpc(fn,body){return fetch(SB+fn,{method:'POST',headers:{'apikey':KEY,'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){if(!r.ok)throw j;return j;});});}
   function $(i){return document.getElementById(i);}
-  function show(id){['write','care','sent','sealed','open','gone'].forEach(function(s){$(s).hidden=(s!==id);});window.scrollTo(0,0);}
+  function show(id){['write','care','blocked','sent','sealed','open','gone'].forEach(function(s){$(s).hidden=(s!==id);});window.scrollTo(0,0);}
 
   // gentle safety net (no AI, nothing leaves the phone): signs of self-harm stop the letter and show help instead;
-  // threats against the reader are not sent. Text is normalised first (no niqqud, one space, lower case).
+  // threats are judged on the server (a threat blocks the sender for good). Text is normalised first (no niqqud, one space, lower case).
   function norm(s){return ' '+s.replace(/[֑-ׇ]/g,'').replace(/[’‘`´]/g,"'").replace(/[\s‏‎]+/g,' ').toLowerCase()+' ';}
   var B='(?:^|[^\\u05D0-\\u05EAa-z\\u0600-\\u06FF\\u0400-\\u04FF])',E='(?=$|[^\\u05D0-\\u05EAa-z\\u0600-\\u06FF\\u0400-\\u04FF])';
   function words(list){return new RegExp(B+'(?:'+list.join('|')+')'+E,'i');}
@@ -165,18 +178,6 @@ input:focus,textarea:focus{outline:2px solid #E8B865;outline-offset:1px}
     'انتحار','أنتحر','انتحر','اقتل نفسي','أقتل نفسي','أريد أن أموت','اريد ان اموت',
     // русский
     'покончить с собой','суицид','хочу умереть','убить себя'
-  ]);
-  var HARM=words([
-    // עברית
-    'אהרוג אותך','אני אהרוג','אני ארצח','ארצח אותך','אחסל אותך','אשרוף (?:לך|אותך)','אפגע בך','אני אפגע בך',
-    'אני אדאג שתמות','(?:ש)?תמות','(?:ש)?תמותי','תמותו','אני יודע איפה את(?:ה)? גר(?:ה)?','אני יודעת איפה את(?:ה)? גר(?:ה)?',
-    // English
-    'i(?:\'ll| will| am going to|\'m going to|m gonna| gonna) kill you','i(?:\'ll| will) hurt you','you will die','hope you die',
-    'i know where you live',
-    // العربية
-    'سأقتلك','ساقتلك','سوف أقتلك',
-    // русский
-    'убью тебя','я тебя убью'
   ]);
 
   var t=new URLSearchParams(location.search).get('t');
@@ -201,30 +202,48 @@ input:focus,textarea:focus{outline:2px solid #E8B865;outline-offset:1px}
   }
 
   show('write');
+  var FN='https://tlvugvpvoenhzdheutxi.supabase.co/functions/v1/ses-send';
+  var CLIENT='1019515499125-hkl7fjk64ima28sie09oelv1a1gahks3.apps.googleusercontent.com';
+  var idt=null;try{idt=sessionStorage.getItem('ses_idt');}catch(e){}
+  function call(body){return fetch(FN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();});}
+  function signedIn(on){$('signin').hidden=on;$('send').disabled=!on;}
+  function onToken(t){idt=t;try{sessionStorage.setItem('ses_idt',t);}catch(e){}
+    call({idt:t,check:true}).then(function(r){if(r&&r.err==='blocked'){show('blocked');return;}if(r&&r.ok)signedIn(true);else{idt=null;signedIn(false);}}).catch(function(){signedIn(!!idt);});}
+  signedIn(false);
+  (function gis(n){
+    if(window.google&&google.accounts&&google.accounts.id){
+      google.accounts.id.initialize({client_id:CLIENT,callback:function(c){onToken(c.credential);},auto_select:true,itp_support:true});
+      google.accounts.id.renderButton($('gbtn'),{theme:'filled_black',size:'large',shape:'pill',text:'signin_with',locale:'he'});
+      if(idt)onToken(idt);
+    } else if(n<60) setTimeout(function(){gis(n+1);},250);
+  })(0);
   $('back').onclick=function(){show('write');};
   $('send').onclick=function(){
     var to=$('to').value.trim(),words=$('words').value.trim(),err=$('err');err.textContent='';
+    if(!idt){err.textContent='קודם מתחברים עם Google, למעלה.';return;}
     if(!to){err.textContent='למי המילים?';return;}
     if(!words){err.textContent='עוד לא נכתבו מילים.';return;}
-    var nw=norm(words+' '+to);
-    if(CARE.test(nw)){show('care');return;}
-    if(HARM.test(nw)){err.textContent='מילים של איום לא נשלחות. אפשר לכתוב את הכאב, בלי לפגוע.';return;}
+    if(CARE.test(norm(words+' '+to))){show('care');return;}
     var b=$('send');b.disabled=true;
-    rpc('ses_send',{p_to:to,p_body:words}).then(function(tok){
-      var url=location.origin+location.pathname+'?t='+encodeURIComponent(tok);
-      $('sentTo').textContent=to;$('link').textContent=url;
-      var msg='מילים אל לב 🕯️\n'+url;
-      var ph=$('phone').value.replace(/[^0-9+]/g,'');
-      if(ph){ph=ph.replace(/^\+/,'');if(ph.charAt(0)==='0')ph='972'+ph.slice(1);}
-      $('wa').href='https://wa.me/'+(ph||'')+'?text='+encodeURIComponent(msg);
-      $('copy').onclick=function(){try{navigator.clipboard.writeText(url);$('copy').textContent='הקישור הועתק';}catch(e){}};
-      $('words').value='';
-      show('sent');
-    }).catch(function(e){
+    call({idt:idt,to:to,body:words}).then(function(r){
       b.disabled=false;
-      var m=(e&&e.message)||'';
-      err.textContent=/rate_limit/.test(m)?'נשלחו כבר כמה מכתבים בשעה האחרונה. אפשר לנסות שוב מאוחר יותר.':'השליחה לא הצליחה. נסה שוב.';
-    });
+      if(r&&r.token){
+        var url=location.origin+location.pathname+'?t='+encodeURIComponent(r.token);
+        $('sentTo').textContent=to;$('link').textContent=url;
+        var msg='מילים אל לב 🕯️\n'+url;
+        var ph=$('phone').value.replace(/[^0-9+]/g,'');
+        if(ph){ph=ph.replace(/^\+/,'');if(ph.charAt(0)==='0')ph='972'+ph.slice(1);}
+        $('wa').href='https://wa.me/'+(ph||'')+'?text='+encodeURIComponent(msg);
+        $('copy').onclick=function(){try{navigator.clipboard.writeText(url);$('copy').textContent='הקישור הועתק';}catch(e){}};
+        $('words').value='';
+        show('sent');return;
+      }
+      var e=r&&r.err;
+      if(e==='care'){show('care');return;}
+      if(e==='blocked'||e==='blocked_now'){$('words').value='';show('blocked');return;}
+      if(e==='signin'){idt=null;try{sessionStorage.removeItem('ses_idt');}catch(x){}signedIn(false);err.textContent='צריך להתחבר שוב עם Google.';return;}
+      err.textContent=e==='rate_limit'?'נשלחו כבר כמה מכתבים היום. אפשר לנסות שוב מחר.':'השליחה לא הצליחה. נסה שוב.';
+    }).catch(function(){b.disabled=false;err.textContent='השליחה לא הצליחה. נסה שוב.';});
   };
 })();
 </script>

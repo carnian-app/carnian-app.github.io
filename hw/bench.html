@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HybridWays · מבחן 100 נסיעות</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+.viz-root{color-scheme:light;--bg:#f4f5f7;--surface-1:#ffffff;--line:#e3e5ea;--grid:#eceef2;--text-primary:#191919;--text-secondary:#5f6672;--series-1:#257de0;--series-2:#f47230;--risk:#6a4ce2}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz-root{color-scheme:dark;--bg:#121417;--surface-1:#191919;--line:#2c3038;--grid:#262a31;--text-primary:#efefef;--text-secondary:#9c9c9c;--series-1:#338ced;--series-2:#e76624;--risk:#9887ef}}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--text-primary);font:16px/1.55 Heebo,system-ui,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:clamp(18px,3vw,40px) max(4vw,16px)}
+.brand{font-weight:800;font-size:22px}.brand span{font-size:15px;color:#d7261e;font-weight:600;margin-inline-start:10px}
+h1{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:6px 0 8px;font-weight:800;text-wrap:balance}
+.sub{color:var(--text-secondary);max-width:70ch;margin:0 0 22px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.tile{background:var(--surface-1);border:1px solid var(--line);border-radius:14px;padding:16px}
+.tile b{display:block;font-size:clamp(28px,3.6vw,40px);font-weight:800;line-height:1.05;font-variant-numeric:tabular-nums}
+.tile span{font-size:14px;color:var(--text-secondary)}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.card{background:var(--surface-1);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
+.card h2{margin:0 0 4px;font-size:19px}.card p.k{margin:0 0 12px;color:var(--text-secondary);font-size:14px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--text-secondary);margin-bottom:8px}.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-inline-end:6px;vertical-align:-1px}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{fill:var(--text-secondary);font-family:Heebo,system-ui,sans-serif}
+.tip{position:fixed;pointer-events:none;background:var(--text-primary);color:var(--surface-1);font-size:13px;padding:6px 10px;border-radius:8px;opacity:0;transition:opacity .1s;z-index:9;max-width:260px}
+table{width:100%;border-collapse:collapse;font-size:14px}th{font-size:12px;color:var(--text-secondary);text-align:start;font-weight:600;padding:6px 4px;border-bottom:1px solid var(--line)}td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.pill{font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;white-space:nowrap;display:inline-block}
+.p-by{background:var(--series-1);color:#fff}.p-to{background:var(--series-2);color:#fff}
+.ok{color:var(--text-primary);font-weight:700}.no{color:var(--text-primary);font-weight:800}.ov{color:var(--text-secondary);font-weight:700}
+details summary{cursor:pointer;color:var(--series-1);font-size:13px}
+.ans{white-space:pre-wrap;font-size:13px;background:var(--bg);border-radius:8px;padding:8px;margin:6px 0;max-height:260px;overflow:auto}
+.note{font-size:13px;color:var(--text-secondary)}
+.scroll{overflow-x:auto}
+@media(max-width:820px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body class="viz-root">
+<main>
+  <div class="brand">HybridWays<span>Air costs · מבחן הוכחה</span></div>
+  <h1>100 משימות, שני כבישים, שופט עיוור.</h1>
+  <p class="sub">כל משימה נסעה גם בקטנוע (Claude Haiku 5.5) וגם במשאית (Claude Opus 5.5), דרך ה-API האמיתי של Anthropic. שופט עיוור (Opus) קיבל את שתי התשובות בסדר אקראי, בלי לדעת מי זה מי, ודירג כל אחת מ-1 עד 10. הווייז של HybridWays ניתב כל משימה מראש. כל המספרים כאן מחושבים מהקבלות למטה.</p>
+  <div class="tiles" id="tiles"></div>
+
+  <div class="grid">
+    <div class="card"><h2>כמה עולות 100,000 נסיעות בחודש</h2><p class="k">אותן משימות, שלוש דרכים לנתב. בשקלים, לפי מחירון Anthropic ודולר ≈ 3.05 ₪.</p><div id="cCost"></div></div>
+    <div class="card"><h2>מה הווייז החליט</h2><p class="k">מול ההחלטה הנכונה: קטנוע כשהוא הספיק, משאית כשהוא לא הספיק או כשהנושא רגיש.</p><div id="cRoute"></div></div>
+  </div>
+
+  <div class="card"><h2>איכות לפי סוג משימה</h2><p class="k">ציון ממוצע של השופט העיוור (1–10). הפער הקטן בין הכבישים הוא כל הסיפור: ברוב המשימות משלמים פי ~29 על הבדל קטן.</p>
+    <div class="legend"><span><i style="background:var(--series-1)"></i>קטנוע (Haiku)</span><span><i style="background:var(--series-2)"></i>משאית (Opus)</span></div>
+    <div id="cCat"></div></div>
+
+  <div class="card"><h2>כל 100 הקבלות</h2><p class="k">אפשר לפתוח כל שורה ולקרוא את שתי התשובות ואת נימוק השופט.</p>
+    <div class="scroll"><table><thead><tr><th>#</th><th>משימה</th><th>הווייז</th><th>קטנוע</th><th>משאית</th><th>הספיק?</th><th>עלות קטנוע</th><th>עלות משאית</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+
+  <p class="note" id="foot"></p>
+</main>
+<div class="tip" id="tip"></div>
+<script>
+{
+const API='https://tlvugvpvoenhzdheutxi.supabase.co/functions/v1/hybridways-bench';
+const USD=3.05,$=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
+const tip=$('tip');
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;const x=Math.min(innerWidth-270,e.clientX+12);tip.style.left=x+'px';tip.style.top=(e.clientY+14)+'px'}
+function hideTip(){tip.style.opacity=0}
+function el(n,a,p){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+const ils=x=>x>=100?'₪'+Math.round(x).toLocaleString('he-IL'):'₪'+x.toFixed(2);
+const agor=x=>(x*USD*100).toFixed(x*USD*100>=1?2:3)+' אג\'';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function hbars(box,items,fmt){ // single-series horizontal bars
+  const W=520,row=46,H=items.length*row+10,L=150,max=Math.max(...items.map(i=>i.v))||1;
+  const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);
+  items.forEach((it,i)=>{const y=i*row+8,w=Math.max(4,(W-L-90)*it.v/max);
+    const t=el('text',{x:W,y:y+20,'text-anchor':'start','font-size':14},s);t.textContent=it.k;
+    const r=el('rect',{x:W-L-w,y:y+4,width:w,height:24,rx:4,fill:it.c||'var(--series-1)'},s);
+    const v=el('text',{x:W-L-w-8,y:y+21,'text-anchor':'end','font-size':14,'font-weight':700},s);v.style.fill='var(--text-primary)';v.textContent=fmt(it.v);
+    const hit=el('rect',{x:0,y:y,width:W,height:row-6,fill:'transparent'},s);hit.addEventListener('mousemove',e=>showTip(e,'<b>'+esc(it.k)+'</b><br>'+esc(it.tip||fmt(it.v))));hit.addEventListener('mouseleave',hideTip)});
+}
+function grouped(box,cats){ // two series per category, vertical bars
+  const W=1060,H=300,B=40,T=16,Lp=30,n=cats.length,gw=(W-Lp)/n,bw=Math.min(22,gw/3);
+  const s=el('svg',{viewBox:`0 0 ${W} ${H+60}`,role:'img'},box);
+  for(let g=0;g<=10;g+=2){const y=T+(H-T-B)*(1-g/10);el('line',{x1:Lp,x2:W,y1:y,y2:y,stroke:'var(--grid)','stroke-width':1},s);const t=el('text',{x:Lp-6,y:y+4,'text-anchor':'end','font-size':12},s);t.textContent=g}
+  cats.forEach((c,i)=>{const cx=W-(i+0.5)*gw;
+    [[c.b,'var(--series-1)',-1,'קטנוע'],[c.t,'var(--series-2)',1,'משאית']].forEach(([v,col,side,name])=>{const h=(H-T-B)*v/10,x=cx+(side<0?2:-bw-2)*(-1)-(side<0?bw+0:0);
+      const xx=side<0?cx+2:cx-bw-2;const r=el('rect',{x:xx,y:H-B-h,width:bw,height:h,rx:4,fill:col},s);
+      r.addEventListener('mousemove',e=>showTip(e,'<b>'+esc(c.k)+'</b><br>'+name+': '+v.toFixed(1)+' / 10<br>'+c.n+' משימות'));r.addEventListener('mouseleave',hideTip)});
+    const t=el('text',{x:cx,y:H-B+18,'text-anchor':'middle','font-size':12},s);t.textContent=c.k;
+    const t2=el('text',{x:cx,y:H-B+34,'text-anchor':'middle','font-size':11},s);t2.textContent=(c.t-c.b>=0?'פער ':'יתרון ')+Math.abs(c.t-c.b).toFixed(1)});
+  el('line',{x1:Lp,x2:W,y1:H-B,y2:H-B,stroke:'var(--line)','stroke-width':1},s);
+}
+async function load(){
+  const d=await fetch(API).then(r=>r.json());const R=(d.rows||[]).map(r=>({...r,route_cost:+r.route_cost||0,b_cost:+r.b_cost||0,t_cost:+r.t_cost||0,judge_cost:+r.judge_cost||0}));
+  if(!R.length){$('tiles').textContent='עוד אין תוצאות.';return}
+  const ideal=r=>r.sensitive?'toll':(r.enough?'bypass':'toll');
+  const ns=R.filter(r=>!r.sensitive),enoughNS=ns.filter(r=>r.enough).length;
+  const correct=R.filter(r=>r.route_road===ideal(r)).length,over=R.filter(r=>r.route_road==='toll'&&ideal(r)==='bypass').length,risky=R.filter(r=>r.route_road==='bypass'&&ideal(r)==='toll').length;
+  const allT=R.reduce((a,r)=>a+r.t_cost,0),waze=R.reduce((a,r)=>a+r.route_cost+(r.route_road==='bypass'?r.b_cost:r.t_cost),0),best=R.reduce((a,r)=>a+r.route_cost+(ideal(r)==='bypass'?r.b_cost:r.t_cost),0);
+  const chosenScore=R.reduce((a,r)=>a+(r.route_road==='bypass'?r.b_score:r.t_score),0)/R.length,tollScore=R.reduce((a,r)=>a+r.t_score,0)/R.length;
+  const per=x=>x/R.length*100000*USD;
+  $('tiles').innerHTML=[
+    [Math.round(enoughNS/ns.length*100)+'%','מהמשימות היומיומיות קטנוע הספיק ('+enoughNS+' מתוך '+ns.length+')'],
+    [Math.round((1-waze/allT)*100)+'%','חיסכון בכסף עם הווייז, לעומת הכול במשאית'],
+    [Math.round(correct/R.length*100)+'%','החלטות נכונות של הווייז ('+correct+' מתוך '+R.length+')'],
+    [chosenScore.toFixed(1)+' / '+tollScore.toFixed(1),'איכות ממוצעת: עם הווייז / הכול במשאית']
+  ].map(([b,s])=>'<div class="tile"><b>'+b+'</b><span>'+esc(s)+'</span></div>').join('');
+  hbars($('cCost'),[
+    {k:'הכול במשאית',v:per(allT),c:'var(--series-2)',tip:'היום: כולם נוסעים במודל החזק'},
+    {k:'עם הווייז',v:per(waze),c:'var(--series-1)',tip:'הניתוב של HybridWays, כולל עלות הווייז עצמו'},
+    {k:'ניתוב מושלם',v:per(best),c:'var(--series-1)',tip:'אילו הווייז היה צודק תמיד: התקרה של מה שאפשר לחסוך'}],ils);
+  hbars($('cRoute'),[
+    {k:'נכון',v:correct,c:'var(--series-1)',tip:'הכביש שהווייז בחר הוא הכביש הנכון'},
+    {k:'שילם יותר מדי',v:over,c:'var(--series-2)',tip:'שלח למשאית כשקטנוע הספיק: כסף מבוזבז, אבל לא מסוכן'},
+    {k:'סיכון',v:risky,c:'var(--risk)',tip:'שלח לקטנוע כשהיה צריך משאית או כשהנושא רגיש'}],v=>v+' משימות');
+  const byCat={};R.forEach(r=>{const k=r.label||'אחר';(byCat[k]=byCat[k]||{k,b:0,t:0,n:0});byCat[k].b+=r.b_score;byCat[k].t+=r.t_score;byCat[k].n++});
+  grouped($('cCat'),Object.values(byCat).map(c=>({k:c.k,b:c.b/c.n,t:c.t/c.n,n:c.n})));
+  $('rows').innerHTML=R.map(r=>{const id=ideal(r),ok=r.route_road===id,cls=ok?'ok':(r.route_road==='toll'?'ov':'no'),txt=ok?'✓':(r.route_road==='toll'?'יקר':'✗');
+    return '<tr><td>'+r.id+'</td><td>'+esc(r.task)+(r.sensitive?' <span class="note">(רגיש)</span>':'')+'<details><summary>תשובות ונימוק</summary><div class="note">שופט: '+esc(r.judge_reason)+'</div><div class="ans"><b>קטנוע ('+r.b_score+'/10):</b>\n'+esc(r.b_text)+'</div><div class="ans"><b>משאית ('+r.t_score+'/10):</b>\n'+esc(r.t_text)+'</div></details></td><td><span class="pill '+(r.route_road==='bypass'?'p-by':'p-to')+'">'+(r.route_road==='bypass'?'קטנוע':'משאית')+'</span> <span class="'+cls+'">'+txt+'</span></td><td>'+r.b_score+'</td><td>'+r.t_score+'</td><td>'+(r.enough?'כן':'לא')+'</td><td>'+agor(r.b_cost)+'</td><td>'+agor(r.t_cost)+'</td></tr>'}).join('');
+  $('foot').textContent='שיטה: "הספיק" = ציון הקטנוע 7 ומעלה, ולא יותר מנקודה אחת מתחת למשאית. משימות רגישות (כסף, בריאות, משפט, פרטים אישיים) נחשבות נכונות רק במשאית, גם כשהקטנוע הספיק. השופט הוא מודל AI ולא בני אדם; הסדר העיוור והאקראי מקטין הטיה אבל לא מבטל אותה. עלות המבחן כולו, כולל השופט: $'+(+d.spent_usd).toFixed(2)+'. '+R.length+' משימות.';
+}
+load().catch(e=>{$('tiles').textContent='לא הצלחתי לטעון את התוצאות.'});
+}
+</script>
+</body>
+</html>

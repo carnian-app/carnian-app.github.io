@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HybridWays · הוכחה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm, confident, a working prototype — not a pitch
+   IDEA: an Israeli highway junction sign: one road splits into a bypass and a toll road
+   PICTURE: the fork itself, drawn large; the car lands on the road the Waze picked
+   COLOUR and TYPE: asphalt grey, sign blue for the bypass, toll amber, white lane marks; Heebo
+   LAYOUT: task + fork on top, answer under it, then the trip meter and the ID card with memory */
+:root{color-scheme:light dark;
+--bg:light-dark(#f4f5f7,#121417);--card:light-dark(#fff,#1b1e23);--ink:light-dark(#15181d,#eef0f3);--mute:light-dark(#5b626d,#9aa3ae);
+--line:light-dark(#dfe2e7,#2b3038);--asph:light-dark(#2d3138,#2a2e35);--by:#1a5fd6;--toll:#e8a300;--accent:#d7261e}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Heebo,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(20px,3.5vw,48px) max(4vw,16px);max-width:1240px;margin:0 auto}
+h1{font-size:clamp(32px,5vw,48px);line-height:1.05;margin:0 0 6px;font-weight:800;text-wrap:balance}
+h2{font-size:22px;margin:0 0 12px;font-weight:800}
+.sub{color:var(--mute);margin:0 0 20px;max-width:62ch}
+.top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px;align-items:stretch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+textarea{width:100%;min-height:120px;font:16px/1.5 inherit;font-family:inherit;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical}
+textarea:focus,input:focus,button:focus-visible{outline:3px solid var(--by);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+button{font:600 16px Heebo,system-ui,sans-serif;min-height:44px;padding:0 18px;border-radius:10px;border:0;cursor:pointer;background:var(--asph);color:#fff}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button:disabled{opacity:.5;cursor:default}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{font-size:14px;min-height:36px;padding:0 12px;background:transparent;color:var(--mute);border:1px dashed var(--line)}
+.fig{position:relative;min-height:300px;background:var(--asph);border-radius:14px;overflow:hidden}
+.fig svg{position:absolute;inset:0;width:100%;height:100%}
+#car{transition:transform .9s cubic-bezier(.4,.1,.2,1)}
+@media(prefers-reduced-motion:reduce){#car{transition:none}}
+.res{margin-top:24px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-weight:800;padding:4px 12px;border-radius:999px;color:#fff;font-size:15px}
+.tag.bypass{background:var(--by)}.tag.toll{background:var(--toll);color:#1a1300}
+.why{color:var(--mute);margin:8px 0 12px}
+.ans{white-space:pre-wrap;line-height:1.7}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:24px;margin-top:24px}
+.meter{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.num{font-size:clamp(28px,4vw,40px);font-weight:800;line-height:1}
+.lbl{font-size:13px;color:var(--mute)}
+.bar{height:14px;border-radius:7px;background:var(--toll);overflow:hidden;display:flex}
+.bar i{display:block;height:100%;background:var(--by);transition:width .6s}
+.log{list-style:none;margin:14px 0 0;padding:0;max-height:220px;overflow:auto}
+.log li{display:flex;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-size:14px}
+.log b{flex:none;width:10px;height:10px;border-radius:50%;margin-top:6px}
+.idc{border:2px solid var(--ink);border-radius:14px;padding:16px;background:var(--card)}
+.idh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:12px}
+.zero{font-size:34px;font-weight:800;line-height:1}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{font-size:13px;color:var(--mute);text-align:start;font-weight:600;padding:6px 4px}
+td{padding:8px 4px;border-top:1px solid var(--line);vertical-align:middle}
+td.c{text-align:center;width:72px}
+input[type=checkbox]{width:22px;height:22px;accent-color:var(--by)}
+input[type=text]{font:16px inherit;font-family:inherit;flex:1;min-height:44px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.x{min-height:36px;padding:0 10px;background:transparent;color:var(--mute);border:1px solid var(--line)}
+.note{font-size:13px;color:var(--mute);margin-top:10px}
+.cost{margin:14px 0 0;padding:10px 12px;border-radius:10px;background:light-dark(#f2f4f7,#22262d);font-size:14px}
+.money{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.money b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.proj{margin-top:12px;padding:12px;border-radius:10px;background:light-dark(#fff6dc,#2b2412);font-size:15px}.proj b{font-size:20px}
+.sgl{margin-top:12px;padding:10px 12px;border-radius:10px;border:1px dashed var(--by)}.sgl ul{margin:6px 0 0;padding-inline-start:20px}
+.sgset{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0 4px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}.seg button{background:transparent;color:var(--ink);border-radius:0;min-height:40px;padding:0 12px;font-size:14px}.seg button[aria-checked=true]{background:var(--by);color:#fff}
+#signs g{transform-box:fill-box;transform-origin:center;animation:bloom .6s ease-out both}@keyframes bloom{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}@media(prefers-reduced-motion:reduce){#signs g{animation:none}}
+.cmpg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.cmpg .ans{max-height:320px;overflow:auto;font-size:15px}@media(max-width:820px){.cmpg{grid-template-columns:minmax(0,1fr)}}
+.rcp{margin-top:14px}.rcp summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}.rcp td,.rcp th{font-size:13px;white-space:nowrap}.cmp{margin-top:24px}
+.hero{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 22px}.hero>div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}.hnum{font-size:clamp(26px,3.6vw,38px);font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.choose{margin-top:24px;border:2px solid var(--ink)}.opts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.opt{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:start;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:14px;padding:16px;min-height:150px;position:relative;font-weight:400}
+.opt b{font-size:26px}.like{font-size:22px;font-weight:800;line-height:1.2}.eq{font-size:14px;color:var(--mute)}.plain{font-size:20px;font-weight:700;margin:4px 0 6px;line-height:1.4}.opt.bypass:hover,.opt.bypass.is-rec{border-color:var(--by)}.opt.toll:hover,.opt.toll.is-rec{border-color:var(--toll)}
+.rec{display:none;position:absolute;top:12px;inset-inline-end:12px;font-size:12px;font-weight:800;background:var(--ink);color:var(--bg);border-radius:999px;padding:2px 10px}.is-rec .rec{display:inline}
+@media(max-width:700px){.hero,.opts{grid-template-columns:minmax(0,1fr)}}
+.rules{margin:0 0 22px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 18px 14px}.rules summary{cursor:pointer;font-size:20px;font-weight:800;min-height:48px;display:flex;align-items:center}
+.mani{margin:18px 0;padding:22px 24px;border-radius:18px;background:linear-gradient(135deg,#0d1b3d,#1a3a7a);color:#fff}.mani h2{margin:0 0 6px;font-size:24px}.mani .lead{margin:0 0 14px;font-size:17px;opacity:.95}.mani ol{margin:0;padding-inline-start:22px;display:grid;gap:8px}.mani li{line-height:1.55;font-size:15px}.mani b{color:#ffd54a}.mani .sum{margin:16px 0 0;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.1);font-weight:700;font-size:16px}.mani .fine{margin:10px 0 0;font-size:12px;opacity:.7}
+.par{margin:16px 0 0;width:100%;border-collapse:separate;border-spacing:0 6px}.par th{text-align:start;font-size:14px;color:#ffd54a;padding:0 10px 4px}.par td{background:rgba(255,255,255,.08);padding:9px 12px;font-size:14px;line-height:1.5;vertical-align:top}.par td:first-child{border-radius:0 10px 10px 0}.par td:last-child{border-radius:10px 0 0 10px}
+.rl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.rl li{display:flex;gap:12px;align-items:flex-start}.rl b{display:block;font-size:17px;margin-bottom:2px}.rl span:not(.sg){font-size:14px;color:var(--mute);line-height:1.5}
+.sg{flex:none;width:44px;height:44px;border-radius:50%;border:4px solid var(--c);background:#fff;color:var(--c);display:grid;place-items:center;font-size:18px;font-weight:800}
+@media(max-width:900px){.rl{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}@media(max-width:600px){.rl{grid-template-columns:minmax(0,1fr)}}
+.brand{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.01em;margin:0 0 10px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;direction:rtl}.brand span{font-size:16px;font-weight:600;color:var(--accent)}
+.ledger{margin:0 0 22px;background:light-dark(#0b2a66,#0d1f42);color:#fff;border-radius:14px;padding:16px 18px}.ledger .note{color:#c9d6f2}.lg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.lg b{display:block;font-size:24px;font-variant-numeric:tabular-nums}.lg span{font-size:13px;color:#c9d6f2}@media(max-width:800px){.lg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.try{margin:0 0 14px;padding:12px 30px 12px 14px;background:light-dark(#eef3ff,#1a2436);border-radius:10px;font-size:15px;line-height:1.6}.try li{margin:2px 0}
+.warn{color:var(--accent)}
+@media(max-width:820px){.top,.grid2{grid-template-columns:minmax(0,1fr)}.fig{min-height:240px}}
+@media(max-width:600px){table{font-size:13px}td.c{width:52px}}
+</style>
+</head>
+<body>
+<main class="band">
+  <div class="brand">HybridWays<span>Air costs · אתם לא נוסעים באוויר, ולא בחינם.</span></div>
+  <h1>הכביש שלך. התנועה שלך. הרווח שלך.</h1>
+  <p class="sub">בכבישי הבינה המלאכותית, בעלי הכבישים רגילים להחליט בשבילך: באיזה מודל תיסע, כמה תשלם ומה הם יודעים עליך. בקרדיט ההחלטה עוברת אליך. הווייז שלך מראה לפני כל נסיעה את שני הכבישים, את המחיר ואת מה שכל כביש יידע, ואתה בוחר.</p>
+  <div class="hero">
+    <div><div class="hnum" id="hSave">₪0</div><div class="lbl">חסכת עד היום, לעומת "הכול באגרה"</div></div>
+    <div><div class="hnum" id="hDec">0</div><div class="lbl">נסיעות שאתה ניתבת</div></div>
+    <div><div class="hnum" id="hKnow">0</div><div class="lbl">פרטים שבחרת לחשוף, ולאיזה כביש</div></div>
+  </div>
+
+  <section class="ledger">
+    <h2>יומן ההוכחה: כל הנסיעות האמיתיות, מכל המשתמשים</h2>
+    <div class="lg"><div><b id="lgT">—</b><span>נסיעות</span></div><div><b id="lgB">—</b><span>עוקף / אגרה</span></div><div><b id="lgC">—</b><span>שולם בפועל מול "הכול באגרה"</span></div><div><b id="lgS">—</b><span>חיסכון אמיתי</span></div><div><b id="lgO">—</b><span>פעמים שנהג בחר נגד הווייז</span></div></div>
+    <p class="note">כל שורה ביומן נרשמת בשרת לפי ספירת הטוקנים ש-Anthropic מחזירה, ולפי מחירון Haiku 5.5 ‏($0.10/$0.50) ו-Opus 5.5 ‏($4/$20) למיליון טוקנים. "באגרה" = אותם טוקנים במחיר Opus. תוכן המשימות לא נשמר, רק אורכן. תקציב ההדגמה: עד 3$ ביום.</p>
+  </section>
+
+  <details class="rules" open><summary>חוקי הכביש: שישה דברים שאף אחד לא סיפר לך</summary>
+    <ol class="rl"><li><span class="sg" style="--c:#d7261e">▲</span><div><b>כל שאלה ל-AI היא נסיעה</b><span>כששאלת את ChatGPT, Claude או Gemini משהו, נסעת בכביש. מאחורי המסך רצים שבבים בחוות שרתים, וזו הנסיעה. כמה זה שווה? דקארט הישראלית, שמאיצה את השבבים האלה, נמכרה לאמזון ב-23.11.2026 בכ-7.5 מיליארד דולר. ובעלת הכביש של Claude, Anthropic, גייסה בהנפקה בנאסד"ק ב-18–19.11.2026 כ-81 מיליארד דולר, לפי שווי של כ-1.5 טריליון דולר. OpenAI, בעלת הכביש של ChatGPT, הוערכה במרץ 2026 בכ-852 מיליארד דולר.</span></div></li><li><span class="sg" style="--c:#e8a300">₪</span><div><b>לכל נסיעה יש מחיר</b><span>גם אם נדמה שזה חינם. מישהו משלם על השבבים והחשמל: אתה במנוי, או בעל הכביש, שמגלגל את זה בחזרה אליך. וכמה אנחנו, הנוסעים, משלמים? ל-Anthropic לבד שילמו בתשעת החודשים הראשונים של 2026 כ-33 מיליארד דולר, ו-OpenAI הכניסה בסוף ספטמבר 2026 בקצב של כ-50 מיליארד דולר בשנה.</span></div></li><li><span class="sg" style="--c:#1a5fd6">⇄</span><div><b>יש כבישים זולים ויקרים</b><span>מודל קטן הוא קטנוע, ומודל חזק הוא משאית סמי־טריילר. לרוב הנסיעות קטנוע מספיק. היום כולם נוסעים במשאית סמי־טריילר בלי לדעת.</span></div></li><li><span class="sg" style="--c:#5b626d">👂</span><div><b>הכביש שומע מה שאתה אומר</b><span>כל מה שכתבת בדרך, בעל הכביש יודע. בקרדיט אתה מחליט מראש מה כל כביש יידע עליך, ומה לא.</span></div></li><li><span class="sg" style="--c:#0e7a3e">✋</span><div><b>היום בעל הכביש מחליט בשבילך</b><span>באיזה מודל תיסע, כמה זה יעלה ומה יישמר. בקרדיט הווייז שלך מראה לפני כל נסיעה את שני הכבישים, ואתה בוחר.</span></div></li><li><span class="sg" style="--c:#7a3eb5">🤝</span><div><b>סוכנים יכולים לנסוע בשבילך</b><span>הסוכן שלך פוגש את הסוכן של אדם אחר, הם מתאמים ביניהם, ולך נשאר רק לאשר. ככה חוזר אליך הזמן.</span></div></li></ol>
+  </details>
+
+  <section class="mani" aria-labelledby="maniH">
+    <h2 id="maniH">הווייז של הנהגים, והשותף של הכבישים</h2>
+    <p class="lead">HybridWays הוא לא נגד בעלי הכביש. אנחנו מביאים את הנהג הנכון לכביש הנכון, לפני שמישהו אחר יחזיק את המפה בשביל עצמו.</p>
+    <ol>
+      <li><b>ב-Waze הכוח לא אצל מי שסלל את הכביש.</b> הוא אצל הנהגים שמדווחים איפה הפקק. מיליוני דיווחים קטנים יוצרים מפה שאף אחד לא יכול לקנות.</li>
+      <li><b>בכבישי AI אין היום מפה כזו.</b> כל אחד נוסע לבד, בחושך, במשאית סמי־טריילר, ומשלם. אם הנהגים לא יחזיקו את המפה, תגיע מפלצת: ענקית שתאסוף את כל הנסיעות, תמכור את תשומת הלב שלנו ותלחץ גם על הנהגים וגם על הכבישים.</li>
+      <li><b>כל נסיעה ב-HybridWays היא דיווח.</b> איזה סוג משימה, באיזה כביש, כמה עלה, והאם קטנוע הספיק. בלי השם שלך ובלי תוכן השאלה.</li>
+      <li><b>ככל שיותר נהגים נוסעים, הניתוב חכם יותר.</b> אם אלף נהגים גילו שרשימת קניות עוברת מצוין בקטנוע, הנהג הבא כבר לא ישלם על משאית.</li>
+      <li><b>גם הכבישים מרוויחים.</b> השבבים יקרים ותפוסים. כל נסיעה שעוברת לקטנוע מפנה את המשאית למי שבאמת צריך אותה. ולקוח שמבין מה הוא משלם, נשאר.</li>
+      <li><b>הנהג נוסע בחינם, החברים משלמים.</b> כמו ב-Waze: עסקים שרוצים להגיע לנהג משלמים, ורק אם הנהג הסכים. וכמו חברות הסלולר והאשראי, גם הכבישים ירצו לתת הנחות וקרדיטים למי שמביא אליהם תנועה.</li>
+      <li><b>הכפתור נשאר אצלך.</b> הווייז ממליץ, אתה מאשר. אתה יכול לעקוף את ההמלצה ולבחור מה הת"ז שלך זוכרת.</li>
+    </ol>
+    <table class="par"><thead><tr><th>ככה זה עובד בכביש</th><th>ככה זה יעבוד בכביש AI</th></tr></thead><tbody><tr><td>Waze: הנהג לא משלם על האפליקציה.</td><td>HybridWays: הנהג לא משלם על הווייז.</td></tr><tr><td>נהגים מדווחים על פקקים, וכולם נוסעים מהר יותר.</td><td>כל נסיעה מדווחת איפה קטנוע הספיק, וכולם משלמים פחות.</td></tr><tr><td>Waze ממליץ על מסלול, והנהג בוחר אם לנסוע בו.</td><td>הווייז ממליץ על עוקף או אגרה, והנהג מאשר או עוקף את ההמלצה.</td></tr><tr><td>כביש 6 גובה אגרה, ויש גם דרך עוקפת בחינם.</td><td>מודל חזק עולה ביוקר, ומודל קטן עולה כמעט כלום.</td></tr><tr><td>תחנות דלק ומסעדות משלמות כדי להופיע במפה.</td><td>עסקים משלמים כדי להופיע כשלט בכביש העוקף, ורק אם הנהג הסכים.</td></tr><tr><td>מי שמביא את התנועה מרוויח, לא מי שסלל.</td><td>הנהגים מחזיקים את מפת הנסיעות, והכבישים מקבלים תנועה נכונה במקום פקקים במשאיות.</td></tr><tr><td>רישיון הנהיגה שלך הולך איתך לכל כביש.</td><td>הת"ז קרדיט שלך הולכת איתך לכל כביש AI, ואתה מחליט מה היא מספרת.</td></tr></tbody></table>
+    <p class="sum">כל נסיעה שלך מלמדת את כולם. ביחד אנחנו יודעים איפה קטנוע מספיק, הנהגים מחזיקים את המפה, והכבישים מקבלים את הנהג הנכון. כולם מרוויחים, חוץ מהמפלצת.</p>
+    <p class="fine">בדף ההוכחה כל נסיעה נרשמת ביומן בלי תוכן השאלה. המפה המשותפת היא השלב הבא.</p>
+  </section>
+
+  <section class="top">
+    <form class="card" id="f">
+      <label for="task" class="lbl">המשימה</label>
+      <textarea id="task" placeholder="למשל: מה להוסיף לרשימת קניות לארוחת שישי?"></textarea>
+      <div class="chips" id="ex"></div>
+      <div class="row">
+        <button type="submit" id="go">לנסיעה</button>
+        <button type="button" class="ghost" id="swap" disabled>אותה משימה בכביש השני</button>
+      </div>
+      <p class="note" id="status"></p>
+    </form>
+    <div class="fig" aria-label="צומת: כביש עוקף וכביש אגרה">
+      <svg id="road" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet" role="img">
+        <defs>
+          <linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></linearGradient>
+        </defs>
+        <rect width="600" height="340" fill="url(#sh)"/>
+        <path id="pb" d="M300 345 L300 230 Q300 170 430 120 L640 40" fill="none" stroke="#1a5fd6" stroke-width="64" stroke-linecap="butt" opacity=".9"/>
+        <path id="pt" d="M300 345 L300 230 Q300 170 170 120 L-40 40" fill="none" stroke="#e8a300" stroke-width="64" opacity=".9"/>
+        <path d="M300 345 L300 230" stroke="#3a3f47" stroke-width="66"/>
+        <path d="M300 340 L300 236" stroke="#fff" stroke-width="4" stroke-dasharray="16 14"/>
+        <g font-family="Heebo,sans-serif" font-weight="800" text-anchor="middle">
+          <rect x="430" y="210" width="150" height="62" rx="8" fill="#1a5fd6" stroke="#fff" stroke-width="3"/>
+          <text x="505" y="238" fill="#fff" font-size="22">עוקף</text>
+          <text x="505" y="261" fill="#dbe6ff" font-size="14" font-weight="600">מודל מהיר וזול</text>
+          <rect x="20" y="210" width="150" height="62" rx="8" fill="#e8a300" stroke="#fff" stroke-width="3"/>
+          <text x="95" y="238" fill="#1a1300" font-size="22">אגרה</text>
+          <text x="95" y="261" fill="#3b2c00" font-size="14" font-weight="600">מודל חזק ומאובטח</text>
+        </g>
+        <g id="signs" font-family="Heebo,sans-serif" font-weight="700" text-anchor="middle"></g>
+        <g id="car" transform="translate(300 300)">
+          <ellipse cx="0" cy="16" rx="22" ry="6" fill="#000" opacity=".35"/>
+          <rect x="-16" y="-26" width="32" height="44" rx="9" fill="#d7261e"/>
+          <rect x="-11" y="-18" width="22" height="12" rx="3" fill="#fff" opacity=".85"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <section class="card choose" id="choose" hidden>
+    <h2>הווייז שלך מציע שני מסלולים. אתה מחליט.</h2>
+    <p class="plain" id="chPlain"></p><p class="why" id="chWhy"></p>
+    <div class="opts">
+      <button type="button" class="opt bypass" id="oB"><span class="tag bypass">עוקף · מודל מהיר</span><span class="like" id="oBl"></span><b id="oBc"></b><span class="eq" id="oBe"></span><span id="oBk" class="lbl"></span><span class="rec" id="oBr">מומלץ</span></button>
+      <button type="button" class="opt toll" id="oT"><span class="tag toll">אגרה · מודל חזק</span><span class="like" id="oTl"></span><b id="oTc"></b><span class="eq" id="oTe"></span><span id="oTk" class="lbl"></span><span class="rec" id="oTr">מומלץ</span></button>
+    </div>
+    <p class="note">המחיר משוער מראש לפי אורך המשימה. המחיר הסופי יופיע בקבלה.</p>
+  </section>
+
+  <section class="card res" id="resBox" hidden>
+    <span class="tag" id="tag"></span>
+    <p class="why" id="why"></p>
+    <div class="ans" id="ans"></div>
+    <p class="cost" id="cost" hidden></p>
+    <div class="sgl" id="sgl" hidden><div class="lbl">שלטים שפרחו בעוקף · דוגמה להמחשה, לא מבצעים אמיתיים</div><ul id="sgList"></ul></div>
+  </section>
+
+  <section class="card cmp" id="cmp" hidden>
+    <h2>השוואה: אותה משימה בשני הכבישים</h2>
+    <div class="cmpg"><div><span class="tag bypass">עוקף</span><p class="lbl" id="cB"></p><div class="ans" id="aB"></div></div><div><span class="tag toll">אגרה</span><p class="lbl" id="cT"></p><div class="ans" id="aT"></div></div></div>
+    <p class="note">אם תשובת העוקף טובה מספיק, ההפרש בעלות הוא חיסכון נקי.</p>
+  </section>
+
+  <section class="grid2">
+    <div class="card">
+      <h2>מד הנסיעות</h2>
+      <div class="meter">
+        <div><div class="num" id="nB">0</div><div class="lbl">בעוקף</div></div>
+        <div><div class="num" id="nT">0</div><div class="lbl">באגרה</div></div>
+        <div><div class="num" id="nP">0%</div><div class="lbl">חיסכון בכסף</div></div>
+      </div>
+      <div class="bar" aria-hidden="true"><i id="barB" style="width:0"></i></div>
+      <div class="money">
+        <div><span class="lbl">שולם בפועל</span><b id="mAct">₪0</b></div>
+        <div><span class="lbl">אילו הכול באגרה</span><b id="mToll">₪0</b></div>
+      </div>
+      <div class="proj" id="proj"></div>
+      <p class="note">מחיר API לפי ספירת הטוקנים האמיתית ומחירון Anthropic (נובמבר 2026): מודל מהיר Haiku 5.5 ‏$0.10/$0.50, מודל חזק Opus 5.5 ‏$4/$20 למיליון טוקנים (קלט/פלט), דולר ≈ 3.05 ₪. כמות הטוקנים מוערכת לפי אורך הטקסט. כולל את עלות הווייז עצמו. בדף הזה אתה לא משלם לפי טוקן.</p>
+      <ul class="log" id="log"></ul>
+      <details class="rcp"><summary>קבלות: הוכחה לכל נסיעה</summary>
+        <div class="scroll"><table><thead><tr><th>מתי</th><th>כביש</th><th>מודל</th><th>טוקנים*</th><th>עלה</th><th>באגרה</th></tr></thead><tbody id="rcB"></tbody></table></div>
+        <div class="row"><button type="button" class="ghost" id="cpy">העתק כ-CSV</button><span class="lbl" id="cpyN"></span></div>
+        <p class="note">✓ = Claude אישר בעצמו איזה מודל ענה. *טוקנים מוערכים לפי אורך הטקסט; Claude לא מחזיר ספירה מדויקת לדף.</p>
+      </details>
+    </div>
+
+    <div class="idc">
+      <div class="idh">
+        <div><div class="lbl">ת"ז קרדיט</div><div class="zero" id="idn">—</div></div>
+        <div class="lbl" style="text-align:end">ה-0 במשמורת אצל בעל הכביש<br>הבעלות שלך</div>
+      </div>
+      <ol class="try">
+        <li>הוסף כאן למטה פרט עליך, למשל: אני גר בגבעתיים</li>
+        <li>למעלה, שאל: איפה כדאי לקנות לארוחת שישי? התשובה תכיר אותך.</li>
+        <li>הורד את הסימון מ"עוקף" ושאל שוב. העוקף כבר לא יידע. אתה מחליט.</li>
+      </ol>
+      <p class="note" style="margin-top:0">מה שהסוכנים יודעים עליך. אתה מחליט מה כל כביש מקבל. אותו זיכרון משרת את שני המנועים.</p>
+      <table>
+        <thead><tr><th>פרט</th><th class="c">עוקף</th><th class="c">אגרה</th><th class="c"></th></tr></thead>
+        <tbody id="mem"></tbody>
+      </table>
+
+      <form class="row" id="addF">
+        <input type="text" id="newM" placeholder="פרט חדש, למשל: אני צמחוני">
+        <button type="submit">הוספה</button>
+      </form>
+      <p class="note" id="memNote"></p>
+    </div>
+  </section>
+  <p class="note">גרסת הוכחה: כל נסיעה רצה על Claude API אמיתי (Haiku 5.5 לעוקף, Opus 5.5 לאגרה), דרך שרת HybridWays. מעבר לספקים נוספים, כמו GPT, יגיע בהמשך.</p>
+</main>
+<script>
+{
+const $=id=>document.getElementById(id);
+const EX=['מה לקנות לארוחת שישי לארבעה?','תנסח לי הודעת תודה קצרה לשכן','האם כדאי לי לפרוע משכנתא מוקדם?','יש לי לחץ בחזה כבר יומיים, מה לעשות?','תכתוב תוכנית עסקית קצרה לבית קפה שכונתי'];
+const MODELS={bypass:'claude-haiku-5-5',toll:'claude-opus-5-5'};
+const USD=3.05,PR={haiku:[0.10,0.50],sonnet:[2,10],opus:[4,20]};
+const tok=s=>Math.ceil(String(s||'').length/3);
+function price(model,inT,outT){return (inT*model[0]+outT*model[1])/1e6*USD}
+function pick(name,road,tier){const n=String(name||'').toLowerCase();if(!n&&tier){if(tier==='quick')return PR.haiku;if(tier==='default')return PR.sonnet;if(tier==='complex')return PR.opus}if(n.includes('haiku'))return PR.haiku;if(n.includes('sonnet'))return PR.sonnet;if(n.includes('opus'))return PR.opus;return road==='bypass'?PR.haiku:PR.opus}
+function ils(x){if(x>=1)return '₪'+x.toFixed(2);return (x*100).toFixed(x*100>=1?2:3)+' אג\''}
+let routeCost=0,signMode='shop';
+function renderSeg(){document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.v===signMode)))}
+function clearSigns(){$('signs').innerHTML='';$('sgl').hidden=true;$('sgList').innerHTML=''}
+const SPOTS=[[372,196],[452,156],[524,118]];
+function drawSigns(list){const g=$('signs');g.innerHTML='';const NS='http://www.w3.org/2000/svg';list.slice(0,3).forEach((t,i)=>{const [x,y]=SPOTS[i];const s=document.createElementNS(NS,'g');s.style.animationDelay=(i*0.25)+'s';const pole=document.createElementNS(NS,'line');pole.setAttribute('x1',x);pole.setAttribute('x2',x);pole.setAttribute('y1',y);pole.setAttribute('y2',y+38);pole.setAttribute('stroke','#cfd6e4');pole.setAttribute('stroke-width','3');const r=document.createElementNS(NS,'rect');r.setAttribute('x',x-68);r.setAttribute('y',y-30);r.setAttribute('width',136);r.setAttribute('height',30);r.setAttribute('rx',6);r.setAttribute('fill','#fff');r.setAttribute('stroke','#1a5fd6');r.setAttribute('stroke-width','2');const tx=document.createElementNS(NS,'text');tx.setAttribute('x',x);tx.setAttribute('y',y-10);tx.setAttribute('font-size','12');tx.setAttribute('fill','#0b2a66');const w=String(t);tx.textContent=w.length>20?w.slice(0,19)+'…':w;s.append(pole,r,tx);g.appendChild(s)});const ul=$('sgList');ul.innerHTML='';list.slice(0,3).forEach(t=>{const li=document.createElement('li');li.textContent=t;ul.appendChild(li)});$('sgl').hidden=!list.length}
+async function bloom(task){if(signMode==='off')return 0;const p='אתה הסוכן של הנהג בכביש העוקף. המשימה שלו: '+task+'\nהאם היא קשורה לקניות או לצריכה? אם כן, הצע עד 3 "שלטים" קצרים (עד 5 מילים כל אחד, בעברית) של סוגי מבצעים שכדאי לו לחפש עבור הצורך הזה. בלי שמות חנויות, בלי מחירים ובלי להמציא מבצעים אמיתיים. החזר JSON בלבד: {"shop":true או false,"signs":["..."]}';let o=null;try{o=await sample(p,{modelTier:'quick',cache:false})}catch(e){return 0}const t=(o&&o.text)||'';let r=null;try{const m=t.match(/\{[\s\S]*\}/);r=m?JSON.parse(m[0]):null}catch(e){r=null}const c=price(pick(o&&o.modelApplied,'bypass'),tok(p),tok(t));if(!r)return c;const list=Array.isArray(r.signs)?r.signs.filter(x=>typeof x==='string').map(x=>x.slice(0,40)):[];if(signMode==='shop'&&!r.shop)return c;if(list.length)drawSigns(list);return c}
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{signMode=b.dataset.v;renderSeg();saveMem();if(signMode==='off')clearSigns()}));
+let sample=null,db=null,uid=null,mem=[],stats={bypass:0,toll:0,pn:0,act:0,tollOnly:0,trips:[]},last=null,busy=false,memRef=null,statRef=null;
+
+$('ex').innerHTML='';
+EX.forEach(t=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=t;b.onclick=()=>{$('task').value=t;$('task').focus()};$('ex').appendChild(b)});
+
+function moveCar(road){const c=$('car');c.setAttribute('transform',road==='bypass'?'translate(470 105) rotate(69)':road==='toll'?'translate(130 105) rotate(-69)':'translate(300 300)')}
+function setStatus(t,w){const s=$('status');s.textContent=t||'';s.className='note'+(w?' warn':'')}
+
+function renderStats(){renderRc();renderHero();
+  const b=stats.bypass||0,t=stats.toll||0,n=b+t;
+  $('nB').textContent=b;$('nT').textContent=t;
+  const act=stats.act||0,full=stats.tollOnly||0,p=full>0?Math.max(0,Math.round((1-act/full)*100)):0;
+  $('nP').textContent=p+'%';$('mAct').textContent=ils(act);$('mToll').textContent=ils(full);
+  const pr=$('proj');pr.textContent='';
+  const pn=stats.pn||0;if(pn>0&&full>0){const per=(full-act)/pn,mo=per*100000;const a=document.createElement('div');a.textContent='עסק עם 100,000 נסיעות בחודש, בתמהיל כמו שלך, היה חוסך בערך:';const bb=document.createElement('b');bb.textContent=ils(mo)+' בחודש';pr.append(a,bb)}else{pr.textContent='אחרי הנסיעה הראשונה תופיע כאן תחזית חיסכון לעסק.'}$('barB').style.width=(n?b/n*100:0)+'%';
+  const ul=$('log');ul.innerHTML='';
+  (stats.trips||[]).slice().reverse().forEach(x=>{const li=document.createElement('li');const d=document.createElement('b');d.style.background=x.road==='bypass'?'var(--by)':'var(--toll)';const s=document.createElement('span');s.textContent=x.task;li.append(d,s);ul.appendChild(li)});
+}
+function renderRc(){const tb=$('rcB');tb.innerHTML='';(stats.rc||[]).slice().reverse().forEach(r=>{const tr=document.createElement('tr');[r.t,r.road==='toll'?'אגרה':'עוקף',(r.ok?'✓ ':'')+String(r.model||''),(r.inT||0)+'+'+(r.outT||0),ils(+r.c||0),ils(+r.tc||0)].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td)});tb.appendChild(tr)})}
+function showCmp(a,b){const B=a.road==='bypass'?a:b,T=a.road==='bypass'?b:a;$('aB').textContent=B.text;$('aT').textContent=T.text;$('cB').textContent=(B.ok?'✓ '+B.used+' · ':'')+'עלה '+ils(B.c);$('cT').textContent=(T.ok?'✓ '+T.used+' · ':'')+'עלה '+ils(T.c);$('cmp').hidden=false}
+$('cpy').onclick=async()=>{const rows=[['time','road','model','confirmed','in_tokens_est','out_tokens_est','cost_ils','toll_cost_ils','task']].concat((stats.rc||[]).map(r=>[r.t,r.road,r.model,r.ok?'yes':'no',r.inT,r.outT,r.c,r.tc,'"'+String(r.task).replace(/"/g,'""')+'"']));try{await navigator.clipboard.writeText(rows.map(x=>x.join(',')).join('\n'));$('cpyN').textContent='הועתק.'}catch(e){$('cpyN').textContent='ההעתקה נחסמה בדפדפן.'}};
+function renderMem(){renderHero();
+  const tb=$('mem');tb.innerHTML='';
+  if(!mem.length){const tr=document.createElement('tr');const td=document.createElement('td');td.colSpan=4;td.className='lbl';td.textContent='עוד אין פרטים. הוסף את הראשון למטה.';tr.appendChild(td);tb.appendChild(tr);return}
+  mem.forEach((m,i)=>{
+    const tr=document.createElement('tr');const t=document.createElement('td');t.textContent=m.text;tr.appendChild(t);
+    ['bypass','toll'].forEach(k=>{const td=document.createElement('td');td.className='c';const cb=document.createElement('input');cb.type='checkbox';cb.checked=!!m[k];cb.setAttribute('aria-label',(k==='bypass'?'עוקף: ':'אגרה: ')+m.text);cb.onchange=()=>{mem[i]={...mem[i],[k]:cb.checked};saveMem()};td.appendChild(cb);tr.appendChild(td)});
+    const td=document.createElement('td');td.className='c';const x=document.createElement('button');x.className='x';x.type='button';x.textContent='מחק';x.onclick=()=>{mem.splice(i,1);renderMem();saveMem()};td.appendChild(x);tr.appendChild(td);
+    tb.appendChild(tr)});
+}
+let saving=Promise.resolve();
+function saveMem(){lsSet('hw_mem',mem);return;const body={signs:signMode,items:mem.map(m=>({text:m.text,bypass:!!m.bypass,toll:!!m.toll}))};saving=saving.then(()=>memRef.set(body)).catch(()=>{$('memNote').textContent='לא הצלחתי לשמור. השינוי נשמר רק בדף הזה.'})}
+let savingS=Promise.resolve();
+function saveStats(){lsSet('hw_stats',stats);return;const body={dec:stats.dec||0,rc:(stats.rc||[]).slice(-30),bypass:stats.bypass,toll:stats.toll,pn:stats.pn||0,act:stats.act||0,tollOnly:stats.tollOnly||0,trips:(stats.trips||[]).slice(-30)};savingS=savingS.then(()=>statRef.set(body)).catch(()=>{})}
+
+$('addF').addEventListener('submit',e=>{e.preventDefault();const v=$('newM').value.trim();if(!v)return;mem.push({text:v.slice(0,200),bypass:true,toll:true});$('newM').value='';renderMem();saveMem()});
+
+function memFor(road){const ok=mem.filter(m=>m[road]).map(m=>'- '+m.text);return ok.length?'מה שהנהג הרשה לך לדעת עליו:\n'+ok.join('\n')+'\n\n':''}
+
+const API='https://tlvugvpvoenhzdheutxi.supabase.co/functions/v1/hybridways';
+let routeUse=null;
+async function route(task){
+  const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'route',task})}).then(x=>x.json()).catch(()=>({error:'net'}));
+  if(r.error){throw {code:r.error}}
+  routeUse=r.route||null;routeCost=routeUse?routeUse.cost_usd*USD:0;
+  return {road:r.road==='toll'?'toll':'bypass',reason:r.reason||'',bl:r.bl||'',tl:r.tl||'',plain:r.plain||''};
+}
+async function drive(task,road,reason,forced){
+  $('resBox').hidden=false;const tg=$('tag');tg.className='tag '+road;tg.textContent=road==='bypass'?'כביש עוקף · מודל מהיר':'כביש אגרה · מודל חזק';
+  $('why').textContent=forced?'נסיעת השוואה: אותה משימה בכביש השני.':reason;$('ans').textContent='בדרך...';moveCar(road);
+  $('cost').hidden=true;$('ans').textContent='בדרך... (תשובה אמיתית דרך ה-API)';
+  const memList=mem.filter(m=>m[road]).map(m=>m.text);
+  const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'drive',task,road,recommended:forced?null:(lastRec||null),memory:memList,route:forced?null:(routeUse?{in:routeUse.in,out:routeUse.out}:null)})}).then(x=>x.json()).catch(()=>({error:'net'}));
+  if(r.error)throw {code:r.error};
+  const out=r.text||'';$('ans').textContent=String(out).replace(/\*\*/g,'').replace(/^#+\s*/gm,'');
+  const used=r.model||'';const ok=used.startsWith(MODELS[road]);const tier='';const inT=r.in,outT=r.out;
+  const c=r.cost_usd*USD,tc=r.toll_cost_usd*USD;
+  const ce=$('cost');ce.hidden=false;ce.textContent='קבלה מ-Anthropic: ענה '+used+' · '+inT+' טוקנים נכנסו, '+outT+' יצאו'+(r.route_in?' (+ווייז '+r.route_in+'/'+r.route_out+')':'')+' · עלה '+ils(c)+' · אותה נסיעה באגרה: '+ils(tc)+' · לכל 1,000 נסיעות כאלה: '+ils(c*1000)+' מול '+ils(tc*1000);
+  const clean=String(out).replace(/\*\*/g,'').replace(/^#+\s*/gm,'');
+  if(forced&&last&&last.text&&last.task===task){showCmp(last,{road,text:clean,c,ok,used})}else{$('cmp').hidden=true}
+  last={task,road,text:clean,c,ok,used};
+  let sc=0;loadLedger();
+  stats.act=(stats.act||0)+c+sc;stats.pn=(stats.pn||0)+1;stats.tollOnly=(stats.tollOnly||0)+tc;
+  stats.rc=[...(stats.rc||[]),{t:new Date().toISOString().slice(0,16).replace('T',' '),task:task.slice(0,60),road,model:used||tier,ok,inT,outT,c:+(c+sc).toFixed(8),tc:+tc.toFixed(8)}].slice(-30);
+  stats[road]=(stats[road]||0)+1;stats.trips=[...(stats.trips||[]),{task:task.slice(0,80),road}].slice(-30);renderStats();saveStats();
+}
+
+$('f').addEventListener('submit',async e=>{
+  e.preventDefault();if(busy)return;const task=$('task').value.trim();if(!task){setStatus('כתוב משימה קודם.',true);return}
+  
+  busy=true;$('go').disabled=true;$('swap').disabled=true;setStatus('הווייז בוחר כביש...');moveCar('');
+  try{const r=await route(task);last=null;setStatus('');await choose(task,r)}
+  catch(err){setStatus(err&&err.code==='daily_cap'?'התקציב היומי של ההדגמה (3$) נגמר. נסה מחר.':'משהו נתקע בדרך. נסה שוב.'+(err&&err.code?' ('+String(err.code).slice(0,40)+')':''),true)}
+  finally{busy=false;$('go').disabled=false}
+});
+function estFor(road,task){const inT=tok(memFor(road)+task)+90;const outs=(stats.rc||[]).map(r=>r.outT).filter(Boolean);const outT=outs.length?Math.round(outs.reduce((a,b)=>a+b,0)/outs.length):300;return price(road==='bypass'?PR.haiku:PR.opus,inT,outT)}
+function knows(road){const k=mem.filter(m=>m[road]).map(m=>m.text);return k.length?'יידע עליך: '+k.join(' · '):'לא יידע עליך כלום'}
+let lastRec=null;
+function choose(task,r){lastRec=r.road;return new Promise(res=>{const box=$('choose');box.hidden=false;$('chWhy').textContent='למה: '+r.reason;
+  const eb=estFor('bypass',task),et=estFor('toll',task);$('oBc').textContent=ils(eb);$('oTc').textContent=ils(et);
+  $('oBl').textContent=r.bl||'כלי קטן וזול';$('oTl').textContent=r.tl||'כלי כבד ובטוח';$('chPlain').textContent=r.plain||'';
+  const COFFEE=12;const eq=x=>{const m=x*100000;return '100,000 נסיעות כאלה = '+(m<COFFEE?'פחות מכוס קפה':'כ-'+Math.round(m/COFFEE).toLocaleString('he-IL')+' כוסות קפה')+' ('+ils(m)+')'};
+  $('oBe').textContent=eq(eb);$('oTe').textContent=eq(et);$('oBk').textContent=knows('bypass');$('oTk').textContent=knows('toll');
+  $('oB').classList.toggle('is-rec',r.road==='bypass');$('oT').classList.toggle('is-rec',r.road==='toll');
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+  const go=async road=>{$('oB').onclick=$('oT').onclick=null;box.hidden=true;stats.dec=(stats.dec||0)+1;const own=road!==r.road;await drive(task,road,own?'בחרת בעצמך, בניגוד להמלצה. אתה קובע את התנועה.':r.reason,false);$('swap').disabled=false;res()};
+  $('oB').onclick=()=>go('bypass');$('oT').onclick=()=>go('toll')})}
+function renderHero(){$('hSave').textContent=ils(Math.max(0,(stats.tollOnly||0)-(stats.act||0)));$('hDec').textContent=String(stats.dec||0);const b=mem.filter(m=>m.bypass).length,t=mem.filter(m=>m.toll).length;$('hKnow').textContent=mem.length?(b+' לעוקף · '+t+' לאגרה'):'0'}
+$('swap').onclick=async()=>{if(busy||!last||!sample)return;busy=true;$('swap').disabled=true;$('go').disabled=true;const other=last.road==='bypass'?'toll':'bypass';
+  try{await drive(last.task,other,'',true)}catch(err){setStatus('משהו נתקע בדרך. נסה שוב.',true)}finally{busy=false;$('go').disabled=false;$('swap').disabled=false}};
+
+function lsGet(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+{const m=lsGet('hw_mem');if(Array.isArray(m))mem=m.filter(x=>x&&typeof x.text==='string').map(x=>({text:x.text,bypass:!!x.bypass,toll:!!x.toll}));
+ const s=lsGet('hw_stats');if(s&&typeof s==='object'){stats=Object.assign(stats,s);if(!Array.isArray(stats.rc))stats.rc=[];if(!Array.isArray(stats.trips))stats.trips=[]}
+ let id=lsGet('hw_id');if(!id){id=Math.random().toString(36).slice(2,8).toUpperCase();lsSet('hw_id',id)}$('idn').textContent='קרדיט-'+id;
+ sample=true;$('memNote').textContent='הת"ז נשמרת בדפדפן שלך בלבד. השרת מקבל רק את מה שסימנת לכל נסיעה, ולא שומר אותו.'}
+async function loadLedger(){try{const s=await fetch(API).then(x=>x.json());if(s&&s.trips!=null){const save=Math.max(0,(+s.toll_cost_usd-+s.cost_usd)*USD);$('lgT').textContent=String(s.trips);$('lgB').textContent=s.bypass+' / '+s.toll;$('lgC').textContent=ils(+s.cost_usd*USD)+' מול '+ils(+s.toll_cost_usd*USD);$('lgS').textContent=(+s.toll_cost_usd>0?Math.round((1-s.cost_usd/s.toll_cost_usd)*100):0)+'%';$('lgO').textContent=String(s.overridden)}}catch(e){}}
+renderStats();renderMem();loadLedger();
+}
+</script>
+</body>
+</html>

@@ -201,7 +201,7 @@ input[type=text]{font:16px inherit;font-family:inherit;flex:1;min-height:44px;pa
   </section>
 
   <section class="card choose" id="choose" hidden>
-    <p class="pick">👇 לחץ על אחד משני הכבישים כדי לנסוע</p><h2>הווייז שלך מציע שני מסלולים. אתה מחליט.</h2>
+    <p class="pick">👇 לחץ על אחד משלושת הכבישים כדי לנסוע</p><h2>הווייז שלך מציע שלושה מסלולים. אתה מחליט.</h2>
     <p class="plain" id="chPlain"></p><p class="mapnote" id="chMap"></p><p class="why" id="chWhy"></p>
     <div class="opts">
       <button type="button" class="opt bypass" id="oB"><span class="tag bypass">קטנוע · מודל מהיר</span><span class="like" id="oBl"></span><b id="oBc"></b><span class="eq" id="oBe"></span><span id="oBk" class="lbl"></span><span class="tk" id="oBt"></span><span class="rec" id="oBr">מומלץ</span></button>
@@ -416,7 +416,7 @@ $('f').addEventListener('submit',async e=>{
   e.preventDefault();if(busy)return;const task=$('task').value.trim();if(!task){setStatus('כתוב משימה קודם.',true);return}
   
   $('rep').hidden=true;tripId=null;busy=true;$('go').disabled=true;$('swap').disabled=true;setStatus('הווייז בוחר כביש...');moveCar('');
-  try{const r=await route(task);last=null;setStatus('👇 עכשיו לחץ על אחד משני הכבישים למטה.');busy=false;$('go').disabled=false;choose(task,r)}
+  try{const r=await route(task);last=null;setStatus('👇 עכשיו לחץ על אחד משלושת הכבישים למטה.');busy=false;$('go').disabled=false;choose(task,r)}
   catch(err){setStatus(errMsg(err&&err.code),true)}
   finally{busy=false;$('go').disabled=false}
 });

@@ -98,6 +98,7 @@ input[type=text]{font:16px inherit;font-family:inherit;flex:1;min-height:44px;pa
 .mrow{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.6fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
 .mbar{height:12px;border-radius:6px;background:var(--toll);overflow:hidden}.mbar i{display:block;height:100%;background:var(--by)}
 .st{font-size:12px;font-weight:800;padding:2px 8px;border-radius:999px;white-space:nowrap}.st.go{background:var(--by);color:#fff}.st.jam{background:var(--toll);color:#1a1300}.st.wait{background:var(--line);color:var(--ink)}
+.mani .close{margin:18px 0 0;padding:16px 18px;border-radius:14px;border:2px solid #ffd54a}.mani .cl{margin:0 0 8px;font-size:clamp(20px,2.6vw,26px);font-weight:800;color:#ffd54a;line-height:1.3}.mani .close ul{margin:0;padding-inline-start:20px;font-size:14px;line-height:1.6}
 .rl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.rl li{display:flex;gap:12px;align-items:flex-start}.rl b{display:block;font-size:17px;margin-bottom:2px}.rl span:not(.sg){font-size:14px;color:var(--mute);line-height:1.5}
 .sg{flex:none;width:44px;height:44px;border-radius:50%;border:4px solid var(--c);background:#fff;color:var(--c);display:grid;place-items:center;font-size:18px;font-weight:800}
 @media(max-width:900px){.rl{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}@media(max-width:600px){.rl{grid-template-columns:minmax(0,1fr)}}
@@ -146,6 +147,8 @@ input[type=text]{font:16px inherit;font-family:inherit;flex:1;min-height:44px;pa
     </ol>
     <table class="par"><thead><tr><th>ככה זה עובד בכביש</th><th>ככה זה יעבוד בכביש AI</th></tr></thead><tbody><tr><td>Waze: הנהג לא משלם על האפליקציה.</td><td>HybridWays: הנהג לא משלם על הווייז.</td></tr><tr><td>נהגים מדווחים על פקקים, וכולם נוסעים מהר יותר.</td><td>כל נסיעה מדווחת איפה קטנוע הספיק, וכולם משלמים פחות.</td></tr><tr><td>Waze ממליץ על מסלול, והנהג בוחר אם לנסוע בו.</td><td>הווייז ממליץ על עוקף או אגרה, והנהג מאשר או עוקף את ההמלצה.</td></tr><tr><td>כביש 6 גובה אגרה, ויש גם דרך עוקפת בחינם.</td><td>מודל חזק עולה ביוקר, ומודל קטן עולה כמעט כלום.</td></tr><tr><td>תחנות דלק ומסעדות משלמות כדי להופיע במפה.</td><td>עסקים משלמים כדי להופיע כשלט בכביש העוקף, ורק אם הנהג הסכים.</td></tr><tr><td>מי שמביא את התנועה מרוויח, לא מי שסלל.</td><td>הנהגים מחזיקים את מפת הנסיעות, והכבישים מקבלים תנועה נכונה במקום פקקים במשאיות.</td></tr><tr><td>גוגל משלמת לאפל כדי להיות ברירת המחדל באייפון.</td><td>הכבישים משלמים לנהגים כדי לקבל את התנועה, והכסף נכנס לארנק.</td></tr><tr><td>רישיון הנהיגה שלך הולך איתך לכל כביש.</td><td>הת"ז קרדיט שלך הולכת איתך לכל כביש AI, ואתה מחליט מה היא מספרת.</td></tr></tbody></table>
     <p class="sum">כל נסיעה שלך מלמדת את כולם. ביחד אנחנו יודעים איפה קטנוע מספיק, הנהגים מחזיקים את המפה, והכבישים מקבלים את הנהג הנכון. כולם מרוויחים, חוץ מהמפלצת.</p>
+    <div class="close"><p class="cl">הווייז בידינו. תשמרו עלינו, אנחנו שם. תאתגרו אותנו, אנחנו בדרך.</p>
+      <ul><li>אחוז קבוע מכל הכנסה עובר לארנקי הנהגים, לפי כלל כתוב, לא לפי החלטה של מישהו.</li><li>הנתונים שייכים לנהג: הוא יכול לראות אותם, לקחת אותם ולמחוק אותם.</li><li>ההמלצה לא נמכרת. היא הולכת לכביש שמתאים לנסיעה, בשום מחיר אחר.</li></ul></div>
     <p class="fine">בדף ההוכחה כל נסיעה נרשמת ביומן בלי תוכן השאלה. המפה המשותפת היא השלב הבא.</p>
   </section>
 

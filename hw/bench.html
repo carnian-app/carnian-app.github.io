@@ -166,7 +166,7 @@ async function load(){
     const ser=[['rBiz','var(--series-1)','אחוז מהחיסכון של עסקים'],['rRef','var(--series-2)','עמלת הפניה מהכבישים'],['tot','var(--series-3)','סך ההכנסה החודשית']];
     $('pLeg').innerHTML=ser.map(([k,c,n])=>'<span><i style="background:'+c+'"></i>'+n+'</span>').join('');
     ser.forEach(([k,c])=>{el('path',{d:M.map((x,i)=>(i?'L':'M')+X(x.m)+' '+Y(x[k])).join(' '),fill:'none',stroke:c,'stroke-width':2,'stroke-linejoin':'round'},s)});
-    const lt=el('text',{x:X(24)-6,y:Y(last.tot)-8,'text-anchor':'start','font-size':13,'font-weight':700},s);lt.style.fill='var(--text-primary)';lt.textContent='$'+Math.round(last.tot).toLocaleString('he-IL')+' בחודש';
+    const lt=el('text',{x:X(24),y:Y(last.tot)-10,'text-anchor':'start',direction:'ltr','font-size':13,'font-weight':700},s);lt.style.fill='var(--text-primary)';lt.textContent='$'+Math.round(last.tot).toLocaleString('he-IL')+' בחודש';
     const cross=el('line',{x1:0,x2:0,y1:T,y2:H-B,stroke:'var(--text-secondary)','stroke-dasharray':'3 3',opacity:0},s);
     const hit=el('rect',{x:10,y:T,width:W-L-10,height:H-T-B,fill:'transparent'},s);
     hit.addEventListener('mousemove',e=>{const r=s.getBoundingClientRect(),px=(e.clientX-r.left)*W/r.width;let m=Math.round(1+(W-L-px)/((W-L-10)/23));m=Math.max(1,Math.min(24,m));const x=M[m-1];cross.setAttribute('x1',X(m));cross.setAttribute('x2',X(m));cross.setAttribute('opacity',1);

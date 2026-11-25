@@ -57,6 +57,13 @@ details summary{cursor:pointer;color:var(--series-1);font-size:13px}
     <div id="cCat"></div></div>
 
 
+  <div class="card" id="c3card"><h2>הכביש האמצעי: קטנוע, מכונית, משאית</h2>
+    <p class="k">אותן 100 משימות, עכשיו עם מכונית באמצע (Claude Sonnet 5.5). השופט העיוור קיבל את שלוש התשובות יחד, בסדר אקראי, ודירג כל אחת.</p>
+    <div class="legend"><span><i style="background:var(--series-1)"></i>קטנוע (Haiku)</span><span><i style="background:var(--series-3)"></i>מכונית (Sonnet)</span><span><i style="background:var(--series-2)"></i>משאית (Opus)</span></div>
+    <div class="grid"><div><p class="k" style="margin:0 0 4px">ציון איכות ממוצע (1–10)</p><div id="c3q"></div></div><div><p class="k" style="margin:0 0 4px">עלות ל-1,000 נסיעות (₪)</p><div id="c3c"></div></div></div>
+    <div class="tiles" id="t3" style="margin-top:14px"></div>
+    <p class="note" id="n3"></p>
+  </div>
   <div class="card" id="sumCard"><h2>מה המבחן מראה, בלי ייפוי</h2><div id="summary" class="note" style="font-size:15px;color:var(--text-primary)"></div></div>
 
   <div class="card"><h2>תחזית לשנתיים: הרווח הגלום</h2>
@@ -134,6 +141,27 @@ async function load(){
   $('rows').innerHTML=R.map(r=>{const id=ideal(r),ok=r.route_road===id,cls=ok?'ok':(r.route_road==='toll'?'ov':'no'),txt=ok?'✓':(r.route_road==='toll'?'יקר':'✗');
     return '<tr><td>'+r.id+'</td><td>'+esc(r.task)+(r.sensitive?' <span class="note">(רגיש)</span>':'')+'<details><summary>תשובות ונימוק</summary><div class="note">שופט: '+esc(r.judge_reason)+'</div><div class="ans"><b>קטנוע ('+r.b_score+'/10):</b>\n'+esc(r.b_text)+'</div><div class="ans"><b>משאית ('+r.t_score+'/10):</b>\n'+esc(r.t_text)+'</div></details></td><td><span class="pill '+(r.route_road==='bypass'?'p-by':'p-to')+'">'+(r.route_road==='bypass'?'קטנוע':'משאית')+'</span> <span class="'+cls+'">'+txt+'</span></td><td>'+r.b_score+'</td><td>'+r.t_score+'</td><td>'+(r.enough?'כן':'לא')+'</td><td>'+agor(r.b_cost)+'</td><td>'+agor(r.t_cost)+'</td></tr>'}).join('');
 
+
+  // three roads
+  const R3=R.filter(r=>r.j3_b!=null&&r.j3_m!=null&&r.j3_t!=null).map(r=>({...r,m_cost:+r.m_cost||0}));
+  if(R3.length){
+    const avg=f=>R3.reduce((a,r)=>a+f(r),0)/R3.length;
+    const q=[['קטנוע',avg(r=>r.j3_b),'var(--series-1)'],['מכונית',avg(r=>r.j3_m),'var(--series-3)'],['משאית',avg(r=>r.j3_t),'var(--series-2)']];
+    const c=[['קטנוע',avg(r=>r.b_cost)*1000*USD,'var(--series-1)'],['מכונית',avg(r=>r.m_cost)*1000*USD,'var(--series-3)'],['משאית',avg(r=>r.t_cost)*1000*USD,'var(--series-2)']];
+    hbars($('c3q'),q.map(([k,v,cc])=>({k,v,c:cc,tip:v.toFixed(2)+' מתוך 10'})),v=>v.toFixed(1));
+    hbars($('c3c'),c.map(([k,v,cc])=>({k,v,c:cc,tip:'₪'+v.toFixed(2)+' ל-1,000 נסיעות'})),v=>'₪'+v.toFixed(2));
+    // smart 3-road: cheapest road within 1 point of best; sensitive -> never scooter
+    let cost3=0,q3=0,cnt={b:0,m:0,t:0},costT=0,qT=0;
+    R3.forEach(r=>{const best=Math.max(r.j3_b,r.j3_m,r.j3_t);let pick;
+      if(!r.sensitive&&r.j3_b>=best-1)pick='b';else if(r.j3_m>=best-1)pick='m';else pick='t';
+      cnt[pick]++;cost3+=r.route_cost+(pick==='b'?r.b_cost:pick==='m'?r.m_cost:r.t_cost);q3+=(pick==='b'?r.j3_b:pick==='m'?r.j3_m:r.j3_t);costT+=r.t_cost;qT+=r.j3_t});
+    const mVsT=R3.filter(r=>r.j3_m>=r.j3_t-1).length;
+    $('t3').innerHTML=[[Math.round(mVsT/R3.length*100)+'%','מהמשימות המכונית כמעט טובה כמו המשאית (פער של נקודה לכל היותר)'],
+      ['פי '+(avg(r=>r.t_cost)/avg(r=>r.m_cost)).toFixed(1),'המשאית יקרה מהמכונית'],
+      [Math.round((1-cost3/costT)*100)+'%','חיסכון בניתוב חכם לשלושה כבישים'],
+      [(q3/R3.length).toFixed(1)+' / '+(qT/R3.length).toFixed(1),'איכות: ניתוב חכם / הכול במשאית']].map(([b,t])=>'<div class="tile"><b>'+b+'</b><span>'+esc(t)+'</span></div>').join('');
+    $('n3').textContent='ניתוב חכם = הכביש הזול ביותר שהשופט נתן לו ציון של עד נקודה אחת מתחת לטוב ביותר, ובנושא רגיש לא נוסעים בקטנוע. בחלוקה: '+cnt.b+' קטנוע, '+cnt.m+' מכונית, '+cnt.t+' משאית. זה הניתוב שהווייז צריך ללמוד, ממפת הנהגים ומהדיווחים; הווייז של היום עוד לא מגיע אליו. נמדד על '+R3.length+' משימות.';
+  } else { $('c3card').hidden=true }
   // honest summary
   const nsE=Math.round(enoughNS/ns.length*100),sens=R.filter(r=>r.sensitive),sensToll=sens.filter(r=>r.route_road==='toll').length;
   const bAvg=ns.reduce((a,r)=>a+r.b_score,0)/ns.length,tAvg=ns.reduce((a,r)=>a+r.t_score,0)/ns.length,b7=R.filter(r=>r.b_score>=7).length;
@@ -143,7 +171,7 @@ async function load(){
    '<li><b>האיכות:</b> במשימות יומיומיות הקטנוע קיבל '+bAvg.toFixed(1)+' מ-10, והמשאית '+tAvg.toFixed(1)+'. '+b7+' מתוך '+R.length+' תשובות קטנוע קיבלו 7 ומעלה.</li>'+
    '<li><b>"קטנוע הספיק"</b> לפי הגדרה מחמירה (פער של נקודה לכל היותר מהמשאית): '+nsE+'% מהמשימות היומיומיות. כלומר, לא "רוב הנסיעות", אלא בערך '+(nsE>=45?'חצי':'שליש')+' מהן.</li>'+
    '<li><b>הווייז:</b> חסך '+Math.round((1-waze/allT)*100)+'% מהכסף, ואף פעם לא שלח נושא רגיש לקטנוע ('+sensToll+' מתוך '+sens.length+' רגישים הלכו למשאית). אבל הוא אגרסיבי מדי: '+risky+' פעמים שלח לקטנוע כשהשופט העדיף בבירור את המשאית, והאיכות הממוצעת ירדה מ-'+tollScore.toFixed(1)+' ל-'+chosenScore.toFixed(1)+'.</li>'+
-   '<li><b>מה זה אומר:</b> הכסף אמיתי, אבל צריך "כביש אמצעי" (מודל ביניים), ודיווחי הנהגים כדי לכייל את הווייז. זה בדיוק התפקיד של מפת הנהגים.</li></ul>';
+   '<li><b>מה זה אומר:</b> הכסף אמיתי, אבל שני כבישים לא מספיקים. הכביש האמצעי (למעלה) סוגר את הפער, ודיווחי הנהגים מכיילים את הווייז. זה בדיוק התפקיד של מפת הנהגים.</li></ul>';
   // projection
   const saveRate=1-waze/allT; // measured
   const SC={'זהיר':{biz:20,spend:10000,cons:2000},'בסיסי':{biz:100,spend:30000,cons:20000},'אופטימי':{biz:500,spend:50000,cons:200000}};

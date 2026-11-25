@@ -23,6 +23,16 @@ h1{font-size:clamp(32px,5vw,48px);line-height:1.05;margin:0 0 6px;font-weight:80
 h2{font-size:22px;margin:0 0 12px;font-weight:800}
 .sub{color:var(--mute);margin:0 0 20px;max-width:62ch}
 .top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px;align-items:stretch}
+.shark{border:2px solid #e8a300;background:light-dark(#fffaf0,#221d12)}
+.shark h3{margin:0 0 4px}.shark .sub{color:var(--mut,#777);font-size:13px;margin:0 0 12px}
+.shk{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:10px 0}
+.shk div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+.shk b{display:block;font-size:22px}.shk span{font-size:12px;opacity:.75}
+.shs label{display:block;font-size:14px;margin:10px 0 2px}.shs input{width:100%}
+.sho{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px}
+.sho div{border-radius:10px;padding:12px;text-align:center;background:light-dark(#fff,#2a2418);border:1px solid #e8a300}
+.sho b{display:block;font-size:24px}
+.shr{margin:12px 0 0;padding-inline-start:18px;font-size:14px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
 textarea{width:100%;min-height:120px;font:16px/1.5 inherit;font-family:inherit;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical}
 textarea:focus,input:focus,button:focus-visible{outline:3px solid var(--by);outline-offset:2px}
@@ -248,6 +258,20 @@ input[type=text]{font:16px inherit;font-family:inherit;flex:1;min-height:44px;pa
       <div id="mapRows"></div>
     </div>
   </section>
+  <section class="card shark" id="shark" aria-labelledby="shH">
+    <h3 id="shH">🦈 כרטיס כריש: מה בעל כביש AI קונה כאן</h3>
+    <p class="sub">כמו הסיכה הממותגת בווייז או הנתיב המהיר בכביש 1, רק לנסיעות AI. התנועה למטה אמיתית, מהמפה החיה. המחיר הוא הצעה שאתה מזיז, לא עסקה קיימת.</p>
+    <div class="shk"><div><b id="shT">—</b><span>נסיעות אמיתיות עד עכשיו</span></div><div><b id="shC">—</b><span>קטגוריות במפת הנהגים</span></div><div><b id="shS">—</b><span>חיסכון אמיתי לנהגים</span></div><div><b id="shR">—</b><span>דיווחי נהגים במפה</span></div></div>
+    <div class="shs">
+      <label>נסיעות בחודש בפלטפורמה: <b id="shVv"></b></label><input type="range" id="shV" min="3" max="8" step="0.1" value="5">
+      <label>כמה מהנסיעות עוברות בנתיב הממומן: <b id="shPv"></b></label><input type="range" id="shP" min="1" max="30" step="1" value="10">
+      <label>מחיר לכריש לכל 1,000 נסיעות מופנות: <b id="shMv"></b></label><input type="range" id="shM" min="5" max="200" step="5" value="40">
+      <label>חלק הנהגים מההכנסה (לארנק): <b id="shDv"></b></label><input type="range" id="shD" min="0" max="80" step="5" value="50">
+    </div>
+    <div class="sho"><div><span>הכריש משלם בחודש</span><b id="shO1">—</b></div><div><span>לארנקי הנהגים</span><b id="shO2">—</b></div><div><span>לפלטפורמה</span><b id="shO3">—</b></div></div>
+    <ul class="shr"><li>הנתיב תמיד מסומן "ממומן".</li><li>מצלמת המהירות מצלמת גם את הכריש: אם הוא יקר או חלש, הנהג רואה דוח.</li><li>כלל של נהג וההמלצה של המפה תמיד גוברים על כסף.</li></ul>
+    <p class="sub">דוגמאות מהחיים: וייז מוכרת סיכות ממותגות ופרסומת בעצירה, הנתיב המהיר בכביש 1 גובה לפי העומס, ואמזון השקיעה באנתרופיק מיליארדים שחוזרים אליה כתנועה בענן שלה.</p>
+  </section>
   <section class="card cmp" id="cmp" hidden>
     <h2>השוואה: אותה משימה בשני הכבישים</h2>
     <div class="cmpg"><div><span class="tag bypass">עוקף</span><p class="lbl" id="cB"></p><div class="ans" id="aB"></div></div><div><span class="tag toll">אגרה</span><p class="lbl" id="cT"></p><div class="ans" id="aT"></div></div></div>
@@ -450,6 +474,10 @@ function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 async function loadLedger(){try{const s=await fetch(API+'?driver='+drv).then(x=>x.json());if(s){renderWallet(s.wallet);renderMap(s.map)}if(s&&s.trips!=null){const save=Math.max(0,(+s.toll_cost_usd-+s.cost_usd)*USD);$('lgT').textContent=String(s.trips);$('lgB').textContent=s.bypass+' / '+s.toll;$('lgC').textContent=ils(+s.cost_usd*USD)+' מול '+ils(+s.toll_cost_usd*USD);$('lgS').textContent=(+s.toll_cost_usd>0?Math.round((1-s.cost_usd/s.toll_cost_usd)*100):0)+'%';$('lgO').textContent=String(s.overridden)}}catch(e){}}
 renderStats();renderMem();loadLedger();setStep(1);$('task').addEventListener('input',()=>{if($('s1').classList.contains('now')&&$('task').value.trim())$('task').classList.remove('blink')});
 }
+
+function shCalc(){const v=Math.round(Math.pow(10,+$('shV').value)),p=+$('shP').value,m=+$('shM').value,d=+$('shD').value;const nf=n=>n.toLocaleString('he-IL');$('shVv').textContent=nf(v);$('shPv').textContent=p+'%';$('shMv').textContent='₪'+m;$('shDv').textContent=d+'%';const pay=v*p/100/1000*m;$('shO1').textContent='₪'+nf(Math.round(pay));$('shO2').textContent='₪'+nf(Math.round(pay*d/100));$('shO3').textContent='₪'+nf(Math.round(pay*(100-d)/100))}
+['shV','shP','shM','shD'].forEach(k=>$(k).addEventListener('input',shCalc));shCalc();
+(async()=>{try{const s=await fetch(API).then(x=>x.json());$('shT').textContent=String(s.trips||0);const mp=s.map||{};$('shC').textContent=String(Object.keys(mp).length);let r=0;for(const k in mp)r+=(mp[k].b_n||0)+(mp[k].t_n||0);$('shR').textContent=String(r);$('shS').textContent=(+s.toll_cost_usd>0?Math.round((1-s.cost_usd/s.toll_cost_usd)*100):0)+'%'}catch(e){}})();
 </script>
 </body>
 </html>

@@ -32,10 +32,24 @@ button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line
 button:disabled{opacity:.5;cursor:default}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .chip{font-size:14px;min-height:36px;padding:0 12px;background:transparent;color:var(--mute);border:1px dashed var(--line)}
-.fig{position:relative;min-height:300px;background:var(--asph);border-radius:14px;overflow:hidden}
-.fig svg{position:absolute;inset:0;width:100%;height:100%}
-#car{transition:transform .9s cubic-bezier(.4,.1,.2,1)}
-@media(prefers-reduced-motion:reduce){#car{transition:none}}
+.fig{position:relative;min-height:320px;border-radius:14px;overflow:hidden;background:linear-gradient(#0b1430,#1d2e5c 45%,#2d3138 45%);perspective:520px;perspective-origin:50% 0%}
+.sky{position:absolute;inset:0 0 55% 0}.sun{position:absolute;width:70px;height:70px;border-radius:50%;top:22%;left:12%;background:radial-gradient(#ffd54a,#ff9f1c);box-shadow:0 0 60px #ffb300}
+.plane{position:absolute;left:0;right:0;bottom:0;height:260%;transform-origin:50% 100%;transform:rotateX(72deg);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));direction:rtl}
+.lane{position:relative;background:#2f343c;border-inline-start:3px solid rgba(255,255,255,.25)}
+.lane i{position:absolute;top:0;bottom:0;inset-inline-start:-3px;width:5px;background:repeating-linear-gradient(to top,transparent 0 60px,#fff 60px 110px);animation:dash 1.1s linear infinite;opacity:.85}
+.lane span{position:absolute;bottom:3%;left:0;right:0;text-align:center;font-weight:800;font-size:30px;color:rgba(255,255,255,.85)}
+.l-b{box-shadow:inset 0 0 0 3px rgba(26,95,214,.55)}.l-m{box-shadow:inset 0 0 0 3px rgba(15,157,122,.6)}.l-t{box-shadow:inset 0 0 0 3px rgba(232,163,0,.6)}
+.l-s{background:linear-gradient(90deg,#3b2f10,#4a3a12);box-shadow:inset 0 0 0 3px #ffd54a,0 0 40px rgba(255,213,74,.5)}.l-s i{animation-duration:.25s}
+@keyframes dash{to{background-position-y:110px}}
+.fig[data-road=bypass] .l-b i,.fig[data-road=mid] .l-m i{animation-duration:.6s}.fig[data-road=toll] .l-t i{animation-duration:.45s}
+.gantry{position:absolute;top:47%;left:4%;right:4%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;direction:rtl;transform:translateY(-100%)}
+.gantry b{background:#0e5a2e;color:#fff;border:2px solid #fff;border-radius:6px;text-align:center;font-size:12px;padding:4px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gantry b.sp{background:#6b4e00;border-color:#ffd54a}
+.veh{position:absolute;bottom:6%;font-size:46px;line-height:1;transform:translateX(50%);transition:right .9s cubic-bezier(.4,.1,.2,1);right:50%;filter:drop-shadow(0 6px 6px rgba(0,0,0,.6))}
+.fig[data-road=bypass] .veh{right:12.5%}.fig[data-road=mid] .veh{right:37.5%}.fig[data-road=toll] .veh{right:62.5%}.fig[data-road=sp] .veh{right:87.5%}
+.cam{position:absolute;top:8%;right:6%;font-size:30px}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}.flash.on{animation:fl .6s ease-out}@keyframes fl{0%{opacity:.9}100%{opacity:0}}
+.ticket{position:absolute;top:18%;right:4%;max-width:70%;background:#d7261e;color:#fff;font-weight:800;font-size:15px;padding:8px 12px;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.4);opacity:0;transform:translateY(-8px);transition:opacity .3s,transform .3s}.ticket.on{opacity:1;transform:none}.ticket.ok{background:#0f9d7a}
+@media(prefers-reduced-motion:reduce){.lane i{animation:none}.veh,.ticket{transition:none}.flash.on{animation:none}}
 .res{margin-top:24px}
 .tag{display:inline-flex;align-items:center;gap:6px;font-weight:800;padding:4px 12px;border-radius:999px;color:#fff;font-size:15px}
 .tag.bypass{background:var(--by)}.tag.mid{background:var(--mid)}.tag.toll{background:var(--toll);color:#1a1300}.tk{font-size:13px;font-weight:700;color:var(--accent)}.tk.ok{color:var(--mid)}
@@ -172,31 +186,20 @@ input[type=text]{font:16px inherit;font-family:inherit;flex:1;min-height:44px;pa
       </div>
       <p class="note" id="status"></p>
     </form>
-    <div class="fig" aria-label="צומת: כביש עוקף וכביש אגרה">
-      <svg id="road" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet" role="img">
-        <defs>
-          <linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></linearGradient>
-        </defs>
-        <rect width="600" height="340" fill="url(#sh)"/>
-        <path id="pb" d="M300 345 L300 230 Q300 170 430 120 L640 40" fill="none" stroke="#1a5fd6" stroke-width="64" stroke-linecap="butt" opacity=".9"/>
-        <path id="pt" d="M300 345 L300 230 Q300 170 170 120 L-40 40" fill="none" stroke="#e8a300" stroke-width="64" opacity=".9"/>
-        <path d="M300 345 L300 230" stroke="#3a3f47" stroke-width="66"/>
-        <path d="M300 340 L300 236" stroke="#fff" stroke-width="4" stroke-dasharray="16 14"/>
-        <g font-family="Heebo,sans-serif" font-weight="800" text-anchor="middle">
-          <rect x="430" y="210" width="150" height="62" rx="8" fill="#1a5fd6" stroke="#fff" stroke-width="3"/>
-          <text x="505" y="238" fill="#fff" font-size="22">עוקף</text>
-          <text x="505" y="261" fill="#dbe6ff" font-size="14" font-weight="600">מודל מהיר וזול</text>
-          <rect x="20" y="210" width="150" height="62" rx="8" fill="#e8a300" stroke="#fff" stroke-width="3"/>
-          <text x="95" y="238" fill="#1a1300" font-size="22">אגרה</text>
-          <text x="95" y="261" fill="#3b2c00" font-size="14" font-weight="600">מודל חזק ומאובטח</text>
-        </g>
-        <g id="signs" font-family="Heebo,sans-serif" font-weight="700" text-anchor="middle"></g>
-        <g id="car" transform="translate(300 300)">
-          <ellipse cx="0" cy="16" rx="22" ry="6" fill="#000" opacity=".35"/>
-          <rect x="-16" y="-26" width="32" height="44" rx="9" fill="#d7261e"/>
-          <rect x="-11" y="-18" width="22" height="12" rx="3" fill="#fff" opacity=".85"/>
-        </g>
-      </svg>
+    <div class="fig" id="fig" data-road="" aria-label="כביש תלת-ממדי: קטנוע, מכונית, משאית ונתיב ממומן">
+      <div class="sky"><span class="sun"></span></div>
+      <div class="plane" aria-hidden="true">
+        <div class="lane l-b"><i></i><span>🛵 קטנוע</span></div>
+        <div class="lane l-m"><i></i><span>🚗 מכונית</span></div>
+        <div class="lane l-t"><i></i><span>🚛 משאית</span></div>
+        <div class="lane l-s"><i></i><span>🦈 ממומן</span></div>
+      </div>
+      <div class="gantry" aria-hidden="true"><b>🛵 קטנוע</b><b>🚗 מכונית</b><b>🚛 משאית</b><b class="sp">🦈 נתיב ממומן · דוגמה</b></div>
+      <div class="cam" id="cam" aria-hidden="true">📸</div>
+      <div class="veh" id="veh" aria-hidden="true">🚘</div>
+      <div class="flash" id="flash" aria-hidden="true"></div>
+      <div class="ticket" id="ticket" role="status" aria-live="polite"></div>
+      <div id="signs" hidden></div>
     </div>
   </section>
 
@@ -325,7 +328,8 @@ let sample=null,db=null,uid=null,mem=[],stats={bypass:0,toll:0,pn:0,act:0,tollOn
 $('ex').innerHTML='';
 EX.forEach(t=>{const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=t;b.onclick=()=>{$('task').value=t;$('task').focus()};$('ex').appendChild(b)});
 
-function moveCar(road){const c=$('car');c.setAttribute('transform',road==='bypass'?'translate(470 105) rotate(69)':road==='toll'?'translate(130 105) rotate(-69)':road==='mid'?'translate(300 175)':'translate(300 300)')}
+function moveCar(road){const f=$('fig');f.dataset.road=road||'';$('veh').textContent=road==='bypass'?'🛵':road==='mid'?'🚗':road==='toll'?'🚛':'🚘'}
+let tkT=null;function flashTicket(txt,ok){const t=$('ticket'),fl=$('flash');t.textContent=txt;t.className='ticket on'+(ok?' ok':'');if(!ok){fl.classList.remove('on');void fl.offsetWidth;fl.classList.add('on')}clearTimeout(tkT);tkT=setTimeout(()=>t.className='ticket'+(ok?' ok':''),4500)}
 function setStatus(t,w){const s=$('status');s.textContent=t||'';s.className='note'+(w?' warn':'')}
 
 function renderStats(){renderRc();renderHero();
@@ -360,7 +364,7 @@ $('addF').addEventListener('submit',e=>{e.preventDefault();const v=$('newM').val
 function memFor(road){const ok=mem.filter(m=>m[road]).map(m=>'- '+m.text);return ok.length?'מה שהנהג הרשה לך לדעת עליו:\n'+ok.join('\n')+'\n\n':''}
 
 const API='https://tlvugvpvoenhzdheutxi.supabase.co/functions/v1/hybridways';
-let routeUse=null,routeInfo=null,tripId=null;
+let routeUse=null,routeInfo=null,tripId=null,estNow=null;
 let rules=lsGet('hw_rules')||{};
 {const CATS=['קניות ורשימות','תרגום וניסוח','מידע כללי','טיולים ותכנון','אוכל ומתכונים','עבודה ומיילים','קוד וטכני','כתיבה ארוכה','כסף','בריאות','משפט וחוזים','פרטים אישיים','אחר'];
  const rg=$('rg');CATS.forEach(c=>{const l=document.createElement('label');l.textContent=c;const sel=document.createElement('select');[['','אוטומטי'],['bypass','🛵 קטנוע'],['mid','🚗 מכונית'],['toll','🚛 משאית']].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;sel.appendChild(o)});sel.value=rules[c]||'';sel.onchange=()=>{if(sel.value)rules[c]=sel.value;else delete rules[c];lsSet('hw_rules',rules)};l.appendChild(sel);rg.appendChild(l)})}
@@ -425,13 +429,13 @@ function knows(road){const k=mem.filter(m=>m[road]).map(m=>m.text);return k.leng
 let lastRec=null;
 function choose(task,r){lastRec=r.road;return new Promise(res=>{const box=$('choose');box.hidden=false;$('chWhy').textContent='למה: '+r.reason;$('chMap').innerHTML='';{const b=document.createElement('b');b.textContent=routeInfo&&routeInfo.source==='map'?'🗺️ ההמלצה באה ממפת הנהגים:':'🗺️ מפת הנהגים:';$('chMap').append(b,document.createTextNode(routeInfo?routeInfo.note:''))}
   const eb=estFor('bypass',task),em=estFor('mid',task),et=estFor('toll',task);$('oBc').textContent=ils(eb);$('oMc').textContent=ils(em);$('oTc').textContent=ils(et);
-  {const E={bypass:eb,mid:em,toll:et},er=E[r.road];[['bypass','oBt'],['mid','oMt'],['toll','oTt']].forEach(([k,id])=>{const d=E[k]-er,el=$(id);if(k===r.road){el.className='tk ok';el.textContent='הכביש הנכון למשימה'}else if(d>0){el.className='tk';el.textContent='🚨 דוח מהירות: '+ils(d*1000)+' יותר לכל 1,000 נסיעות'}else{el.className='tk';el.textContent='זול יותר, אבל עלול לא להספיק'}})}
+  {const E={bypass:eb,mid:em,toll:et},er=E[r.road];estNow={E,rec:r.road};[['bypass','oBt'],['mid','oMt'],['toll','oTt']].forEach(([k,id])=>{const d=E[k]-er,el=$(id);if(k===r.road){el.className='tk ok';el.textContent='הכביש הנכון למשימה'}else if(d>0){el.className='tk';el.textContent='🚨 דוח מהירות: '+ils(d*1000)+' יותר לכל 1,000 נסיעות'}else{el.className='tk';el.textContent='זול יותר, אבל עלול לא להספיק'}})}
   $('oBl').textContent=r.bl||'כלי קטן וזול';$('oMl').textContent=r.ml||'רכב נוח ובטוח';$('oTl').textContent=r.tl||'כלי כבד ובטוח';$('chPlain').textContent=r.plain||'';
   const COFFEE=12;const eq=x=>{const m=x*100000;return '100,000 נסיעות כאלה = '+(m<COFFEE?'פחות מכוס קפה':'כ-'+Math.round(m/COFFEE).toLocaleString('he-IL')+' כוסות קפה')+' ('+ils(m)+')'};
   $('oBe').textContent=eq(eb);$('oMe').textContent=eq(em);$('oMk').textContent=knows('mid');$('oTe').textContent=eq(et);$('oBk').textContent=knows('bypass');$('oTk').textContent=knows('toll');
   $('oB').classList.toggle('is-rec',r.road==='bypass');$('oM').classList.toggle('is-rec',r.road==='mid');$('oT').classList.toggle('is-rec',r.road==='toll');
   box.scrollIntoView({behavior:'smooth',block:'nearest'});setStep(2);
-  const go=async road=>{if(busy)return;busy=true;$('go').disabled=true;setStatus('');$('oB').onclick=$('oM').onclick=$('oT').onclick=null;box.hidden=true;stats.dec=(stats.dec||0)+1;const own=road!==r.road;try{await drive(task,road,own?'בחרת בעצמך, בניגוד להמלצה. אתה קובע את התנועה.':r.reason,false);$('swap').disabled=false}catch(err){$('resBox').hidden=true;setStatus(errMsg(err&&err.code),true);setStep(1)}finally{busy=false;$('go').disabled=false;res()}};
+  const go=async road=>{if(busy)return;busy=true;$('go').disabled=true;setStatus('');$('oB').onclick=$('oM').onclick=$('oT').onclick=null;box.hidden=true;stats.dec=(stats.dec||0)+1;const own=road!==r.road;if(estNow){const d=estNow.E[road]-estNow.E[estNow.rec];if(d>0)flashTicket('🚨 דוח מהירות: '+ils(d*1000)+' יותר לכל 1,000 נסיעות');else flashTicket(own?'💸 נתיב זול יותר. בדוק שהתשובה מספיקה.':'✅ נוסע בכביש הנכון, בלי דוח',own?false:true)}try{await drive(task,road,own?'בחרת בעצמך, בניגוד להמלצה. אתה קובע את התנועה.':r.reason,false);$('swap').disabled=false}catch(err){$('resBox').hidden=true;setStatus(errMsg(err&&err.code),true);setStep(1)}finally{busy=false;$('go').disabled=false;res()}};
   $('oB').onclick=()=>go('bypass');$('oM').onclick=()=>go('mid');$('oT').onclick=()=>go('toll')})}
 function renderHero(){$('hSave').textContent=ils(Math.max(0,(stats.tollOnly||0)-(stats.act||0)));$('hDec').textContent=String(stats.dec||0);const b=mem.filter(m=>m.bypass).length,t=mem.filter(m=>m.toll).length;$('hKnow').textContent=mem.length?(b+' לעוקף · '+t+' לאגרה'):'0'}
 $('swap').onclick=async()=>{if(busy||!last||!sample)return;busy=true;$('swap').disabled=true;$('go').disabled=true;const other=last.road==='bypass'?'toll':'bypass';

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HybridWays · 100-trip proof</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+.viz-root{color-scheme:light;--series-3:#00b894;--bg:#f4f5f7;--surface-1:#ffffff;--line:#e3e5ea;--grid:#eceef2;--text-primary:#191919;--text-secondary:#5f6672;--series-1:#257de0;--series-2:#f47230;--risk:#6a4ce2}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz-root{color-scheme:dark;--series-3:#00a888;--bg:#121417;--surface-1:#191919;--line:#2c3038;--grid:#262a31;--text-primary:#efefef;--text-secondary:#9c9c9c;--series-1:#338ced;--series-2:#e76624;--risk:#9887ef}}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--text-primary);font:16px/1.55 Heebo,system-ui,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:clamp(18px,3vw,40px) max(4vw,16px)}
+.brand{font-weight:800;font-size:22px}.brand span{font-size:15px;color:#d7261e;font-weight:600;margin-inline-start:10px}
+.brand a{float:right;font-size:14px;font-weight:600;color:var(--series-1)}
+h1{font-size:clamp(28px,4.4vw,44px);line-height:1.1;margin:6px 0 8px;font-weight:800;text-wrap:balance}
+.sub{color:var(--text-secondary);max-width:75ch;margin:0 0 22px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.tile{background:var(--surface-1);border:1px solid var(--line);border-radius:14px;padding:16px}
+.tile b{display:block;font-size:clamp(28px,3.6vw,40px);font-weight:800;line-height:1.05;font-variant-numeric:tabular-nums}
+.tile span{font-size:14px;color:var(--text-secondary)}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.card{background:var(--surface-1);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
+.card h2{margin:0 0 4px;font-size:19px}.card p.k{margin:0 0 12px;color:var(--text-secondary);font-size:14px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--text-secondary);margin-bottom:8px}.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-inline-end:6px;vertical-align:-1px}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{fill:var(--text-secondary);font-family:Heebo,system-ui,sans-serif}
+.tip{position:fixed;pointer-events:none;background:var(--text-primary);color:var(--surface-1);font-size:13px;padding:6px 10px;border-radius:8px;opacity:0;transition:opacity .1s;z-index:9;max-width:260px}
+table{width:100%;border-collapse:collapse;font-size:14px}th{font-size:12px;color:var(--text-secondary);text-align:start;font-weight:600;padding:6px 4px;border-bottom:1px solid var(--line)}td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.pill{font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;white-space:nowrap;display:inline-block}
+.p-by{background:var(--series-1);color:#fff}.p-to{background:var(--series-2);color:#fff}
+.ok{color:var(--text-primary);font-weight:700}.no{color:var(--text-primary);font-weight:800}.ov{color:var(--text-secondary);font-weight:700}
+details summary{cursor:pointer;color:var(--series-1);font-size:13px}
+.ans{white-space:pre-wrap;font-size:13px;background:var(--bg);border-radius:8px;padding:8px;margin:6px 0;max-height:260px;overflow:auto;direction:rtl;text-align:right}
+.he{direction:rtl;text-align:right;display:block}
+.note{font-size:13px;color:var(--text-secondary)}
+.scroll{overflow-x:auto}
+.ctl label{font-size:13px;color:var(--text-secondary);display:block}.ctl input[type=range]{width:100%;accent-color:var(--series-1)}.ctl b{color:var(--text-primary);font-variant-numeric:tabular-nums}
+.sb{font:600 14px Heebo,system-ui,sans-serif;min-height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface-1);color:var(--text-primary);cursor:pointer}.sb[aria-pressed=true]{background:var(--text-primary);color:var(--surface-1)}
+@media(max-width:820px){.ctl{grid-template-columns:minmax(0,1fr)!important}}
+@media(max-width:820px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body class="viz-root">
+<main>
+  <div class="brand">HybridWays<span>Air costs · proof test</span><a href="bench.html" lang="he">עברית</a></div>
+  <h1>100 tasks, three roads, a supreme judge.</h1>
+  <p class="sub">Every task was driven on three roads through Anthropic's real API: 🛵 scooter (Claude Haiku 5.5), 🚗 car (Claude Sonnet 5.5) and 🚛 truck (Claude Opus 5.5). <b>Supreme judge (AI)</b> = a third model (Claude Opus 5.5) that rules like a supreme court justice: it receives the answers unnamed and in random order, so it cannot know who wrote what and cannot favour the expensive one. It scores each answer 1–10 and explains its ruling. Every number on this page is computed live from the receipts at the bottom. The tasks themselves were written in Hebrew.</p>
+
+  <div class="card" id="find" style="border:2px solid var(--series-2)"><h2>The finding: value moved from the chip to the route</h2>
+    <p class="k" style="font-size:15px;color:var(--text-primary)">Descartes said "I think, therefore I am" (Cogito Ergo Sum). SES says "I feel, therefore I am" (Sentio Ergo Sum). HybridWays turns the spotlight away from the chips, which save compute time, toward the information routes, which save time, money and calm for the person using them.</p>
+    <ul class="note" id="findList" style="font-size:15px;color:var(--text-primary);line-height:1.7"><li>Loading…</li></ul></div>
+
+  <div class="card" id="algo"><h2>The algorithm: how each trip chooses a road</h2>
+    <p class="k" style="font-size:15px;color:var(--text-primary)">HybridWays is a hybrid of two agents: <b>my data agent</b>, which sits with the driver and keeps what it knows about them, and the <b>road agent</b>, the model on the chosen road, which does the task. Between them stands <b>the Waze</b>, which decides which road to take.</p>
+    <table><thead><tr><th>Step</th><th>What happens</th></tr></thead><tbody>
+    <tr><td>1. My data agent</td><td>The driver writes a task. Their agent keeps personal information on the driver's device, and the driver decides in advance what each road may know. A road without permission gets no personal detail at all.</td></tr>
+    <tr><td>2. The Waze (classifier)</td><td>A small, cheap model (Haiku) reads the task and assigns one of 13 categories: shopping, translation, general info, travel, food, work, code, long writing, money, health, law, personal details, other.</td></tr>
+    <tr><td>3. Safety rule</td><td>Money, health, law and personal details never go on the scooter, even when it is cheaper.</td></tr>
+    <tr><td>4. Drivers' map</td><td>After at least 3 reports in a category: if the scooter was enough 70% of the time or more, the Waze sends it to the scooter. Below 40%, it moves up to the car or the truck.</td></tr>
+    <tr><td>5. The driver's rules</td><td>A rule the driver set ("translation always by scooter") overrides the Waze. The driver can always pick a different road by hand.</td></tr>
+    <tr><td>6. Road agent</td><td>🛵 <b>Scooter</b>, Claude Haiku 5.5: routine tasks, short wording, lists.<br>🚗 <b>Car</b>, Claude Sonnet 5.5: work, emails, planning, medium analysis.<br>🚛 <b>Truck</b>, Claude Opus 5.5: sensitive topics, deep analysis, long writing.</td></tr>
+    <tr><td>7. Report</td><td>The driver taps 👍 or 👎. The report joins everyone's map, improves the Waze for the next driver and earns the driver a share of the savings pool.</td></tr>
+    </tbody></table>
+    <p class="note">In the open: the 100-task test did not use the personal data agent. All tasks were sent with no personal detail, so the comparison between roads stays clean. The drivers' map and rules run on the live proof page.</p></div>
+
+  <div class="card" id="c3card"><h2>🛵 Scooter · 🚗 Car · 🚛 Truck: the same 100 tasks</h2>
+    <p class="k">Each task got three answers. The judge saw them together, labelled only A, B, C in random order, and scored each one.</p>
+    <div class="legend"><span><i style="background:var(--series-1)"></i>Scooter (Haiku)</span><span><i style="background:var(--series-3)"></i>Car (Sonnet)</span><span><i style="background:var(--series-2)"></i>Truck (Opus)</span></div>
+    <div class="grid"><div><p class="k" style="margin:0 0 4px">Average quality score (1–10)</p><div id="c3q"></div></div><div><p class="k" style="margin:0 0 4px">Cost per 1,000 trips (USD)</p><div id="c3c"></div></div></div>
+    <div class="tiles" id="t3" style="margin-top:14px"></div>
+    <p class="note" id="n3"></p>
+  </div>
+
+  <div class="card" id="uCard" style="border:2px solid var(--series-3)"><h2>Second ruling: UnOpus · a supreme judge from another company</h2>
+    <p class="k">The first judge is Opus by Anthropic, the same company that builds all three roads. To check it does not rule in its own favour, a second supreme judge from Google (Gemini) received the same answers, unnamed and in a new random order, and ruled again.</p>
+    <div id="uBox" class="note" style="font-size:15px;color:var(--text-primary)">Loading…</div></div>
+
+  <h2 style="margin:26px 0 10px">Detail: scooter vs truck</h2>
+  <div class="tiles" id="tiles"></div>
+
+  <div class="grid">
+    <div class="card"><h2>What 100,000 trips a month cost</h2><p class="k">Same tasks, three ways to route. In US dollars, at Anthropic list prices.</p><div id="cCost"></div></div>
+    <div class="card"><h2>What the Waze decided</h2><p class="k">Against the right call: scooter when it was enough, truck when it wasn't or the topic is sensitive.</p><div id="cRoute"></div></div>
+  </div>
+
+  <div class="card"><h2>Quality by task type</h2><p class="k">Average supreme-judge score (1–10), scooter vs truck.</p>
+    <div class="legend"><span><i style="background:var(--series-1)"></i>Scooter (Haiku)</span><span><i style="background:var(--series-2)"></i>Truck (Opus)</span></div>
+    <div id="cCat"></div></div>
+
+  <div class="card" id="sumCard"><h2>What the test shows, unpolished</h2><div id="summary" class="note" style="font-size:15px;color:var(--text-primary)"></div></div>
+
+  <div class="card"><h2>Two-year projection: the embedded profit</h2>
+    <p class="k">The base is the saving measured in the test. Everything else is an assumption, visible and adjustable. This is a projection, not a result.</p>
+    <div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px" id="scen"></div>
+    <div class="ctl" id="ctl" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 18px;margin-bottom:14px"></div>
+    <div class="legend" id="pLeg"></div>
+    <div id="cProj"></div>
+    <div class="tiles" id="pTiles" style="margin-top:14px"></div>
+    <p class="note" id="pNote"></p>
+  </div>
+  <div class="card"><h2>All 100 receipts: three roads</h2><p class="k">Open any row to read the scooter, car and truck answers (in Hebrew) and the judges' reasoned rulings. The "3 roads" score comes from one ruling that saw all three answers together.</p>
+    <div class="scroll"><table><thead><tr><th>#</th><th>Task</th><th>Waze</th><th>🛵 Scooter</th><th>🚛 Truck</th><th>3 roads: 🛵 / 🚗 / 🚛</th><th>Enough?</th><th>Cost 🛵</th><th>Cost 🚗</th><th>Cost 🚛</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+
+  <p class="note" id="foot"></p>
+  <p class="note" style="text-align:center;margin-top:18px">© 2026 HybridWays · All rights reserved to Ofer Meir Vald · Sentio Ergo Sum (SES)</p>
+</main>
+<div class="tip" id="tip"></div>
+<script>
+{
+const API='https://tlvugvpvoenhzdheutxi.supabase.co/functions/v1/hybridways-bench';
+const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
+const tip=$('tip');
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;const x=Math.min(innerWidth-270,e.clientX+12);tip.style.left=x+'px';tip.style.top=(e.clientY+14)+'px'}
+function hideTip(){tip.style.opacity=0}
+function el(n,a,p){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+const usd=x=>x>=100?'$'+Math.round(x).toLocaleString('en-US'):'$'+x.toFixed(2);
+const cents=x=>(x*100).toFixed(x*100>=1?2:3)+'¢';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct=(a,b)=>Math.round(a/b*100)+'%';
+function hbars(box,items,fmt){
+  const W=520,row=46,H=items.length*row+10,L=110,max=Math.max(...items.map(i=>i.v))||1;
+  const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},box);
+  items.forEach((it,i)=>{const y=i*row+8,w=Math.max(4,(W-L-90)*it.v/max);
+    const t=el('text',{x:0,y:y+20,'text-anchor':'start','font-size':14},s);t.textContent=it.k;
+    el('rect',{x:L,y:y+4,width:w,height:24,rx:4,fill:it.c||'var(--series-1)'},s);
+    const v=el('text',{x:L+w+8,y:y+21,'text-anchor':'start','font-size':14,'font-weight':700},s);v.style.fill='var(--text-primary)';v.textContent=fmt(it.v);
+    const hit=el('rect',{x:0,y:y,width:W,height:row-6,fill:'transparent'},s);hit.addEventListener('mousemove',e=>showTip(e,'<b>'+esc(it.k)+'</b><br>'+esc(it.tip||fmt(it.v))));hit.addEventListener('mouseleave',hideTip)});
+}
+function grouped(box,cats){
+  const W=1060,H=300,B=40,T=16,Lp=30,n=cats.length,gw=(W-Lp)/n,bw=Math.min(22,gw/3);
+  const s=el('svg',{viewBox:`0 0 ${W} ${H+60}`,role:'img'},box);
+  for(let g=0;g<=10;g+=2){const y=T+(H-T-B)*(1-g/10);el('line',{x1:Lp,x2:W,y1:y,y2:y,stroke:'var(--grid)','stroke-width':1},s);const t=el('text',{x:Lp-6,y:y+4,'text-anchor':'end','font-size':12},s);t.textContent=g}
+  cats.forEach((c,i)=>{const cx=Lp+(i+0.5)*gw;
+    [[c.b,'var(--series-1)',-1,'Scooter'],[c.t,'var(--series-2)',1,'Truck']].forEach(([v,col,side,name])=>{const h=(H-T-B)*v/10;
+      const xx=side<0?cx-bw-2:cx+2;const r=el('rect',{x:xx,y:H-B-h,width:bw,height:h,rx:4,fill:col},s);
+      r.addEventListener('mousemove',e=>showTip(e,'<b>'+esc(c.k)+'</b><br>'+name+': '+v.toFixed(1)+' / 10<br>'+c.n+' tasks'));r.addEventListener('mouseleave',hideTip)});
+    const t=el('text',{x:cx,y:H-B+18,'text-anchor':'middle','font-size':12,direction:'rtl'},s);t.textContent=c.k;
+    const t2=el('text',{x:cx,y:H-B+34,'text-anchor':'middle','font-size':11},s);t2.textContent=(c.t-c.b>=0?'gap ':'lead ')+Math.abs(c.t-c.b).toFixed(1)});
+  el('line',{x1:Lp,x2:W,y1:H-B,y2:H-B,stroke:'var(--line)','stroke-width':1},s);
+}
+async function load(){
+  const d=await fetch(API).then(r=>r.json());const R=(d.rows||[]).map(r=>({...r,route_cost:+r.route_cost||0,b_cost:+r.b_cost||0,t_cost:+r.t_cost||0,judge_cost:+r.judge_cost||0}));
+  if(!R.length){$('tiles').textContent='No results yet.';return}
+  const ideal=r=>r.sensitive?'toll':(r.enough?'bypass':'toll');
+  const ns=R.filter(r=>!r.sensitive),enoughNS=ns.filter(r=>r.enough).length;
+  const correct=R.filter(r=>r.route_road===ideal(r)).length,over=R.filter(r=>r.route_road==='toll'&&ideal(r)==='bypass').length,risky=R.filter(r=>r.route_road==='bypass'&&ideal(r)==='toll').length;
+  const allT=R.reduce((a,r)=>a+r.t_cost,0),waze=R.reduce((a,r)=>a+r.route_cost+(r.route_road==='bypass'?r.b_cost:r.t_cost),0),best=R.reduce((a,r)=>a+r.route_cost+(ideal(r)==='bypass'?r.b_cost:r.t_cost),0);
+  const chosenScore=R.reduce((a,r)=>a+(r.route_road==='bypass'?r.b_score:r.t_score),0)/R.length,tollScore=R.reduce((a,r)=>a+r.t_score,0)/R.length;
+  const per=x=>x/R.length*100000;
+  $('tiles').innerHTML=[
+    [pct(enoughNS,ns.length),'of everyday tasks the scooter was enough ('+enoughNS+' of '+ns.length+')'],
+    [Math.round((1-waze/allT)*100)+'%','money saved with the Waze vs everything by truck'],
+    [pct(correct,R.length),'correct Waze decisions ('+correct+' of '+R.length+')'],
+    [chosenScore.toFixed(1)+' / '+tollScore.toFixed(1),'average quality: with the Waze / everything by truck']
+  ].map(([b,s])=>'<div class="tile"><b>'+b+'</b><span>'+esc(s)+'</span></div>').join('');
+  hbars($('cCost'),[
+    {k:'All by truck',v:per(allT),c:'var(--series-2)',tip:'Today: everyone rides the strongest model'},
+    {k:'With the Waze',v:per(waze),c:'var(--series-1)',tip:'HybridWays routing, including the cost of the Waze itself'},
+    {k:'Careful routing',v:per(best),c:'var(--series-1)',tip:'Scooter only when the judge rated it within one point of the truck'}],usd);
+  hbars($('cRoute'),[
+    {k:'Correct',v:correct,c:'var(--series-1)',tip:'The road the Waze chose was the right one'},
+    {k:'Overpaid',v:over,c:'var(--series-2)',tip:'Sent to the truck when the scooter was enough: wasted money, not risky'},
+    {k:'Risk',v:risky,c:'var(--risk)',tip:'Sent to the scooter when the truck was needed or the topic was sensitive'}],v=>v+' tasks');
+  const byCat={};R.forEach(r=>{const k=r.label||'אחר';(byCat[k]=byCat[k]||{k,b:0,t:0,n:0});byCat[k].b+=r.b_score;byCat[k].t+=r.t_score;byCat[k].n++});
+  grouped($('cCat'),Object.values(byCat).map(c=>({k:c.k,b:c.b/c.n,t:c.t/c.n,n:c.n})));
+  $('rows').innerHTML=R.map(r=>{const id=ideal(r),ok=r.route_road===id,cls=ok?'ok':(r.route_road==='toll'?'ov':'no'),txt=ok?'✓':(r.route_road==='toll'?'costly':'✗');
+    return '<tr><td>'+r.id+'</td><td><span class="he">'+esc(r.task)+'</span>'+(r.sensitive?' <span class="note">(sensitive)</span>':'')+'<details><summary>Answers and rulings</summary><div class="note">Judge (2 roads): <span class="he">'+esc(r.judge_reason)+'</span></div><div class="ans"><b>Scooter ('+r.b_score+'/10):</b>\n'+esc(r.b_text)+'</div>'+(r.m_text?'<div class="ans"><b>🚗 Car ('+r.j3_m+'/10 in the 3-road ruling):</b>\n'+esc(r.m_text)+'</div><div class="note">Supreme judge ruling (Opus): <span class="he">'+esc(r.j3_reason)+'</span></div>'+(r.u_b!=null?'<div class="note">UnOpus ruling (Gemini): 🛵 '+r.u_b+' · 🚗 '+r.u_m+' · 🚛 '+r.u_t+'. <span class="he">'+esc(r.u_reason)+'</span></div>':''):'')+'<div class="ans"><b>Truck ('+r.t_score+'/10):</b>\n'+esc(r.t_text)+'</div></details></td><td><span class="pill '+(r.route_road==='bypass'?'p-by':'p-to')+'">'+(r.route_road==='bypass'?'Scooter':'Truck')+'</span> <span class="'+cls+'">'+txt+'</span></td><td>'+r.b_score+'</td><td>'+r.t_score+'</td><td>'+(r.j3_m!=null?r.j3_b+' / <b>'+r.j3_m+'</b> / '+r.j3_t:'—')+'</td><td>'+(r.enough?'yes':'no')+'</td><td>'+cents(r.b_cost)+'</td><td>'+(r.m_cost!=null?cents(+r.m_cost):'—')+'</td><td>'+cents(r.t_cost)+'</td></tr>'}).join('');
+
+  const R3=R.filter(r=>r.j3_b!=null&&r.j3_m!=null&&r.j3_t!=null).map(r=>({...r,m_cost:+r.m_cost||0}));
+  if(R3.length){
+    const avg=f=>R3.reduce((a,r)=>a+f(r),0)/R3.length;
+    const q=[['Scooter',avg(r=>r.j3_b),'var(--series-1)'],['Car',avg(r=>r.j3_m),'var(--series-3)'],['Truck',avg(r=>r.j3_t),'var(--series-2)']];
+    const c=[['Scooter',avg(r=>r.b_cost)*1000,'var(--series-1)'],['Car',avg(r=>r.m_cost)*1000,'var(--series-3)'],['Truck',avg(r=>r.t_cost)*1000,'var(--series-2)']];
+    hbars($('c3q'),q.map(([k,v,cc])=>({k,v,c:cc,tip:v.toFixed(2)+' out of 10'})),v=>v.toFixed(1));
+    hbars($('c3c'),c.map(([k,v,cc])=>({k,v,c:cc,tip:'$'+v.toFixed(2)+' per 1,000 trips'})),v=>'$'+v.toFixed(2));
+    let cost3=0,q3=0,cnt={b:0,m:0,t:0},costT=0,qT=0;
+    R3.forEach(r=>{const best=Math.max(r.j3_b,r.j3_m,r.j3_t);let pick;
+      if(!r.sensitive&&r.j3_b>=best-1)pick='b';else if(r.j3_m>=best-1)pick='m';else pick='t';
+      cnt[pick]++;cost3+=r.route_cost+(pick==='b'?r.b_cost:pick==='m'?r.m_cost:r.t_cost);q3+=(pick==='b'?r.j3_b:pick==='m'?r.j3_m:r.j3_t);costT+=r.t_cost;qT+=r.j3_t});
+    const mVsT=R3.filter(r=>r.j3_m>=r.j3_t-1).length,tcRatio=avg(r=>r.t_cost)/avg(r=>r.m_cost),tbRatio=avg(r=>r.t_cost)/avg(r=>r.b_cost),save3=Math.round((1-cost3/costT)*100);
+    $('t3').innerHTML=[[pct(mVsT,R3.length),'of tasks the car came within one point of the truck'],
+      [tcRatio.toFixed(1)+'×','the truck costs more than the car'],
+      [save3+'%','saved by smart 3-road routing'],
+      [(q3/R3.length).toFixed(1)+' / '+(qT/R3.length).toFixed(1),'quality: smart routing / all by truck']].map(([b,t])=>'<div class="tile"><b>'+b+'</b><span>'+esc(t)+'</span></div>').join('');
+    $('n3').textContent='Smart routing = the cheapest road the judge scored within one point of the best; sensitive topics never ride the scooter. Split: '+cnt.b+' scooter, '+cnt.m+' car, '+cnt.t+' truck. This is the routing the Waze has to learn from the drivers\' map and reports; today\'s Waze does not reach it yet. Measured on '+R3.length+' tasks.';
+    $('findList').innerHTML=
+      '<li><b>Same task, a '+Math.round(tbRatio)+'× gap:</b> the truck costs $'+(avg(r=>r.t_cost)*1000).toFixed(2)+' per 1,000 trips, the scooter $'+(avg(r=>r.b_cost)*1000).toFixed(2)+'.</li>'+
+      '<li><b>Quality barely moves:</b> in '+pct(mVsT,R3.length)+' of tasks the car came within one point of the truck, at a price '+tcRatio.toFixed(1)+'× lower.</li>'+
+      '<li><b>Smart routing across the three roads saves '+save3+'%</b>, at average quality '+(q3/R3.length).toFixed(1)+' vs '+(qT/R3.length).toFixed(1)+' for "all by truck".</li>'+
+      '<li><b>The conclusion:</b> without a routing layer, whoever picks the strongest model for every task pays many times what the task needs. That gap is HybridWays\' market.</li>';
+  } else { $('c3card').hidden=true }
+  const nsE=Math.round(enoughNS/ns.length*100),sens=R.filter(r=>r.sensitive),sensToll=sens.filter(r=>r.route_road==='toll').length;
+  const bAvg=ns.reduce((a,r)=>a+r.b_score,0)/ns.length,tAvg=ns.reduce((a,r)=>a+r.t_score,0)/ns.length,b7=R.filter(r=>r.b_score>=7).length;
+  const ratio=(allT/R.length)/(R.reduce((a,r)=>a+r.b_cost,0)/R.length);
+  $('summary').innerHTML='<ul style="margin:0;padding-inline-start:20px;line-height:1.8">'+
+   '<li><b>Price:</b> a truck trip cost on average '+Math.round(ratio)+'× a scooter trip.</li>'+
+   '<li><b>Quality:</b> on everyday tasks the scooter scored '+bAvg.toFixed(1)+'/10 and the truck '+tAvg.toFixed(1)+'. '+b7+' of '+R.length+' scooter answers scored 7 or more.</li>'+
+   '<li><b>"Scooter was enough"</b> by a strict definition (within one point of the truck): '+nsE+'% of everyday tasks. Not "most trips", roughly '+(nsE>=45?'half':'a third')+' of them.</li>'+
+   '<li><b>The Waze:</b> saved '+Math.round((1-waze/allT)*100)+'% of the money and never sent a sensitive topic to the scooter ('+sensToll+' of '+sens.length+' sensitive tasks went by truck). But it is too aggressive: '+risky+' times it chose the scooter when the judge clearly preferred the truck, and average quality fell from '+tollScore.toFixed(1)+' to '+chosenScore.toFixed(1)+'.</li>'+
+   '<li><b>What it means:</b> the money is real, but two roads are not enough. The middle road (above) closes the gap, and the drivers\' reports calibrate the Waze. That is exactly the job of the drivers\' map.</li></ul>';
+  const saveRate=1-waze/allT;
+  const SC={'Conservative':{biz:20,spend:10000,cons:2000},'Base':{biz:100,spend:30000,cons:20000},'Optimistic':{biz:500,spend:50000,cons:200000}};
+  const P={biz:100,spend:30000,save:Math.round(saveRate*100),share:20,cons:20000,trips:200,ref:5};
+  const CT=[['biz','Connected businesses, month 24',5,1000,5,v=>v.toLocaleString('en-US')],['spend','Monthly AI spend per business ($)',1000,100000,1000,v=>'$'+v.toLocaleString('en-US')],['save','Saving per business (%) · measured: '+Math.round(saveRate*100)+'%',10,80,1,v=>v+'%'],['share','HybridWays share of the saving (%)',5,40,1,v=>v+'%'],['cons','Private drivers, month 24',0,1000000,1000,v=>v.toLocaleString('en-US')],['ref','Referral fee from roads (%)',0,15,1,v=>v+'%']];
+  const ctl=$('ctl');ctl.innerHTML='';const outs={};
+  CT.forEach(([k,lab,mn,mx,st,f])=>{const w=document.createElement('div');const l=document.createElement('label');l.innerHTML=esc(lab)+': <b></b>';const i=document.createElement('input');i.type='range';i.min=mn;i.max=mx;i.step=st;i.value=P[k];i.setAttribute('aria-label',lab);outs[k]=[i,l.querySelector('b'),f];i.oninput=()=>{P[k]=+i.value;draw()};w.append(l,i);ctl.appendChild(w)});
+  const sb=$('scen');sb.innerHTML='';Object.keys(SC).forEach(n=>{const b=document.createElement('button');b.className='sb';b.textContent=n;b.onclick=()=>{Object.assign(P,SC[n]);Object.keys(outs).forEach(k=>outs[k][0].value=P[k]);mark(n);draw()};sb.appendChild(b)});
+  function mark(n){[...sb.children].forEach(b=>b.setAttribute('aria-pressed',String(b.textContent===n)))}
+  const tripCost=waze/R.length;
+  function model(p){const out=[];for(let m=1;m<=24;m++){const g=1/(1+Math.exp(-(m-12)/3.2)),g24=1/(1+Math.exp(-(24-12)/3.2)),f=g/g24;const biz=p.biz*f,cons=p.cons*f;
+    const rBiz=biz*p.spend*(p.save/100)*(p.share/100);const routed=biz*p.spend*(1-p.save/100)+cons*p.trips*tripCost;const rRef=routed*(p.ref/100);out.push({m,biz,cons,rBiz,rRef,tot:rBiz+rRef})}return out}
+  function draw(){Object.keys(outs).forEach(k=>outs[k][1].textContent=outs[k][2](P[k]));
+    const M=model(P),last=M[23],arr=last.tot*12,cum=M.reduce((a,x)=>a+x.tot,0);
+    const box=$('cProj');box.innerHTML='';const W=1060,H=280,B=34,T=10,L=70,mx=Math.max(...M.map(x=>x.tot))||1;
+    const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Monthly revenue by month'},box);
+    const X=m=>L+(W-L-10)*(m-1)/23,Y=v=>T+(H-T-B)*(1-v/mx);
+    for(let k=0;k<=4;k++){const v=mx*k/4,y=Y(v);el('line',{x1:L,x2:W-10,y1:y,y2:y,stroke:'var(--grid)'},s);const t=el('text',{x:L-8,y:y+4,'text-anchor':'end','font-size':12},s);t.textContent='$'+Math.round(v/1000).toLocaleString('en-US')+'K'}
+    [1,6,12,18,24].forEach(m=>{const t=el('text',{x:X(m),y:H-10,'text-anchor':'middle','font-size':12},s);t.textContent='Month '+m});
+    const ser=[['rBiz','var(--series-1)','Share of business savings'],['rRef','var(--series-2)','Referral fee from roads'],['tot','var(--series-3)','Total monthly revenue']];
+    $('pLeg').innerHTML=ser.map(([k,c,n])=>'<span><i style="background:'+c+'"></i>'+n+'</span>').join('');
+    ser.forEach(([k,c])=>{el('path',{d:M.map((x,i)=>(i?'L':'M')+X(x.m)+' '+Y(x[k])).join(' '),fill:'none',stroke:c,'stroke-width':2,'stroke-linejoin':'round'},s)});
+    const lt=el('text',{x:X(24),y:Y(last.tot)-10,'text-anchor':'end','font-size':13,'font-weight':700},s);lt.style.fill='var(--text-primary)';lt.textContent='$'+Math.round(last.tot).toLocaleString('en-US')+' / month';
+    const cross=el('line',{x1:0,x2:0,y1:T,y2:H-B,stroke:'var(--text-secondary)','stroke-dasharray':'3 3',opacity:0},s);
+    const hit=el('rect',{x:L,y:T,width:W-L-10,height:H-T-B,fill:'transparent'},s);
+    hit.addEventListener('mousemove',e=>{const r=s.getBoundingClientRect(),px=(e.clientX-r.left)*W/r.width;let m=Math.round(1+(px-L)/((W-L-10)/23));m=Math.max(1,Math.min(24,m));const x=M[m-1];cross.setAttribute('x1',X(m));cross.setAttribute('x2',X(m));cross.setAttribute('opacity',1);
+      showTip(e,'<b>Month '+m+'</b><br>'+Math.round(x.biz)+' businesses · '+Math.round(x.cons).toLocaleString('en-US')+' drivers<br>From savings: $'+Math.round(x.rBiz).toLocaleString('en-US')+'<br>Referrals: $'+Math.round(x.rRef).toLocaleString('en-US')+'<br><b>Total: $'+Math.round(x.tot).toLocaleString('en-US')+'</b>')});
+    hit.addEventListener('mouseleave',()=>{hideTip();cross.setAttribute('opacity',0)});
+    $('pTiles').innerHTML=[['$'+Math.round(last.tot).toLocaleString('en-US'),'revenue in month 24'],['$'+(arr/1e6).toFixed(arr>=1e7?0:1)+'M','annual run-rate at month 24'],['$'+(cum/1e6).toFixed(1)+'M','cumulative revenue over 24 months'],['$'+Math.round(last.biz*P.spend*(P.save/100)/1000).toLocaleString('en-US')+'K','monthly customer savings at month 24']].map(([b,t])=>'<div class="tile"><b>'+b+'</b><span>'+esc(t)+'</span></div>').join('');
+    $('pNote').textContent='Assumptions: S-curve growth to the target at month 24. A business pays '+P.share+'% of the saving the Waze created for it. Roads pay a '+P.ref+'% referral fee on traffic routed to them. A private driver makes '+P.trips+' trips a month, at the per-trip cost measured in the test ('+cents(tripCost)+'). Private drivers bring little direct revenue; their value is the map and the reports. For comparison: OpenRouter reported about $160M annual revenue in August 2026.'}
+  mark('Base');draw();
+  $('foot').textContent='Method: "enough" = scooter scored 7+ and no more than one point below the truck. Sensitive tasks (money, health, law, personal details) count as correct only by truck, even when the scooter was enough. The judges are AI models, not people; random order reduces bias but does not remove it. Total cost of the whole test, judges included: $'+(+d.spent_usd).toFixed(2)+'. '+R.length+' tasks.';
+}
+load().catch(e=>{$('tiles').textContent='Could not load the results.'});
+async function unopus(){try{const d=await fetch(API).then(r=>r.json());const R=(d.rows||[]).filter(r=>r.u_b!=null&&r.j3_b!=null);const n=R.length;const box=$('uBox');if(!n){box.textContent='The second ruling has not run yet.';return}
+const av=f=>(R.reduce((s,r)=>s+f(r),0)/n).toFixed(1);const best=(b,m,t)=>{const x=Math.max(b,m,t);return t===x?'t':m===x?'m':'b'};
+const same=R.filter(r=>best(r.j3_b,r.j3_m,r.j3_t)===best(r.u_b,r.u_m,r.u_t)).length;
+const m1o=R.filter(r=>r.j3_m>=r.j3_t-1).length,m1u=R.filter(r=>r.u_m>=r.u_t-1).length;
+const tO=R.filter(r=>r.j3_t>r.j3_m).length,tU=R.filter(r=>r.u_t>r.u_m).length;const pc=x=>Math.round(x/n*100)+'%';
+const um=(R.find(r=>r.u_model)||{}).u_model||'Gemini';
+box.innerHTML='<table><thead><tr><th>Judge</th><th>🛵 Scooter</th><th>🚗 Car</th><th>🚛 Truck</th><th>Car within 1 pt of truck</th><th>Truck above car</th></tr></thead><tbody>'+
+'<tr><td>Opus (Anthropic)</td><td>'+av(r=>r.j3_b)+'</td><td>'+av(r=>r.j3_m)+'</td><td>'+av(r=>r.j3_t)+'</td><td>'+pc(m1o)+'</td><td>'+pc(tO)+'</td></tr>'+
+'<tr><td><b>UnOpus</b> ('+esc(um)+')</td><td>'+av(r=>r.u_b)+'</td><td>'+av(r=>r.u_m)+'</td><td>'+av(r=>r.u_t)+'</td><td>'+pc(m1u)+'</td><td>'+pc(tU)+'</td></tr></tbody></table>'+
+'<p>Both judges picked the same winning road in <b>'+pc(same)+'</b> of tasks ('+n+' tasks judged twice so far). If Opus favoured itself, the truck (Opus) would win far more often with Opus than with UnOpus. With Opus the truck beats the car in '+pc(tO)+' of tasks; with UnOpus in '+pc(tU)+'.</p>'}catch(e){$('uBox').textContent='Could not load the second ruling.'}}
+unopus();
+}
+</script>
+</body>
+</html>

@@ -99,6 +99,7 @@ input[type=text]{font:16px inherit;font-family:inherit;flex:1;min-height:44px;pa
 .mbar{height:12px;border-radius:6px;background:var(--toll);overflow:hidden}.mbar i{display:block;height:100%;background:var(--by)}
 .st{font-size:12px;font-weight:800;padding:2px 8px;border-radius:999px;white-space:nowrap}.st.go{background:var(--by);color:#fff}.st.jam{background:var(--toll);color:#1a1300}.st.wait{background:var(--line);color:var(--ink)}
 .mani .close{margin:18px 0 0;padding:16px 18px;border-radius:14px;border:2px solid #ffd54a}.mani .cl{margin:0 0 8px;font-size:clamp(20px,2.6vw,26px);font-weight:800;color:#ffd54a;line-height:1.3}.mani .close ul{margin:0;padding-inline-start:20px;font-size:14px;line-height:1.6}
+.pick{margin:0 0 12px;padding:10px 14px;border-radius:10px;background:#ffb300;color:#1a1300;font-weight:800;font-size:17px}
 .rl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.rl li{display:flex;gap:12px;align-items:flex-start}.rl b{display:block;font-size:17px;margin-bottom:2px}.rl span:not(.sg){font-size:14px;color:var(--mute);line-height:1.5}
 .sg{flex:none;width:44px;height:44px;border-radius:50%;border:4px solid var(--c);background:#fff;color:var(--c);display:grid;place-items:center;font-size:18px;font-weight:800}
 @media(max-width:900px){.rl{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}@media(max-width:600px){.rl{grid-template-columns:minmax(0,1fr)}}
@@ -199,7 +200,7 @@ input[type=text]{font:16px inherit;font-family:inherit;flex:1;min-height:44px;pa
   </section>
 
   <section class="card choose" id="choose" hidden>
-    <h2>הווייז שלך מציע שני מסלולים. אתה מחליט.</h2>
+    <p class="pick">👇 לחץ על אחד משני הכבישים כדי לנסוע</p><h2>הווייז שלך מציע שני מסלולים. אתה מחליט.</h2>
     <p class="plain" id="chPlain"></p><p class="mapnote" id="chMap"></p><p class="why" id="chWhy"></p>
     <div class="opts">
       <button type="button" class="opt bypass" id="oB"><span class="tag bypass">עוקף · מודל מהיר</span><span class="like" id="oBl"></span><b id="oBc"></b><span class="eq" id="oBe"></span><span id="oBk" class="lbl"></span><span class="rec" id="oBr">מומלץ</span></button>
@@ -354,6 +355,7 @@ function memFor(road){const ok=mem.filter(m=>m[road]).map(m=>'- '+m.text);return
 
 const API='https://tlvugvpvoenhzdheutxi.supabase.co/functions/v1/hybridways';
 let routeUse=null,routeInfo=null,tripId=null;
+const errMsg=c=>c==='daily_cap'?'התקציב היומי של ההדגמה (3$) נגמר. נסה מחר.':c==='driver_cap'?'הגעת ל-20 נסיעות היום. נתראה מחר.':c==='ip_cap'?'יותר מדי נסיעות מהרשת הזו היום. נסה מחר.':'משהו נתקע בדרך. נסה שוב.'+(c?' ('+String(c).slice(0,40)+')':'');
 let drv=lsGet('hw_drv');if(!/^[a-z0-9]{12,40}$/.test(String(drv||''))){drv=Array.from(crypto.getRandomValues(new Uint8Array(10)),b=>(b%36).toString(36)).join('')+Date.now().toString(36);lsSet('hw_drv',drv)}
 function setStep(n){for(let i=1;i<=4;i++){const li=$('s'+i);li.classList.toggle('done',i<n);li.classList.toggle('now',i===n)}
   document.querySelectorAll('.blink').forEach(e=>e.classList.remove('blink'));
@@ -404,8 +406,8 @@ $('f').addEventListener('submit',async e=>{
   e.preventDefault();if(busy)return;const task=$('task').value.trim();if(!task){setStatus('כתוב משימה קודם.',true);return}
   
   $('rep').hidden=true;tripId=null;busy=true;$('go').disabled=true;$('swap').disabled=true;setStatus('הווייז בוחר כביש...');moveCar('');
-  try{const r=await route(task);last=null;setStatus('');await choose(task,r)}
-  catch(err){setStatus(err&&err.code==='daily_cap'?'התקציב היומי של ההדגמה (3$) נגמר. נסה מחר.':'משהו נתקע בדרך. נסה שוב.'+(err&&err.code?' ('+String(err.code).slice(0,40)+')':''),true)}
+  try{const r=await route(task);last=null;setStatus('👇 עכשיו לחץ על אחד משני הכבישים למטה.');busy=false;$('go').disabled=false;choose(task,r)}
+  catch(err){setStatus(errMsg(err&&err.code),true)}
   finally{busy=false;$('go').disabled=false}
 });
 function estFor(road,task){const inT=tok(memFor(road)+task)+90;const outs=(stats.rc||[]).map(r=>r.outT).filter(Boolean);const outT=outs.length?Math.round(outs.reduce((a,b)=>a+b,0)/outs.length):300;return price(road==='bypass'?PR.haiku:PR.opus,inT,outT)}
@@ -418,7 +420,7 @@ function choose(task,r){lastRec=r.road;return new Promise(res=>{const box=$('cho
   $('oBe').textContent=eq(eb);$('oTe').textContent=eq(et);$('oBk').textContent=knows('bypass');$('oTk').textContent=knows('toll');
   $('oB').classList.toggle('is-rec',r.road==='bypass');$('oT').classList.toggle('is-rec',r.road==='toll');
   box.scrollIntoView({behavior:'smooth',block:'nearest'});setStep(2);
-  const go=async road=>{$('oB').onclick=$('oT').onclick=null;box.hidden=true;stats.dec=(stats.dec||0)+1;const own=road!==r.road;await drive(task,road,own?'בחרת בעצמך, בניגוד להמלצה. אתה קובע את התנועה.':r.reason,false);$('swap').disabled=false;res()};
+  const go=async road=>{if(busy)return;busy=true;$('go').disabled=true;setStatus('');$('oB').onclick=$('oT').onclick=null;box.hidden=true;stats.dec=(stats.dec||0)+1;const own=road!==r.road;try{await drive(task,road,own?'בחרת בעצמך, בניגוד להמלצה. אתה קובע את התנועה.':r.reason,false);$('swap').disabled=false}catch(err){$('resBox').hidden=true;setStatus(errMsg(err&&err.code),true);setStep(1)}finally{busy=false;$('go').disabled=false;res()}};
   $('oB').onclick=()=>go('bypass');$('oT').onclick=()=>go('toll')})}
 function renderHero(){$('hSave').textContent=ils(Math.max(0,(stats.tollOnly||0)-(stats.act||0)));$('hDec').textContent=String(stats.dec||0);const b=mem.filter(m=>m.bypass).length,t=mem.filter(m=>m.toll).length;$('hKnow').textContent=mem.length?(b+' לעוקף · '+t+' לאגרה'):'0'}
 $('swap').onclick=async()=>{if(busy||!last||!sample)return;busy=true;$('swap').disabled=true;$('go').disabled=true;const other=last.road==='bypass'?'toll':'bypass';

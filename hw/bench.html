@@ -43,8 +43,8 @@ details summary{cursor:pointer;color:var(--series-1);font-size:13px}
 <body class="viz-root">
 <main>
   <div class="brand">HybridWays<span>Air costs · מבחן הוכחה</span></div>
-  <h1>100 משימות, שלושה כבישים, שופט עיוור.</h1>
-  <p class="sub">כל משימה נסעה בשלושה כבישים, דרך ה-API האמיתי של Anthropic: 🛵 קטנוע (Claude Haiku 5.5), 🚗 מכונית (Claude Sonnet 5.5) ו-🚛 משאית (Claude Opus 5.5). <b>שופט עיוור</b> = מודל שלישי שמקבל את התשובות בלי שמות ובסדר אקראי, כמו טעימה עיוורת של יין: הוא לא יודע מי כתב מה, ולכן לא יכול להעדיף את היקר. הוא נותן לכל תשובה ציון מ-1 עד 10. כל המספרים מחושבים מהקבלות בתחתית העמוד.</p>
+  <h1>100 משימות, שלושה כבישים, שופט עליון.</h1>
+  <p class="sub">כל משימה נסעה בשלושה כבישים, דרך ה-API האמיתי של Anthropic: 🛵 קטנוע (Claude Haiku 5.5), 🚗 מכונית (Claude Sonnet 5.5) ו-🚛 משאית (Claude Opus 5.5). <b>שופט עליון (AI)</b> = מודל שלישי (Claude Opus 5.5) שפוסק כמו שופט בבית המשפט העליון: הוא מקבל את התשובות בלי שמות ובסדר אקראי, ולכן לא יודע מי כתב מה ולא יכול להעדיף את היקר. הוא נותן לכל תשובה ציון מ-1 עד 10 ומנמק את הפסיקה. כל המספרים מחושבים מהקבלות בתחתית העמוד.</p>
   <div class="card" id="c3card"><h2>🛵 קטנוע · 🚗 מכונית · 🚛 משאית: אותן 100 משימות</h2>
     <p class="k">כל משימה קיבלה שלוש תשובות. השופט ראה אותן יחד, מסומנות רק A, B, C בסדר אקראי, ונתן לכל אחת ציון.</p>
     <div class="legend"><span><i style="background:var(--series-1)"></i>קטנוע (Haiku)</span><span><i style="background:var(--series-3)"></i>מכונית (Sonnet)</span><span><i style="background:var(--series-2)"></i>משאית (Opus)</span></div>
@@ -61,7 +61,7 @@ details summary{cursor:pointer;color:var(--series-1);font-size:13px}
     <div class="card"><h2>מה הווייז החליט</h2><p class="k">מול ההחלטה הנכונה: קטנוע כשהוא הספיק, משאית כשהוא לא הספיק או כשהנושא רגיש.</p><div id="cRoute"></div></div>
   </div>
 
-  <div class="card"><h2>איכות לפי סוג משימה</h2><p class="k">ציון ממוצע של השופט העיוור (1–10). הפער הקטן בין הכבישים הוא כל הסיפור: המשאית טובה יותר בכ-2 נקודות, אבל עולה פי ~45.</p>
+  <div class="card"><h2>איכות לפי סוג משימה</h2><p class="k">ציון ממוצע של השופט העליון (1–10). הפער הקטן בין הכבישים הוא כל הסיפור: המשאית טובה יותר בכ-2 נקודות, אבל עולה פי ~45.</p>
     <div class="legend"><span><i style="background:var(--series-1)"></i>קטנוע (Haiku)</span><span><i style="background:var(--series-2)"></i>משאית (Opus)</span></div>
     <div id="cCat"></div></div>
 
@@ -78,7 +78,7 @@ details summary{cursor:pointer;color:var(--series-1);font-size:13px}
     <div class="tiles" id="pTiles" style="margin-top:14px"></div>
     <p class="note" id="pNote"></p>
   </div>
-  <div class="card"><h2>כל 100 הקבלות: שלושת הכבישים</h2><p class="k">פתח כל שורה וקרא את התשובות של הקטנוע, המכונית והמשאית, ואת נימוקי השופט העיוור. ציון "3 כבישים" הוא משיפוט אחד שראה את שלוש התשובות יחד.</p>
+  <div class="card"><h2>כל 100 הקבלות: שלושת הכבישים</h2><p class="k">פתח כל שורה וקרא את התשובות של הקטנוע, המכונית והמשאית, ואת הפסיקה המנומקת של השופט העליון. ציון "3 כבישים" הוא משיפוט אחד שראה את שלוש התשובות יחד.</p>
     <div class="scroll"><table><thead><tr><th>#</th><th>משימה</th><th>הווייז</th><th>🛵 קטנוע</th><th>🚛 משאית</th><th>3 כבישים: 🛵 / 🚗 / 🚛</th><th>הספיק?</th><th>עלות 🛵</th><th>עלות 🚗</th><th>עלות 🚛</th></tr></thead><tbody id="rows"></tbody></table></div></div>
 
   <p class="note" id="foot"></p>
@@ -142,7 +142,7 @@ async function load(){
   const byCat={};R.forEach(r=>{const k=r.label||'אחר';(byCat[k]=byCat[k]||{k,b:0,t:0,n:0});byCat[k].b+=r.b_score;byCat[k].t+=r.t_score;byCat[k].n++});
   grouped($('cCat'),Object.values(byCat).map(c=>({k:c.k,b:c.b/c.n,t:c.t/c.n,n:c.n})));
   $('rows').innerHTML=R.map(r=>{const id=ideal(r),ok=r.route_road===id,cls=ok?'ok':(r.route_road==='toll'?'ov':'no'),txt=ok?'✓':(r.route_road==='toll'?'יקר':'✗');
-    return '<tr><td>'+r.id+'</td><td>'+esc(r.task)+(r.sensitive?' <span class="note">(רגיש)</span>':'')+'<details><summary>תשובות ונימוק</summary><div class="note">שופט: '+esc(r.judge_reason)+'</div><div class="ans"><b>קטנוע ('+r.b_score+'/10):</b>\n'+esc(r.b_text)+'</div>'+(r.m_text?'<div class="ans"><b>🚗 מכונית ('+r.j3_m+'/10 בשיפוט 3 הכבישים):</b>\n'+esc(r.m_text)+'</div><div class="note">שופט 3 הכבישים: '+esc(r.j3_reason)+'</div>':'')+'<div class="ans"><b>משאית ('+r.t_score+'/10):</b>\n'+esc(r.t_text)+'</div></details></td><td><span class="pill '+(r.route_road==='bypass'?'p-by':'p-to')+'">'+(r.route_road==='bypass'?'קטנוע':'משאית')+'</span> <span class="'+cls+'">'+txt+'</span></td><td>'+r.b_score+'</td><td>'+r.t_score+'</td><td>'+(r.j3_m!=null?r.j3_b+' / <b>'+r.j3_m+'</b> / '+r.j3_t:'—')+'</td><td>'+(r.enough?'כן':'לא')+'</td><td>'+agor(r.b_cost)+'</td><td>'+(r.m_cost!=null?agor(+r.m_cost):'—')+'</td><td>'+agor(r.t_cost)+'</td></tr>'}).join('');
+    return '<tr><td>'+r.id+'</td><td>'+esc(r.task)+(r.sensitive?' <span class="note">(רגיש)</span>':'')+'<details><summary>תשובות ונימוק</summary><div class="note">שופט: '+esc(r.judge_reason)+'</div><div class="ans"><b>קטנוע ('+r.b_score+'/10):</b>\n'+esc(r.b_text)+'</div>'+(r.m_text?'<div class="ans"><b>🚗 מכונית ('+r.j3_m+'/10 בפסיקה על 3 הכבישים):</b>\n'+esc(r.m_text)+'</div><div class="note">שופט 3 הכבישים: '+esc(r.j3_reason)+'</div>':'')+'<div class="ans"><b>משאית ('+r.t_score+'/10):</b>\n'+esc(r.t_text)+'</div></details></td><td><span class="pill '+(r.route_road==='bypass'?'p-by':'p-to')+'">'+(r.route_road==='bypass'?'קטנוע':'משאית')+'</span> <span class="'+cls+'">'+txt+'</span></td><td>'+r.b_score+'</td><td>'+r.t_score+'</td><td>'+(r.j3_m!=null?r.j3_b+' / <b>'+r.j3_m+'</b> / '+r.j3_t:'—')+'</td><td>'+(r.enough?'כן':'לא')+'</td><td>'+agor(r.b_cost)+'</td><td>'+(r.m_cost!=null?agor(+r.m_cost):'—')+'</td><td>'+agor(r.t_cost)+'</td></tr>'}).join('');
 
 
   // three roads
@@ -206,7 +206,7 @@ async function load(){
     $('pTiles').innerHTML=[['$'+Math.round(last.tot).toLocaleString('he-IL'),'הכנסה בחודש 24'],['$'+(arr/1e6).toFixed(arr>=1e7?0:1)+'M','קצב הכנסה שנתי בחודש 24'],['$'+(cum/1e6).toFixed(1)+'M','הכנסה מצטברת ב-24 חודשים'],['$'+Math.round(last.biz*P.spend*(P.save/100)/1000).toLocaleString('he-IL')+'K','חיסכון חודשי ללקוחות בחודש 24']].map(([b,t])=>'<div class="tile"><b>'+b+'</b><span>'+esc(t)+'</span></div>').join('');
     $('pNote').textContent='הנחות: צמיחה בעקומת S עד היעד בחודש 24. עסק משלם '+P.share+'% מהחיסכון שהווייז יצר לו. הכבישים משלמים '+P.ref+'% עמלת הפניה על התנועה שמנותבת אליהם. נהג פרטי עושה '+P.trips+' נסיעות בחודש, והעלות לנסיעה ('+agor(tripCost)+') נמדדה במבחן. הנהגים הפרטיים מכניסים מעט כסף ישירות; הערך שלהם הוא המפה והדיווחים. לשם השוואה: OpenRouter הכניסה כ-160 מיליון דולר בשנה באוגוסט 2026.'}
   mark('בסיסי');draw();
-  $('foot').textContent='שיטה: "הספיק" = ציון הקטנוע 7 ומעלה, ולא יותר מנקודה אחת מתחת למשאית. משימות רגישות (כסף, בריאות, משפט, פרטים אישיים) נחשבות נכונות רק במשאית, גם כשהקטנוע הספיק. השופט הוא מודל AI ולא בני אדם; הסדר העיוור והאקראי מקטין הטיה אבל לא מבטל אותה. עלות המבחן כולו, כולל השופט: $'+(+d.spent_usd).toFixed(2)+'. '+R.length+' משימות.';
+  $('foot').textContent='שיטה: "הספיק" = ציון הקטנוע 7 ומעלה, ולא יותר מנקודה אחת מתחת למשאית. משימות רגישות (כסף, בריאות, משפט, פרטים אישיים) נחשבות נכונות רק במשאית, גם כשהקטנוע הספיק. השופט הוא מודל AI ולא בני אדם; הסדר האקראי והאקראי מקטין הטיה אבל לא מבטל אותה. עלות המבחן כולו, כולל השופט: $'+(+d.spent_usd).toFixed(2)+'. '+R.length+' משימות.';
 }
 load().catch(e=>{$('tiles').textContent='לא הצלחתי לטעון את התוצאות.'});
 }

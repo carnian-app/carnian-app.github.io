@@ -75,8 +75,8 @@ details summary{cursor:pointer;color:var(--series-1);font-size:13px}
     <div class="tiles" id="pTiles" style="margin-top:14px"></div>
     <p class="note" id="pNote"></p>
   </div>
-  <div class="card"><h2>כל 100 הקבלות</h2><p class="k">אפשר לפתוח כל שורה ולקרוא את שתי התשובות ואת נימוק השופט.</p>
-    <div class="scroll"><table><thead><tr><th>#</th><th>משימה</th><th>הווייז</th><th>קטנוע</th><th>משאית</th><th>הספיק?</th><th>עלות קטנוע</th><th>עלות משאית</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+  <div class="card"><h2>כל 100 הקבלות: שלושת הכבישים</h2><p class="k">פתח כל שורה וקרא את התשובות של הקטנוע, המכונית והמשאית, ואת נימוקי השופט העיוור. ציון "3 כבישים" הוא משיפוט אחד שראה את שלוש התשובות יחד. "—" = המכונית עוד לא נבדקה במשימה הזו.</p>
+    <div class="scroll"><table><thead><tr><th>#</th><th>משימה</th><th>הווייז</th><th>🛵 קטנוע</th><th>🚛 משאית</th><th>3 כבישים: 🛵 / 🚗 / 🚛</th><th>הספיק?</th><th>עלות 🛵</th><th>עלות 🚗</th><th>עלות 🚛</th></tr></thead><tbody id="rows"></tbody></table></div></div>
 
   <p class="note" id="foot"></p>
 </main>
@@ -139,7 +139,7 @@ async function load(){
   const byCat={};R.forEach(r=>{const k=r.label||'אחר';(byCat[k]=byCat[k]||{k,b:0,t:0,n:0});byCat[k].b+=r.b_score;byCat[k].t+=r.t_score;byCat[k].n++});
   grouped($('cCat'),Object.values(byCat).map(c=>({k:c.k,b:c.b/c.n,t:c.t/c.n,n:c.n})));
   $('rows').innerHTML=R.map(r=>{const id=ideal(r),ok=r.route_road===id,cls=ok?'ok':(r.route_road==='toll'?'ov':'no'),txt=ok?'✓':(r.route_road==='toll'?'יקר':'✗');
-    return '<tr><td>'+r.id+'</td><td>'+esc(r.task)+(r.sensitive?' <span class="note">(רגיש)</span>':'')+'<details><summary>תשובות ונימוק</summary><div class="note">שופט: '+esc(r.judge_reason)+'</div><div class="ans"><b>קטנוע ('+r.b_score+'/10):</b>\n'+esc(r.b_text)+'</div><div class="ans"><b>משאית ('+r.t_score+'/10):</b>\n'+esc(r.t_text)+'</div></details></td><td><span class="pill '+(r.route_road==='bypass'?'p-by':'p-to')+'">'+(r.route_road==='bypass'?'קטנוע':'משאית')+'</span> <span class="'+cls+'">'+txt+'</span></td><td>'+r.b_score+'</td><td>'+r.t_score+'</td><td>'+(r.enough?'כן':'לא')+'</td><td>'+agor(r.b_cost)+'</td><td>'+agor(r.t_cost)+'</td></tr>'}).join('');
+    return '<tr><td>'+r.id+'</td><td>'+esc(r.task)+(r.sensitive?' <span class="note">(רגיש)</span>':'')+'<details><summary>תשובות ונימוק</summary><div class="note">שופט: '+esc(r.judge_reason)+'</div><div class="ans"><b>קטנוע ('+r.b_score+'/10):</b>\n'+esc(r.b_text)+'</div>'+(r.m_text?'<div class="ans"><b>🚗 מכונית ('+r.j3_m+'/10 בשיפוט 3 הכבישים):</b>\n'+esc(r.m_text)+'</div><div class="note">שופט 3 הכבישים: '+esc(r.j3_reason)+'</div>':'')+'<div class="ans"><b>משאית ('+r.t_score+'/10):</b>\n'+esc(r.t_text)+'</div></details></td><td><span class="pill '+(r.route_road==='bypass'?'p-by':'p-to')+'">'+(r.route_road==='bypass'?'קטנוע':'משאית')+'</span> <span class="'+cls+'">'+txt+'</span></td><td>'+r.b_score+'</td><td>'+r.t_score+'</td><td>'+(r.j3_m!=null?r.j3_b+' / <b>'+r.j3_m+'</b> / '+r.j3_t:'—')+'</td><td>'+(r.enough?'כן':'לא')+'</td><td>'+agor(r.b_cost)+'</td><td>'+(r.m_cost!=null?agor(+r.m_cost):'—')+'</td><td>'+agor(r.t_cost)+'</td></tr>'}).join('');
 
 
   // three roads

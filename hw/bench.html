@@ -61,6 +61,10 @@ details summary{cursor:pointer;color:var(--series-1);font-size:13px}
     <p class="note" id="n3"></p>
   </div>
 
+  <div class="card" id="uCard" style="border:2px solid var(--series-3)"><h2>פסיקה שנייה: UnOpus · שופט עליון מחברה אחרת</h2>
+    <p class="k">השופט הראשון הוא Opus של Anthropic, אותה חברה שבונה את שלושת הכבישים. כדי לבדוק שהוא לא פוסק לטובת עצמו, שופט עליון שני מ-Google (Gemini) קיבל את אותן תשובות, בלי שמות ובסדר אקראי חדש, ופסק מחדש.</p>
+    <div id="uBox" class="note" style="font-size:15px;color:var(--text-primary)">טוען…</div></div>
+
   <h2 style="margin:26px 0 10px">פירוט: הקטנוע מול המשאית</h2>
   <div class="tiles" id="tiles"></div>
 
@@ -151,7 +155,7 @@ async function load(){
   const byCat={};R.forEach(r=>{const k=r.label||'אחר';(byCat[k]=byCat[k]||{k,b:0,t:0,n:0});byCat[k].b+=r.b_score;byCat[k].t+=r.t_score;byCat[k].n++});
   grouped($('cCat'),Object.values(byCat).map(c=>({k:c.k,b:c.b/c.n,t:c.t/c.n,n:c.n})));
   $('rows').innerHTML=R.map(r=>{const id=ideal(r),ok=r.route_road===id,cls=ok?'ok':(r.route_road==='toll'?'ov':'no'),txt=ok?'✓':(r.route_road==='toll'?'יקר':'✗');
-    return '<tr><td>'+r.id+'</td><td>'+esc(r.task)+(r.sensitive?' <span class="note">(רגיש)</span>':'')+'<details><summary>תשובות ונימוק</summary><div class="note">שופט: '+esc(r.judge_reason)+'</div><div class="ans"><b>קטנוע ('+r.b_score+'/10):</b>\n'+esc(r.b_text)+'</div>'+(r.m_text?'<div class="ans"><b>🚗 מכונית ('+r.j3_m+'/10 בפסיקה על 3 הכבישים):</b>\n'+esc(r.m_text)+'</div><div class="note">שופט 3 הכבישים: '+esc(r.j3_reason)+'</div>':'')+'<div class="ans"><b>משאית ('+r.t_score+'/10):</b>\n'+esc(r.t_text)+'</div></details></td><td><span class="pill '+(r.route_road==='bypass'?'p-by':'p-to')+'">'+(r.route_road==='bypass'?'קטנוע':'משאית')+'</span> <span class="'+cls+'">'+txt+'</span></td><td>'+r.b_score+'</td><td>'+r.t_score+'</td><td>'+(r.j3_m!=null?r.j3_b+' / <b>'+r.j3_m+'</b> / '+r.j3_t:'—')+'</td><td>'+(r.enough?'כן':'לא')+'</td><td>'+agor(r.b_cost)+'</td><td>'+(r.m_cost!=null?agor(+r.m_cost):'—')+'</td><td>'+agor(r.t_cost)+'</td></tr>'}).join('');
+    return '<tr><td>'+r.id+'</td><td>'+esc(r.task)+(r.sensitive?' <span class="note">(רגיש)</span>':'')+'<details><summary>תשובות ונימוק</summary><div class="note">שופט: '+esc(r.judge_reason)+'</div><div class="ans"><b>קטנוע ('+r.b_score+'/10):</b>\n'+esc(r.b_text)+'</div>'+(r.m_text?'<div class="ans"><b>🚗 מכונית ('+r.j3_m+'/10 בפסיקה על 3 הכבישים):</b>\n'+esc(r.m_text)+'</div><div class="note">פסיקת השופט העליון (Opus): '+esc(r.j3_reason)+'</div>'+(r.u_b!=null?'<div class="note">פסיקת UnOpus (Gemini): 🛵 '+r.u_b+' · 🚗 '+r.u_m+' · 🚛 '+r.u_t+'. '+esc(r.u_reason)+'</div>':''):'')+'<div class="ans"><b>משאית ('+r.t_score+'/10):</b>\n'+esc(r.t_text)+'</div></details></td><td><span class="pill '+(r.route_road==='bypass'?'p-by':'p-to')+'">'+(r.route_road==='bypass'?'קטנוע':'משאית')+'</span> <span class="'+cls+'">'+txt+'</span></td><td>'+r.b_score+'</td><td>'+r.t_score+'</td><td>'+(r.j3_m!=null?r.j3_b+' / <b>'+r.j3_m+'</b> / '+r.j3_t:'—')+'</td><td>'+(r.enough?'כן':'לא')+'</td><td>'+agor(r.b_cost)+'</td><td>'+(r.m_cost!=null?agor(+r.m_cost):'—')+'</td><td>'+agor(r.t_cost)+'</td></tr>'}).join('');
 
 
   // three roads
@@ -218,6 +222,18 @@ async function load(){
   $('foot').textContent='שיטה: "הספיק" = ציון הקטנוע 7 ומעלה, ולא יותר מנקודה אחת מתחת למשאית. משימות רגישות (כסף, בריאות, משפט, פרטים אישיים) נחשבות נכונות רק במשאית, גם כשהקטנוע הספיק. השופט הוא מודל AI ולא בני אדם; הסדר האקראי והאקראי מקטין הטיה אבל לא מבטל אותה. עלות המבחן כולו, כולל השופט: $'+(+d.spent_usd).toFixed(2)+'. '+R.length+' משימות.';
 }
 load().catch(e=>{$('tiles').textContent='לא הצלחתי לטעון את התוצאות.'});
+async function unopus(){try{const d=await fetch(API).then(r=>r.json());const R=(d.rows||[]).filter(r=>r.u_b!=null&&r.j3_b!=null);const n=R.length;const box=$('uBox');if(!n){box.textContent='הפסיקה השנייה עוד לא רצה.';return}
+const av=f=>(R.reduce((s,r)=>s+f(r),0)/n).toFixed(1);const best=(b,m,t)=>{const x=Math.max(b,m,t);return t===x?'t':m===x?'m':'b'};
+const same=R.filter(r=>best(r.j3_b,r.j3_m,r.j3_t)===best(r.u_b,r.u_m,r.u_t)).length;
+const m1o=R.filter(r=>r.j3_m>=r.j3_t-1).length,m1u=R.filter(r=>r.u_m>=r.u_t-1).length;
+const tO=R.filter(r=>r.j3_t>r.j3_m).length,tU=R.filter(r=>r.u_t>r.u_m).length;const pc=x=>Math.round(x/n*100)+'%';
+const um=(R.find(r=>r.u_model)||{}).u_model||'Gemini';
+box.innerHTML='<table><thead><tr><th>שופט</th><th>🛵 קטנוע</th><th>🚗 מכונית</th><th>🚛 משאית</th><th>המכונית עד נקודה מהמשאית</th><th>המשאית מעל המכונית</th></tr></thead><tbody>'+
+'<tr><td>Opus (Anthropic)</td><td>'+av(r=>r.j3_b)+'</td><td>'+av(r=>r.j3_m)+'</td><td>'+av(r=>r.j3_t)+'</td><td>'+pc(m1o)+'</td><td>'+pc(tO)+'</td></tr>'+
+'<tr><td><b>UnOpus</b> ('+esc(um)+')</td><td>'+av(r=>r.u_b)+'</td><td>'+av(r=>r.u_m)+'</td><td>'+av(r=>r.u_t)+'</td><td>'+pc(m1u)+'</td><td>'+pc(tU)+'</td></tr></tbody></table>'+
+'<p>שני השופטים בחרו באותו כביש כמנצח ב-<b>'+pc(same)+'</b> מהמשימות ('+n+' משימות שנשפטו פעמיים). אם Opus היה מעדיף את עצמו, המשאית (Opus) הייתה מנצחת אצלו הרבה יותר מאשר אצל UnOpus. אצל Opus המשאית מעל המכונית ב-'+pc(tO)+', ואצל UnOpus ב-'+pc(tU)+'.</p>'}catch(e){$('uBox').textContent='לא הצלחתי לטעון את הפסיקה השנייה.'}}
+unopus();
+
 }
 </script>
 </body>

@@ -475,9 +475,10 @@ async function loadLedger(){try{const s=await fetch(API+'?driver='+drv).then(x=>
 renderStats();renderMem();loadLedger();setStep(1);$('task').addEventListener('input',()=>{if($('s1').classList.contains('now')&&$('task').value.trim())$('task').classList.remove('blink')});
 }
 
-function shCalc(){const v=Math.round(Math.pow(10,+$('shV').value)),p=+$('shP').value,m=+$('shM').value,d=+$('shD').value;const nf=n=>n.toLocaleString('he-IL');$('shVv').textContent=nf(v);$('shPv').textContent=p+'%';$('shMv').textContent='₪'+m;$('shDv').textContent=d+'%';const pay=v*p/100/1000*m;$('shO1').textContent='₪'+nf(Math.round(pay));$('shO2').textContent='₪'+nf(Math.round(pay*d/100));$('shO3').textContent='₪'+nf(Math.round(pay*(100-d)/100))}
-['shV','shP','shM','shD'].forEach(k=>$(k).addEventListener('input',shCalc));shCalc();
-(async()=>{try{const s=await fetch(API).then(x=>x.json());$('shT').textContent=String(s.trips||0);const mp=s.map||{};$('shC').textContent=String(Object.keys(mp).length);let r=0;for(const k in mp)r+=(mp[k].b_n||0)+(mp[k].t_n||0);$('shR').textContent=String(r);$('shS').textContent=(+s.toll_cost_usd>0?Math.round((1-s.cost_usd/s.toll_cost_usd)*100):0)+'%'}catch(e){}})();
+const $s=id=>document.getElementById(id);
+function shCalc(){const v=Math.round(Math.pow(10,+$s('shV').value)),p=+$s('shP').value,m=+$s('shM').value,d=+$s('shD').value;const nf=n=>n.toLocaleString('he-IL');$s('shVv').textContent=nf(v);$s('shPv').textContent=p+'%';$s('shMv').textContent='₪'+m;$s('shDv').textContent=d+'%';const pay=v*p/100/1000*m;$s('shO1').textContent='₪'+nf(Math.round(pay));$s('shO2').textContent='₪'+nf(Math.round(pay*d/100));$s('shO3').textContent='₪'+nf(Math.round(pay*(100-d)/100))}
+['shV','shP','shM','shD'].forEach(k=>$s(k).addEventListener('input',shCalc));shCalc();
+(async()=>{try{const s=await fetch('https://tlvugvpvoenhzdheutxi.supabase.co/functions/v1/hybridways').then(x=>x.json());$s('shT').textContent=String(s.trips||0);const mp=s.map||{};$s('shC').textContent=String(Object.keys(mp).length);let r=0;for(const k in mp)r+=(mp[k].b_n||0)+(mp[k].t_n||0);$s('shR').textContent=String(r);$s('shS').textContent=(+s.toll_cost_usd>0?Math.round((1-s.cost_usd/s.toll_cost_usd)*100):0)+'%'}catch(e){}})();
 </script>
 </body>
 </html>

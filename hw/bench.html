@@ -6,8 +6,8 @@
 <title>HybridWays · מבחן 100 נסיעות</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-.viz-root{color-scheme:light;--bg:#f4f5f7;--surface-1:#ffffff;--line:#e3e5ea;--grid:#eceef2;--text-primary:#191919;--text-secondary:#5f6672;--series-1:#257de0;--series-2:#f47230;--risk:#6a4ce2}
-@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz-root{color-scheme:dark;--bg:#121417;--surface-1:#191919;--line:#2c3038;--grid:#262a31;--text-primary:#efefef;--text-secondary:#9c9c9c;--series-1:#338ced;--series-2:#e76624;--risk:#9887ef}}
+.viz-root{color-scheme:light;--series-3:#00b894;--bg:#f4f5f7;--surface-1:#ffffff;--line:#e3e5ea;--grid:#eceef2;--text-primary:#191919;--text-secondary:#5f6672;--series-1:#257de0;--series-2:#f47230;--risk:#6a4ce2}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz-root{color-scheme:dark;--series-3:#00a888;--bg:#121417;--surface-1:#191919;--line:#2c3038;--grid:#262a31;--text-primary:#efefef;--text-secondary:#9c9c9c;--series-1:#338ced;--series-2:#e76624;--risk:#9887ef}}
 *{box-sizing:border-box;min-width:0}
 body{margin:0;background:var(--bg);color:var(--text-primary);font:16px/1.55 Heebo,system-ui,sans-serif}
 main{max-width:1180px;margin:0 auto;padding:clamp(18px,3vw,40px) max(4vw,16px)}
@@ -33,6 +33,10 @@ details summary{cursor:pointer;color:var(--series-1);font-size:13px}
 .ans{white-space:pre-wrap;font-size:13px;background:var(--bg);border-radius:8px;padding:8px;margin:6px 0;max-height:260px;overflow:auto}
 .note{font-size:13px;color:var(--text-secondary)}
 .scroll{overflow-x:auto}
+.ctl label{font-size:13px;color:var(--text-secondary);display:block}.ctl input[type=range]{width:100%;accent-color:var(--series-1)}.ctl b{color:var(--text-primary);font-variant-numeric:tabular-nums}
+.sb{font:600 14px Heebo,system-ui,sans-serif;min-height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface-1);color:var(--text-primary);cursor:pointer}.sb[aria-pressed=true]{background:var(--text-primary);color:var(--surface-1)}
+@media(max-width:820px){.ctl{grid-template-columns:minmax(0,1fr)!important}}
+
 @media(max-width:820px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
@@ -48,10 +52,22 @@ details summary{cursor:pointer;color:var(--series-1);font-size:13px}
     <div class="card"><h2>מה הווייז החליט</h2><p class="k">מול ההחלטה הנכונה: קטנוע כשהוא הספיק, משאית כשהוא לא הספיק או כשהנושא רגיש.</p><div id="cRoute"></div></div>
   </div>
 
-  <div class="card"><h2>איכות לפי סוג משימה</h2><p class="k">ציון ממוצע של השופט העיוור (1–10). הפער הקטן בין הכבישים הוא כל הסיפור: ברוב המשימות משלמים פי ~29 על הבדל קטן.</p>
+  <div class="card"><h2>איכות לפי סוג משימה</h2><p class="k">ציון ממוצע של השופט העיוור (1–10). הפער הקטן בין הכבישים הוא כל הסיפור: המשאית טובה יותר בכ-2 נקודות, אבל עולה פי ~45.</p>
     <div class="legend"><span><i style="background:var(--series-1)"></i>קטנוע (Haiku)</span><span><i style="background:var(--series-2)"></i>משאית (Opus)</span></div>
     <div id="cCat"></div></div>
 
+
+  <div class="card" id="sumCard"><h2>מה המבחן מראה, בלי ייפוי</h2><div id="summary" class="note" style="font-size:15px;color:var(--text-primary)"></div></div>
+
+  <div class="card"><h2>תחזית לשנתיים: הרווח הגלום</h2>
+    <p class="k">הבסיס הוא החיסכון שנמדד במבחן. כל השאר הנחות, גלויות וניתנות לשינוי. זו תחזית, לא תוצאה.</p>
+    <div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px" id="scen"></div>
+    <div class="ctl" id="ctl" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 18px;margin-bottom:14px"></div>
+    <div class="legend" id="pLeg"></div>
+    <div id="cProj"></div>
+    <div class="tiles" id="pTiles" style="margin-top:14px"></div>
+    <p class="note" id="pNote"></p>
+  </div>
   <div class="card"><h2>כל 100 הקבלות</h2><p class="k">אפשר לפתוח כל שורה ולקרוא את שתי התשובות ואת נימוק השופט.</p>
     <div class="scroll"><table><thead><tr><th>#</th><th>משימה</th><th>הווייז</th><th>קטנוע</th><th>משאית</th><th>הספיק?</th><th>עלות קטנוע</th><th>עלות משאית</th></tr></thead><tbody id="rows"></tbody></table></div></div>
 
@@ -108,7 +124,7 @@ async function load(){
   hbars($('cCost'),[
     {k:'הכול במשאית',v:per(allT),c:'var(--series-2)',tip:'היום: כולם נוסעים במודל החזק'},
     {k:'עם הווייז',v:per(waze),c:'var(--series-1)',tip:'הניתוב של HybridWays, כולל עלות הווייז עצמו'},
-    {k:'ניתוב מושלם',v:per(best),c:'var(--series-1)',tip:'אילו הווייז היה צודק תמיד: התקרה של מה שאפשר לחסוך'}],ils);
+    {k:'ניתוב זהיר',v:per(best),c:'var(--series-1)',tip:'קטנוע רק כשהשופט קבע שהוא כמעט טוב כמו המשאית (פער של נקודה לכל היותר)'}],ils);
   hbars($('cRoute'),[
     {k:'נכון',v:correct,c:'var(--series-1)',tip:'הכביש שהווייז בחר הוא הכביש הנכון'},
     {k:'שילם יותר מדי',v:over,c:'var(--series-2)',tip:'שלח למשאית כשקטנוע הספיק: כסף מבוזבז, אבל לא מסוכן'},
@@ -117,6 +133,48 @@ async function load(){
   grouped($('cCat'),Object.values(byCat).map(c=>({k:c.k,b:c.b/c.n,t:c.t/c.n,n:c.n})));
   $('rows').innerHTML=R.map(r=>{const id=ideal(r),ok=r.route_road===id,cls=ok?'ok':(r.route_road==='toll'?'ov':'no'),txt=ok?'✓':(r.route_road==='toll'?'יקר':'✗');
     return '<tr><td>'+r.id+'</td><td>'+esc(r.task)+(r.sensitive?' <span class="note">(רגיש)</span>':'')+'<details><summary>תשובות ונימוק</summary><div class="note">שופט: '+esc(r.judge_reason)+'</div><div class="ans"><b>קטנוע ('+r.b_score+'/10):</b>\n'+esc(r.b_text)+'</div><div class="ans"><b>משאית ('+r.t_score+'/10):</b>\n'+esc(r.t_text)+'</div></details></td><td><span class="pill '+(r.route_road==='bypass'?'p-by':'p-to')+'">'+(r.route_road==='bypass'?'קטנוע':'משאית')+'</span> <span class="'+cls+'">'+txt+'</span></td><td>'+r.b_score+'</td><td>'+r.t_score+'</td><td>'+(r.enough?'כן':'לא')+'</td><td>'+agor(r.b_cost)+'</td><td>'+agor(r.t_cost)+'</td></tr>'}).join('');
+
+  // honest summary
+  const nsE=Math.round(enoughNS/ns.length*100),sens=R.filter(r=>r.sensitive),sensToll=sens.filter(r=>r.route_road==='toll').length;
+  const bAvg=ns.reduce((a,r)=>a+r.b_score,0)/ns.length,tAvg=ns.reduce((a,r)=>a+r.t_score,0)/ns.length,b7=R.filter(r=>r.b_score>=7).length;
+  const ratio=(allT/R.length)/(R.reduce((a,r)=>a+r.b_cost,0)/R.length);
+  $('summary').innerHTML='<ul style="margin:0;padding-inline-start:20px;line-height:1.8">'+
+   '<li><b>המחיר:</b> נסיעה במשאית עלתה בממוצע פי '+Math.round(ratio)+' מנסיעה בקטנוע.</li>'+
+   '<li><b>האיכות:</b> במשימות יומיומיות הקטנוע קיבל '+bAvg.toFixed(1)+' מ-10, והמשאית '+tAvg.toFixed(1)+'. '+b7+' מתוך '+R.length+' תשובות קטנוע קיבלו 7 ומעלה.</li>'+
+   '<li><b>"קטנוע הספיק"</b> לפי הגדרה מחמירה (פער של נקודה לכל היותר מהמשאית): '+nsE+'% מהמשימות היומיומיות. כלומר, לא "רוב הנסיעות", אלא בערך '+(nsE>=45?'חצי':'שליש')+' מהן.</li>'+
+   '<li><b>הווייז:</b> חסך '+Math.round((1-waze/allT)*100)+'% מהכסף, ואף פעם לא שלח נושא רגיש לקטנוע ('+sensToll+' מתוך '+sens.length+' רגישים הלכו למשאית). אבל הוא אגרסיבי מדי: '+risky+' פעמים שלח לקטנוע כשהשופט העדיף בבירור את המשאית, והאיכות הממוצעת ירדה מ-'+tollScore.toFixed(1)+' ל-'+chosenScore.toFixed(1)+'.</li>'+
+   '<li><b>מה זה אומר:</b> הכסף אמיתי, אבל צריך "כביש אמצעי" (מודל ביניים), ודיווחי הנהגים כדי לכייל את הווייז. זה בדיוק התפקיד של מפת הנהגים.</li></ul>';
+  // projection
+  const saveRate=1-waze/allT; // measured
+  const SC={'זהיר':{biz:20,spend:10000,cons:2000},'בסיסי':{biz:100,spend:30000,cons:20000},'אופטימי':{biz:500,spend:50000,cons:200000}};
+  const P={biz:100,spend:30000,save:Math.round(saveRate*100),share:20,cons:20000,trips:200,ref:5};
+  const CT=[['biz','עסקים מחוברים בחודש 24',5,1000,5,v=>v.toLocaleString('he-IL')],['spend','הוצאת AI חודשית לעסק ($)',1000,100000,1000,v=>'$'+v.toLocaleString('he-IL')],['save','חיסכון לעסק (%) · נמדד: '+Math.round(saveRate*100)+'%',10,80,1,v=>v+'%'],['share','החלק של HybridWays מהחיסכון (%)',5,40,1,v=>v+'%'],['cons','נהגים פרטיים בחודש 24',0,1000000,1000,v=>v.toLocaleString('he-IL')],['ref','עמלת הפניה מהכבישים (%)',0,15,1,v=>v+'%']];
+  const ctl=$('ctl');ctl.innerHTML='';const outs={};
+  CT.forEach(([k,lab,mn,mx,st,f])=>{const w=document.createElement('div');const l=document.createElement('label');l.innerHTML=esc(lab)+': <b></b>';const i=document.createElement('input');i.type='range';i.min=mn;i.max=mx;i.step=st;i.value=P[k];i.setAttribute('aria-label',lab);outs[k]=[i,l.querySelector('b'),f];i.oninput=()=>{P[k]=+i.value;draw()};w.append(l,i);ctl.appendChild(w)});
+  const sb=$('scen');sb.innerHTML='';Object.keys(SC).forEach(n=>{const b=document.createElement('button');b.className='sb';b.textContent=n;b.onclick=()=>{Object.assign(P,SC[n]);Object.keys(outs).forEach(k=>outs[k][0].value=P[k]);mark(n);draw()};sb.appendChild(b)});
+  function mark(n){[...sb.children].forEach(b=>b.setAttribute('aria-pressed',String(b.textContent===n)))}
+  const tripCost=waze/R.length; // $ per routed consumer trip
+  function model(p){const out=[];for(let m=1;m<=24;m++){const g=1/(1+Math.exp(-(m-12)/3.2)),g24=1/(1+Math.exp(-(24-12)/3.2)),f=g/g24;const biz=p.biz*f,cons=p.cons*f;
+    const rBiz=biz*p.spend*(p.save/100)*(p.share/100);const routed=biz*p.spend*(1-p.save/100)+cons*p.trips*tripCost;const rRef=routed*(p.ref/100);out.push({m,biz,cons,rBiz,rRef,tot:rBiz+rRef})}return out}
+  function draw(){Object.keys(outs).forEach(k=>outs[k][1].textContent=outs[k][2](P[k]));
+    const M=model(P),last=M[23],arr=last.tot*12,cum=M.reduce((a,x)=>a+x.tot,0);
+    const box=$('cProj');box.innerHTML='';const W=1060,H=280,B=34,T=10,L=70,mx=Math.max(...M.map(x=>x.tot))||1;
+    const s=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'הכנסה חודשית לפי חודש'},box);
+    const X=m=>W-(L+(W-L-10)*(m-1)/23),Y=v=>T+(H-T-B)*(1-v/mx);
+    for(let k=0;k<=4;k++){const v=mx*k/4,y=Y(v);el('line',{x1:10,x2:W-L,y1:y,y2:y,stroke:'var(--grid)'},s);const t=el('text',{x:W-L+8,y:y+4,'text-anchor':'start','font-size':12},s);t.textContent='$'+Math.round(v/1000).toLocaleString('he-IL')+'K'}
+    [1,6,12,18,24].forEach(m=>{const t=el('text',{x:X(m),y:H-10,'text-anchor':'middle','font-size':12},s);t.textContent='חודש '+m});
+    const ser=[['rBiz','var(--series-1)','אחוז מהחיסכון של עסקים'],['rRef','var(--series-2)','עמלת הפניה מהכבישים'],['tot','var(--series-3)','סך ההכנסה החודשית']];
+    $('pLeg').innerHTML=ser.map(([k,c,n])=>'<span><i style="background:'+c+'"></i>'+n+'</span>').join('');
+    ser.forEach(([k,c])=>{el('path',{d:M.map((x,i)=>(i?'L':'M')+X(x.m)+' '+Y(x[k])).join(' '),fill:'none',stroke:c,'stroke-width':2,'stroke-linejoin':'round'},s)});
+    const lt=el('text',{x:X(24)-6,y:Y(last.tot)-8,'text-anchor':'start','font-size':13,'font-weight':700},s);lt.style.fill='var(--text-primary)';lt.textContent='$'+Math.round(last.tot).toLocaleString('he-IL')+' בחודש';
+    const cross=el('line',{x1:0,x2:0,y1:T,y2:H-B,stroke:'var(--text-secondary)','stroke-dasharray':'3 3',opacity:0},s);
+    const hit=el('rect',{x:10,y:T,width:W-L-10,height:H-T-B,fill:'transparent'},s);
+    hit.addEventListener('mousemove',e=>{const r=s.getBoundingClientRect(),px=(e.clientX-r.left)*W/r.width;let m=Math.round(1+(W-L-px)/((W-L-10)/23));m=Math.max(1,Math.min(24,m));const x=M[m-1];cross.setAttribute('x1',X(m));cross.setAttribute('x2',X(m));cross.setAttribute('opacity',1);
+      showTip(e,'<b>חודש '+m+'</b><br>'+Math.round(x.biz)+' עסקים · '+Math.round(x.cons).toLocaleString('he-IL')+' נהגים<br>מחיסכון: $'+Math.round(x.rBiz).toLocaleString('he-IL')+'<br>הפניות: $'+Math.round(x.rRef).toLocaleString('he-IL')+'<br><b>סך: $'+Math.round(x.tot).toLocaleString('he-IL')+'</b>')});
+    hit.addEventListener('mouseleave',()=>{hideTip();cross.setAttribute('opacity',0)});
+    $('pTiles').innerHTML=[['$'+Math.round(last.tot).toLocaleString('he-IL'),'הכנסה בחודש 24'],['$'+(arr/1e6).toFixed(arr>=1e7?0:1)+'M','קצב הכנסה שנתי בחודש 24'],['$'+(cum/1e6).toFixed(1)+'M','הכנסה מצטברת ב-24 חודשים'],['$'+Math.round(last.biz*P.spend*(P.save/100)/1000).toLocaleString('he-IL')+'K','חיסכון חודשי ללקוחות בחודש 24']].map(([b,t])=>'<div class="tile"><b>'+b+'</b><span>'+esc(t)+'</span></div>').join('');
+    $('pNote').textContent='הנחות: צמיחה בעקומת S עד היעד בחודש 24. עסק משלם '+P.share+'% מהחיסכון שהווייז יצר לו. הכבישים משלמים '+P.ref+'% עמלת הפניה על התנועה שמנותבת אליהם. נהג פרטי עושה '+P.trips+' נסיעות בחודש, והעלות לנסיעה ('+agor(tripCost)+') נמדדה במבחן. הנהגים הפרטיים מכניסים מעט כסף ישירות; הערך שלהם הוא המפה והדיווחים. לשם השוואה: OpenRouter הכניסה כ-160 מיליון דולר בשנה באוגוסט 2026.'}
+  mark('בסיסי');draw();
   $('foot').textContent='שיטה: "הספיק" = ציון הקטנוע 7 ומעלה, ולא יותר מנקודה אחת מתחת למשאית. משימות רגישות (כסף, בריאות, משפט, פרטים אישיים) נחשבות נכונות רק במשאית, גם כשהקטנוע הספיק. השופט הוא מודל AI ולא בני אדם; הסדר העיוור והאקראי מקטין הטיה אבל לא מבטל אותה. עלות המבחן כולו, כולל השופט: $'+(+d.spent_usd).toFixed(2)+'. '+R.length+' משימות.';
 }
 load().catch(e=>{$('tiles').textContent='לא הצלחתי לטעון את התוצאות.'});

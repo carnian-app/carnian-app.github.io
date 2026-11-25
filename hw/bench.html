@@ -43,8 +43,17 @@ details summary{cursor:pointer;color:var(--series-1);font-size:13px}
 <body class="viz-root">
 <main>
   <div class="brand">HybridWays<span>Air costs · מבחן הוכחה</span></div>
-  <h1>100 משימות, שני כבישים, שופט עיוור.</h1>
-  <p class="sub">כל משימה נסעה גם בקטנוע (Claude Haiku 5.5) וגם במשאית (Claude Opus 5.5), דרך ה-API האמיתי של Anthropic. שופט עיוור (Opus) קיבל את שתי התשובות בסדר אקראי, בלי לדעת מי זה מי, ודירג כל אחת מ-1 עד 10. הווייז של HybridWays ניתב כל משימה מראש. כל המספרים כאן מחושבים מהקבלות למטה.</p>
+  <h1>100 משימות, שלושה כבישים, שופט עיוור.</h1>
+  <p class="sub">כל משימה נסעה בשלושה כבישים, דרך ה-API האמיתי של Anthropic: 🛵 קטנוע (Claude Haiku 5.5), 🚗 מכונית (Claude Sonnet 5.5) ו-🚛 משאית (Claude Opus 5.5). <b>שופט עיוור</b> = מודל שלישי שמקבל את התשובות בלי שמות ובסדר אקראי, כמו טעימה עיוורת של יין: הוא לא יודע מי כתב מה, ולכן לא יכול להעדיף את היקר. הוא נותן לכל תשובה ציון מ-1 עד 10. כל המספרים מחושבים מהקבלות בתחתית העמוד.</p>
+  <div class="card" id="c3card"><h2>🛵 קטנוע · 🚗 מכונית · 🚛 משאית: אותן 100 משימות</h2>
+    <p class="k">כל משימה קיבלה שלוש תשובות. השופט ראה אותן יחד, מסומנות רק A, B, C בסדר אקראי, ונתן לכל אחת ציון.</p>
+    <div class="legend"><span><i style="background:var(--series-1)"></i>קטנוע (Haiku)</span><span><i style="background:var(--series-3)"></i>מכונית (Sonnet)</span><span><i style="background:var(--series-2)"></i>משאית (Opus)</span></div>
+    <div class="grid"><div><p class="k" style="margin:0 0 4px">ציון איכות ממוצע (1–10)</p><div id="c3q"></div></div><div><p class="k" style="margin:0 0 4px">עלות ל-1,000 נסיעות (₪)</p><div id="c3c"></div></div></div>
+    <div class="tiles" id="t3" style="margin-top:14px"></div>
+    <p class="note" id="n3"></p>
+  </div>
+
+  <h2 style="margin:26px 0 10px">פירוט: הקטנוע מול המשאית</h2>
   <div class="tiles" id="tiles"></div>
 
   <div class="grid">
@@ -57,13 +66,7 @@ details summary{cursor:pointer;color:var(--series-1);font-size:13px}
     <div id="cCat"></div></div>
 
 
-  <div class="card" id="c3card"><h2>הכביש האמצעי: קטנוע, מכונית, משאית</h2>
-    <p class="k">אותן 100 משימות, עכשיו עם מכונית באמצע (Claude Sonnet 5.5). השופט העיוור קיבל את שלוש התשובות יחד, בסדר אקראי, ודירג כל אחת.</p>
-    <div class="legend"><span><i style="background:var(--series-1)"></i>קטנוע (Haiku)</span><span><i style="background:var(--series-3)"></i>מכונית (Sonnet)</span><span><i style="background:var(--series-2)"></i>משאית (Opus)</span></div>
-    <div class="grid"><div><p class="k" style="margin:0 0 4px">ציון איכות ממוצע (1–10)</p><div id="c3q"></div></div><div><p class="k" style="margin:0 0 4px">עלות ל-1,000 נסיעות (₪)</p><div id="c3c"></div></div></div>
-    <div class="tiles" id="t3" style="margin-top:14px"></div>
-    <p class="note" id="n3"></p>
-  </div>
+
   <div class="card" id="sumCard"><h2>מה המבחן מראה, בלי ייפוי</h2><div id="summary" class="note" style="font-size:15px;color:var(--text-primary)"></div></div>
 
   <div class="card"><h2>תחזית לשנתיים: הרווח הגלום</h2>
@@ -75,7 +78,7 @@ details summary{cursor:pointer;color:var(--series-1);font-size:13px}
     <div class="tiles" id="pTiles" style="margin-top:14px"></div>
     <p class="note" id="pNote"></p>
   </div>
-  <div class="card"><h2>כל 100 הקבלות: שלושת הכבישים</h2><p class="k">פתח כל שורה וקרא את התשובות של הקטנוע, המכונית והמשאית, ואת נימוקי השופט העיוור. ציון "3 כבישים" הוא משיפוט אחד שראה את שלוש התשובות יחד. "—" = המכונית עוד לא נבדקה במשימה הזו.</p>
+  <div class="card"><h2>כל 100 הקבלות: שלושת הכבישים</h2><p class="k">פתח כל שורה וקרא את התשובות של הקטנוע, המכונית והמשאית, ואת נימוקי השופט העיוור. ציון "3 כבישים" הוא משיפוט אחד שראה את שלוש התשובות יחד.</p>
     <div class="scroll"><table><thead><tr><th>#</th><th>משימה</th><th>הווייז</th><th>🛵 קטנוע</th><th>🚛 משאית</th><th>3 כבישים: 🛵 / 🚗 / 🚛</th><th>הספיק?</th><th>עלות 🛵</th><th>עלות 🚗</th><th>עלות 🚛</th></tr></thead><tbody id="rows"></tbody></table></div></div>
 
   <p class="note" id="foot"></p>

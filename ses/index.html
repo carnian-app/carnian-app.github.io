@@ -429,8 +429,8 @@ window.onYouTubeIframeAPIReady=()=>{try{YP=new YT.Player('yt',{events:{
 const ytc=(f,a)=>{try{if(YP&&YP[f]){YP[f].apply(YP,a||[]);return}$('yt').contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:a||[]}),'*')}catch(e){}};
 // Instagram / Facebook / TikTok in-app browsers block sound from embedded videos: the 🔈 button reopens the page in the phone's real browser
 const UA=navigator.userAgent||'',INAPP=/Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|musical_ly|BytedanceWebview|TikTok|Snapchat|LinkedInApp|Twitter|Pinterest|Threads|Barcelona|Line\/|KAKAOTALK|WeChat|MicroMessenger|; wv\)/i.test(UA);
-if(INAPP)$('snd').textContent='🔈';
-$('snd').onclick=()=>{if(INAPP){const u='https://carnian-app.github.io/ses/';
+$('snd').onclick=()=>{if(false){ // in-app browsers: a tap on the sky (the video itself) starts the music, no need to leave the app
+const u='https://carnian-app.github.io/ses/';
  if(/Android/i.test(UA)){location.href='intent://carnian-app.github.io/ses/#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url='+encodeURIComponent(u)+';end';return}
  const k=document.createElement('div');k.textContent=LG==='he'?'לשמוע את המוזיקה: ⋯ למעלה ← פתיחה ב-Safari':'To hear the music: ⋯ at the top → Open in Safari';k.style.cssText='position:absolute;top:16%;left:50%;transform:translateX(-50%);z-index:5;background:#0d1019e6;color:#fff;padding:8px 14px;border-radius:12px;font:600 14px Heebo,sans-serif;white-space:nowrap';document.querySelector('.skyW').appendChild(k);setTimeout(()=>k.remove(),5000);return}
  sndOn=!sndOn;if(sndOn){ytHello();ytc('playVideo');ytc('unMute');ytc('setVolume',[12]);setTimeout(()=>{ytc('unMute');ytc('setVolume',[12])},400)}else ytc('mute');$('snd').textContent=sndOn?'🔈':'🔇'};

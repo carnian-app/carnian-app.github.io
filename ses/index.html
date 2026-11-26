@@ -68,6 +68,7 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
 .skyW #sky{margin:0 auto}
 #vid{position:absolute;left:50%;top:50%;width:42%;aspect-ratio:16/9;transform:translate(-50%,-50%);opacity:.23;pointer-events:none;border-radius:14px;overflow:hidden}
 #vid iframe{width:100%;height:100%;border:0}
+#snd{position:absolute;top:6%;inset-inline-end:6%;z-index:3;width:42px;height:42px;border-radius:50%;background:#0d1019cc;border:1px solid #2c3350;font-size:18px;padding:0;cursor:pointer}
 #sealO{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none;text-align:center;width:80%}
 .wax2{display:flex;align-items:center;gap:2px;padding:8px 14px;border-radius:999px;background:#8E1F1Ae6;box-shadow:inset 0 0 0 3px #B5372F,0 4px 18px #0008;font:700 24px 'Frank Ruhl Libre',serif;color:#F3D7C7}
 .hrt{position:relative;width:38px;height:34px;display:inline-block;animation:beat 1.2s ease-in-out infinite}
@@ -94,7 +95,7 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
   </div>
 </div>
 
-<div class="skyW"><canvas id="sky"></canvas><div id="vid"></div>
+<div class="skyW"><canvas id="sky"></canvas><div id="vid"><iframe id="yt" src="https://www.youtube-nocookie.com/embed/yEBzzzblScQ?autoplay=1&mute=1&loop=1&playlist=yEBzzzblScQ&controls=0&playsinline=1&enablejsapi=1&rel=0&modestbranding=1" title="SES" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin"></iframe></div><button id="snd" type="button" aria-label="sound">🔇</button>
 <div id="sealO" class="notranslate" translate="no"><div class="wax2"><span>S</span><span class="hrt" id="hrt"><svg viewBox="0 0 32 29" aria-hidden="true"><path d="M16 28C6 20 0 14 0 8a8 8 0 0 1 16-3 8 8 0 0 1 16 3c0 6-6 12-16 20z" fill="#F3D7C7"/></svg><b id="hz">0</b></span><span>S</span></div><div id="sec" dir="auto"></div><div id="secL"></div></div></div>
 <div class="row" style="justify-content:center;margin-bottom:6px">
   <span class="note" data-i="spin"></span>
@@ -412,6 +413,8 @@ const SECRET=[["Abkhaz","Ажәақәа ҵәахны ипсуп"],["Aboriginal (
 let secI=Math.max(0,SECRET.findIndex(x=>x[0]===(LG==='he'?'Hebrew':'English')));
 function secShow(){const [n,p]=SECRET[secI];const a=$('sec'),b=$('secL');a.style.opacity=b.style.opacity=0;setTimeout(()=>{a.textContent=p;b.textContent=(secI+1)+'/197 · '+n;a.style.opacity=b.style.opacity=1},600);secI=(secI+1)%SECRET.length}
 secShow();setInterval(secShow,3200);
+let sndOn=false;const ytc=(f,a)=>{try{$('yt').contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:a||[]}),'*')}catch(e){}};
+$('snd').onclick=()=>{sndOn=!sndOn;if(sndOn){ytc('unMute');ytc('setVolume',[12]);ytc('playVideo')}else ytc('mute');$('snd').textContent=sndOn?'🔈':'🔇'};
 let lastHz=-1;
 const mixc=(a,b,k)=>'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*k)).join(',')+')';
 function frame(now){

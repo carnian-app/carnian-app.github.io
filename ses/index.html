@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SES · אני מרגיש, משמע אני קיים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;800&family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080d;--ink:#eef0f6;--mut:#9aa1b5;--gold:#ffd76a;--line:#22273a;--card:#0d1019}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;line-height:1.6}
+main{max-width:860px;margin:0 auto;padding:28px 18px 60px}
+.brand{display:flex;justify-content:space-between;align-items:baseline;color:var(--mut);font-size:14px}
+.brand b{color:var(--gold);font-family:'Frank Ruhl Libre',serif;font-size:22px;letter-spacing:.06em}
+h1{font-family:'Frank Ruhl Libre',serif;font-weight:800;font-size:clamp(30px,6vw,50px);line-height:1.15;margin:18px 0 6px}
+.sub{color:var(--mut);margin:0 0 20px;font-size:17px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:14px 0}
+textarea{width:100%;min-height:120px;background:#05060a;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px;font:500 21px/1.5 'Frank Ruhl Libre',serif;resize:vertical}
+textarea:focus{outline:2px solid #ffd76a55}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button,select{background:#151a28;color:var(--ink);border:1px solid #2c3350;border-radius:10px;padding:8px 12px;font:600 14px Heebo,sans-serif;cursor:pointer}
+button.pri{background:var(--gold);color:#111;border-color:var(--gold)}
+.loc{color:var(--mut);font-size:14px}
+#sky{width:100%;aspect-ratio:1;display:block;border-radius:50%;margin:10px auto;max-width:720px;touch-action:none}
+.read{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.box{background:#05060a;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.box .v{font:800 26px Heebo,sans-serif;font-variant-numeric:tabular-nums;direction:ltr;text-align:right}
+.box .k{color:var(--mut);font-size:13px}
+.bits{font:600 15px/1.4 ui-monospace,Menlo,monospace;direction:ltr;text-align:left;letter-spacing:.12em;word-break:break-all;color:#cfd5e6}
+.bits i{font-style:normal;color:var(--gold)}
+h2{font-family:'Frank Ruhl Libre',serif;font-size:24px;margin:4px 0 8px}
+.lens{font:500 21px/1.9 'Frank Ruhl Libre',serif}
+.lens .L{background:#000;color:#fff;outline:1px solid #555;border-radius:4px;padding:0 4px}
+.lens .R{color:var(--gold);text-shadow:0 0 12px #ffd76a99}
+.rem{display:flex;flex-direction:column;gap:8px}
+.rem .it{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.rem .w{background:#000;outline:1px solid #555;border-radius:6px;padding:2px 8px;font-family:'Frank Ruhl Libre',serif;font-size:19px}
+.rem button{font-family:'Frank Ruhl Libre',serif;font-size:17px;font-weight:500}
+.note{color:var(--mut);font-size:13px}
+.stars{display:flex;flex-wrap:wrap;gap:8px}
+.stars span{background:#05060a;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:14px}
+.stars span b{color:var(--gold)}
+input[type=range]{width:220px;accent-color:var(--gold)}
+@media(max-width:640px){.read{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main>
+<div class="brand"><b>SES</b><span>Sentio Ergo Sum · אני מרגיש, משמע אני קיים</span></div>
+<h1>האותיות שלך מטילות צל על השמיים שמעליך.</h1>
+<p class="sub">כתוב. כל אות היא אור שמטיל צל על הכוכבים האמיתיים שמעל המקום שבו אתה עומד, עכשיו. מה שבצל: 0. מה שבאור: 1. ומה שבין האור לחושך – השארית.</p>
+
+<div class="card">
+  <textarea id="t" placeholder="כתוב כאן מה שאתה מרגיש…">אני מרגיש שתמיד אני לבד ואף אחד לא מבין</textarea>
+  <div class="row" style="margin-top:10px">
+    <button class="pri" id="geo">📍 השמיים שמעליי</button>
+    <select id="city">
+      <option value="">או בחר מקום…</option>
+      <option value="31.778,35.235,ירושלים">ירושלים</option>
+      <option value="32.085,34.781,תל אביב">תל אביב</option>
+      <option value="40.713,-74.006,ניו יורק">ניו יורק</option>
+      <option value="51.507,-0.128,לונדון">לונדון</option>
+      <option value="35.676,139.650,טוקיו">טוקיו</option>
+      <option value="-33.869,151.209,סידני">סידני</option>
+    </select>
+    <span class="loc" id="loc"></span>
+  </div>
+</div>
+
+<canvas id="sky"></canvas>
+<div class="row" style="justify-content:center;margin-bottom:6px">
+  <span class="note">סיבוב כדור הארץ:</span>
+  <input type="range" id="spd" min="0" max="3.6" step="0.01" value="2.78">
+  <span class="note" id="spdL"></span>
+</div>
+
+<div class="read">
+  <div class="box"><div class="v" id="nOn">—</div><div class="k">כוכבים באור · 1</div></div>
+  <div class="box"><div class="v" id="nOff">—</div><div class="k">כוכבים בצל האותיות · 0</div></div>
+  <div class="box"><div class="v" id="nMid">—</div><div class="k">בין האור לחושך · השארית</div></div>
+</div>
+
+<div class="card">
+  <h2>השמיים שלך בשפת השמאל</h2>
+  <div class="bits" id="bits"></div>
+  <p class="note">32 הכוכבים הבהירים מעל האופק, מהבהיר לחלש: 1 באור, 0 בצל, <span style="color:var(--gold)">½</span> על קו הצל.</p>
+</div>
+
+<div class="card">
+  <h2>מהירות הצל של המילים שלך</h2>
+  <div class="stars" id="fast"></div>
+  <p class="note">כדור הארץ מסתובב, והצל של האותיות שלך נע על הכוכב. מהירות הצל = מהירות הסיבוב × המרחק. המרחקים מקורבים.</p>
+</div>
+
+<div class="card">
+  <h2>שני המשקפיים</h2>
+  <div class="lens" id="lens"></div>
+  <p class="note"><span style="background:#000;outline:1px solid #555;padding:0 4px;border-radius:3px">שחור</span> – משקפי שמאל, או-או, 0/1. &nbsp; <span style="color:var(--gold)">זהב</span> – משקפי ימין, רגש וקשר.</p>
+</div>
+
+<div class="card">
+  <h2>השארית ‎.14159…</h2>
+  <div class="rem" id="rem"></div>
+  <p class="note">לכל מילת או-או יש מילה שבין האור לחושך. אתה בוחר. לחיצה מחליפה את המילה בטקסט שלך.</p>
+</div>
+
+<p class="note">הטקסט והמיקום נשארים בדפדפן שלך בלבד. מיקומי הכוכבים אמיתיים ומחושבים לרגע ולמקום שלך.</p>
+<p class="note" style="text-align:center">© 2026 SES · Sentio Ergo Sum · כל הזכויות שמורות לעופר מאיר ולד (Ofer Meir Vald)</p>
+</main>
+<script>
+const NAMES={"677":["Alpheratz","Alpheratz",97],"746":["Caph","Caph",55],"2081":["Ankaa","Ankaa",null],"3179":["Shedar","Shedar",228],"3419":["Diphda","Diphda",96],"4427":["Navi","Navi",null],"5447":["Mirach","Mirach",197],"7588":["Achernar","Achernar",139],"9640":["Almach","Almach",null],"9884":["Hamal","Hamal",66],"11767":["כוכב הצפון","Polaris",433],"14135":["Menkar","Menkar",250],"14576":["אלגול","Algol",90],"15863":["Mirfak","Mirfak",510],"21421":["אלדבראן","Aldebaran",65],"24436":["ריגל","Rigel",860],"24608":["קפלה","Capella",42.9],"25336":["בלטריקס","Bellatrix",250],"25428":["Elnath","Elnath",134],"25930":["מינטקה","Mintaka",1200],"25985":["Arneb","Arneb",null],"26311":["אלנילם","Alnilam",2000],"26727":["אלניטק","Alnitak",1260],"27366":["Saiph","Saiph",650],"27989":["בטלגז","Betelgeuse",550],"28360":["Menkalinan","Menkalinan",null],"30324":["Mirzam","Mirzam",null],"30438":["קנופוס","Canopus",310],"31681":["Alhena","Alhena",null],"32349":["סיריוס","Sirius",8.6],"33579":["Adhara","Adhara",null],"34444":["Wezen","Wezen",null],"35904":["Aludra","Aludra",null],"36850":["קסטור","Castor",51],"37279":["פרוקיון","Procyon",11.5],"37826":["פולוקס","Pollux",33.8],"39429":["Naos","Naos",null],"39953":["Regor","Regor",null],"41037":["Avior","Avior",null],"42913":["Alsephina","Alsephina",null],"44816":["Suhail","Suhail",null],"45238":["Miaplacidus","Miaplacidus",null],"45556":["Aspidiske","Aspidiske",null],"45941":["Markeb","Markeb",null],"46390":["Alphard","Alphard",177],"49669":["רגולוס","Regulus",79],"50583":["Algieba","Algieba",null],"53910":["Merak","Merak",null],"54061":["דובהה","Dubhe",123],"54872":["Zosma","Zosma",null],"57632":["Denebola","Denebola",36],"58001":["Phecda","Phecda",null],"59803":["Gienah","Gienah",null],"60718":["Acrux","Acrux",320],"61084":["Gacrux","Gacrux",null],"61932":["Muhlifain","Muhlifain",null],"62434":["Mimosa","Mimosa",280],"62956":["Alioth","Alioth",83],"65378":["מיצר","Mizar",86],"65474":["ספיקה","Spica",250],"67301":["Alkaid","Alkaid",104],"68002":["Alnair","Alnair",null],"68702":["Hadar","Hadar",390],"68933":["Menkent","Menkent",null],"69673":["ארקטורוס","Arcturus",36.7],"71681":["Toliman","Toliman",null],"71683":["אלפא קנטאורי","Rigil Kentaurus",4.37],"71860":["Men","Men",null],"72105":["Izar","Izar",null],"72607":["Kochab","Kochab",131],"76267":["Alphecca","Alphecca",null],"78401":["Dschubba","Dschubba",null],"78820":["Acrab","Acrab",null],"80763":["אנטארס","Antares",550],"81377":["Saik","Saik",null],"82273":["Atria","Atria",null],"82396":["Larawag","Larawag",null],"84012":["Sabik","Sabik",null],"85927":["Shaula","Shaula",570],"86032":["Rasalhague","Rasalhague",49],"86228":["Sargas","Sargas",null],"86670":["Mula","Mula",null],"87833":["Eltanin","Eltanin",null],"90185":["Kaus Australis","Kaus Australis",143],"91262":["וגה","Vega",25],"92855":["Nunki","Nunki",228],"93506":["Ascella","Ascella",null],"97649":["אלטאיר","Altair",16.7],"100453":["Sadr","Sadr",null],"100751":["Peacock","Peacock",null],"102098":["דנב","Deneb",2600],"102488":["Aljanah","Aljanah",null],"105199":["Alderamin","Alderamin",null],"107315":["Enif","Enif",690],"109268":["Alnair","Alnair",101],"112122":["Tiaki","Tiaki",null],"113368":["פומלהאוט","Fomalhaut",25],"113881":["Scheat","Scheat",null],"113963":["Markab","Markab",133]};
+let STARS=[],LINES=[];
+
+{
+const $=id=>document.getElementById(id);
+const t=$('t'),cv=$('sky'),cx=cv.getContext('2d');
+const mask=document.createElement('canvas'),mx=mask.getContext('2d',{willReadFrequently:true});
+let lat=31.778,lon=35.235,place='ירושלים',simT=Date.now(),last=performance.now();
+const rad=Math.PI/180;
+function setLoc(a,b,n){lat=a;lon=b;place=n;$('loc').textContent=n+' · '+a.toFixed(2)+'°, '+b.toFixed(2)+'°'}
+setLoc(lat,lon,place);
+$('geo').onclick=()=>{if(!navigator.geolocation){$('loc').textContent='המכשיר לא נותן מיקום – בחר מקום';return}
+ $('loc').textContent='מבקש מיקום…';
+ navigator.geolocation.getCurrentPosition(p=>setLoc(p.coords.latitude,p.coords.longitude,'המקום שלך'),()=>{$('loc').textContent='בלי מיקום – בחר מקום מהרשימה'},{timeout:10000})};
+$('city').onchange=e=>{if(!e.target.value)return;const [a,b,n]=e.target.value.split(',');setLoc(+a,+b,n)};
+
+// lenses
+const BIN={'תמיד':['לעתים קרובות','הרבה פעמים'],'אף פעם':['עד עכשיו לא','עוד לא'],'אף אחד':['עוד לא מצאתי מי','מעטים'],'כולם':['הרבה אנשים','חלק'],'הכל':['הרבה','חלק גדול'],'כלום':['מעט','עוד לא הרבה'],'חייב':['רוצה','בוחר'],'חייבת':['רוצה','בוחרת'],'אסור':['עדיף שלא','אני בוחר שלא'],'רק':['בעיקר','קודם כל'],'לגמרי':['במידה רבה','כמעט'],'בכלל':['כמעט','עדיין'],'אי אפשר':['עוד לא מצאתי איך','קשה'],'אין סיכוי':['זה קשה','עוד לא ברור'],'נכשלתי':['עוד לא הצלחתי','למדתי'],'אף פעם לא':['עד עכשיו לא','עוד לא'],'שום דבר':['מעט','עוד לא הרבה'],'נגמר':['משתנה','עובר'],'לנצח':['לזמן ארוך','עכשיו']};
+const FEEL=['מרגיש','מרגישה','אוהב','אוהבת','אהבה','שמח','שמחה','עצוב','עצובה','כואב','כאב','פחד','מפחד','מתגעגע','געגוע','תקווה','חסד','רחמים','לב','נשמה','אבא','אמא','בת','בנות','ילד','ילדה','בית','חבר','חברה','תודה','שלום','אור','יחד','ביחד','קשר','חום','חיבוק','דמעה','צחוק','יופי','מבין','מבינה','רוך','אמונה','אלוהים','משפחה','נוגע','קרוב'];
+const PRE='(?:[ושהבלכמ]{0,3})';
+const binKeys=Object.keys(BIN).sort((a,b)=>b.length-a.length);
+const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const binRe=new RegExp('(^|[^\\u0590-\\u05FF])('+PRE+')('+binKeys.map(esc).join('|')+')(?=$|[^\\u0590-\\u05FF])','g');
+const feelRe=new RegExp('(^|[^\\u0590-\\u05FF])('+PRE+'(?:'+FEEL.map(esc).join('|')+'))(?=$|[^\\u0590-\\u05FF])','g');
+const html=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function lenses(){
+ const s=t.value;let h=html(s);
+ h=h.replace(binRe,(m,a,p,w)=>a+'<span class="L">'+p+w+'</span>');
+ h=h.replace(feelRe,(m,a,w)=>a+'<span class="R">'+w+'</span>');
+ $('lens').innerHTML=h||'<span class="note">כתוב משהו למעלה.</span>';
+ const rem=$('rem');rem.innerHTML='';const seen=new Set();let m;binRe.lastIndex=0;
+ while((m=binRe.exec(s))){const p=m[2],w=m[3],full=p+w;if(seen.has(full))continue;seen.add(full);
+  const it=document.createElement('div');it.className='it';it.innerHTML='<span class="w">'+html(full)+'</span><span class="note">←</span>';
+  BIN[w].forEach(alt=>{const b=document.createElement('button');b.textContent=p+alt;b.onclick=()=>{
+    const re=new RegExp('(^|[^\\u0590-\\u05FF])'+esc(full)+'(?=$|[^\\u0590-\\u05FF])');t.value=t.value.replace(re,(x,a)=>a+p+alt);lenses();dirty=true};it.appendChild(b)});
+  rem.appendChild(it)}
+ if(!rem.children.length)rem.innerHTML='<span class="note">אין כרגע מילות או-או בטקסט. אתה כבר בתדר הביניים.</span>';
+}
+t.addEventListener('input',()=>{lenses();dirty=true});lenses();
+
+// sky
+let W=0,R=0,C=0,dpr=1;
+function size(){dpr=Math.min(2,devicePixelRatio||1);const w=cv.clientWidth;W=Math.round(w*dpr);cv.width=cv.height=W;mask.width=mask.height=W;R=W*0.48;C=W/2}
+addEventListener('resize',()=>{size();dirty=true});size();
+function lstDeg(ms){const jd=ms/86400000+2440587.5;let g=280.46061837+360.98564736629*(jd-2451545);return ((g+lon)%360+360)%360}
+function proj(ra,dec,lst){const ha=(lst-ra)*rad,d=dec*rad,l=lat*rad;
+ const sa=Math.sin(d)*Math.sin(l)+Math.cos(d)*Math.cos(l)*Math.cos(ha);const alt=Math.asin(Math.max(-1,Math.min(1,sa)));
+ const az=Math.atan2(-Math.sin(ha)*Math.cos(d),Math.cos(l)*Math.sin(d)-Math.sin(l)*Math.cos(d)*Math.cos(ha));
+ const r=R*Math.tan((Math.PI/2-alt)/2);return [C-r*Math.sin(az),C-r*Math.cos(az),alt]}
+function wrapLines(ctx,txt,maxW){const words=txt.split(/\s+/).filter(Boolean),L=[];let cur='';
+ for(const w of words){const tr=cur?cur+' '+w:w;if(ctx.measureText(tr).width>maxW&&cur){L.push(cur);cur=w}else cur=tr}if(cur)L.push(cur);return L}
+let MC=null,MD=null,dirty=true;
+function drawMask(){
+ mx.clearRect(0,0,W,W);let txt=t.value.trim();if(!txt)return null;
+ if(txt.length>140)txt='…'+txt.slice(-140);
+ let fs=W*0.2,L;
+ for(;fs>W*0.035;fs*=0.92){mx.font='800 '+fs+'px "Frank Ruhl Libre",serif';L=wrapLines(mx,txt,R*1.5);if(L.length*fs*1.15<R*1.35)break}
+ mx.direction='rtl';mx.textAlign='center';mx.textBaseline='middle';mx.filter='blur('+(fs*0.06)+'px)';mx.fillStyle='#000';
+ const top=C-(L.length-1)*fs*1.15/2;L.forEach((ln,i)=>mx.fillText(ln,C,top+i*fs*1.15));mx.filter='none';
+ return {L,fs,top};
+}
+let ORDER=[];
+function frame(now){
+ const dt=now-last;last=now;const mult=Math.round(Math.pow(10,+$('spd').value));simT+=dt*mult;
+ $('spdL').textContent=mult<=1?'זמן אמיתי':'×'+mult.toLocaleString('he-IL');
+ const lst=lstDeg(simT);
+ // sky
+ cx.clearRect(0,0,W,W);cx.save();cx.beginPath();cx.arc(C,C,R,0,7);cx.clip();
+ const g=cx.createRadialGradient(C,C,0,C,C,R);g.addColorStop(0,'#0b1024');g.addColorStop(.82,'#141a3a');g.addColorStop(.93,'#3a2a52');g.addColorStop(1,'#a8657a');
+ cx.fillStyle=g;cx.fillRect(0,0,W,W);
+ cx.strokeStyle='rgba(140,160,220,.16)';cx.lineWidth=1*dpr;
+ for(const seg of LINES){cx.beginPath();let on=false;for(const [ra,de] of seg){const [x,y,a]=proj(ra,de,lst);if(a<0){on=false;continue}on?cx.lineTo(x,y):cx.moveTo(x,y);on=true}cx.stroke()}
+ if(dirty){MC=drawMask();MD=MC?mx.getImageData(0,0,W,W).data:null;dirty=false}const M=MC,md=MD;
+ const shade=(x,y)=>{if(!md)return 0;const i=((y|0)*W+(x|0))*4+3;return (md[i]||0)/255};
+ let on=0,off=0,mid=0;const vis=[];
+ for(const s of STARS){const [x,y,a]=proj(s[0],s[1],lst);if(a<0)continue;const sh=shade(x,y);const st=sh>.82?0:sh<.18?1:.5;
+  if(st===1)on++;else if(st===0)off++;else mid++;vis.push([s,x,y,st]);
+  const r=Math.max(.6,3.4-s[2]*.55)*dpr;cx.fillStyle=st===.5?'#ffd76a':'#fff';cx.globalAlpha=Math.min(1,1.15-s[2]*.15);
+  cx.beginPath();cx.arc(x,y,r,0,7);cx.fill()}
+ cx.globalAlpha=1;
+ // shadow of letters
+ if(M){cx.globalAlpha=.93;cx.drawImage(mask,0,0);cx.globalAlpha=1;
+  cx.font='800 '+M.fs+'px "Frank Ruhl Libre",serif';cx.direction='rtl';cx.textAlign='center';cx.textBaseline='middle';
+  cx.strokeStyle='rgba(255,215,106,.35)';cx.lineWidth=Math.max(1,M.fs*.012);cx.shadowColor='rgba(255,215,106,.6)';cx.shadowBlur=M.fs*.12;
+  M.L.forEach((ln,i)=>cx.strokeText(ln,C,M.top+i*M.fs*1.15));cx.shadowBlur=0}
+ // names
+ cx.font='600 '+(11*dpr)+'px Heebo,sans-serif';cx.textAlign='center';cx.direction='rtl';
+ for(const [s,x,y,st] of vis){const n=NAMES[s[3]];if(!n||s[2]>1.6)continue;cx.fillStyle=st===0?'rgba(150,150,170,.55)':'rgba(230,235,255,.85)';cx.fillText(n[0],x,y-8*dpr)}
+ cx.restore();
+ // horizon ring + cardinal
+ cx.strokeStyle='#2c3350';cx.lineWidth=2*dpr;cx.beginPath();cx.arc(C,C,R,0,7);cx.stroke();
+ cx.fillStyle='#9aa1b5';cx.font='700 '+(13*dpr)+'px Heebo,sans-serif';cx.textAlign='center';cx.textBaseline='middle';
+ [['צפון',C,C-R-10*dpr],['דרום',C,C+R+10*dpr],['מזרח',C-R-0*dpr+18*dpr,C],['מערב',C+R-18*dpr,C]].forEach(([n,x,y])=>cx.fillText(n,x,y));
+ $('nOn').textContent=on;$('nOff').textContent=off;$('nMid').textContent=mid;
+ const top32=vis.slice().sort((a,b)=>a[0][2]-b[0][2]).slice(0,32);
+ $('bits').innerHTML=top32.map(v=>v[3]===.5?'<i>½</i>':v[3]).join('');
+ const fast=vis.filter(v=>v[3]!==1&&NAMES[v[0][3]]&&NAMES[v[0][3]][2]).sort((a,b)=>NAMES[a[0][3]][2]-NAMES[b[0][3]][2]).slice(0,8);
+ $('fast').innerHTML=fast.length?fast.map(v=>{const n=NAMES[v[0][3]];return '<span>'+n[0]+' · '+n[2]+' שנות אור · הצל <b>פי '+Math.round(n[2]*2301*Math.cos(v[0][1]*rad)).toLocaleString('he-IL')+'</b> מהאור</span>'}).join(''):'<span class="note" style="border:0">כרגע אף כוכב מוכר לא בצל של המילים שלך. כתוב עוד, או חכה שהשמיים יסתובבו.</span>';
+ requestAnimationFrame(frame)}
+document.fonts&&document.fonts.ready.then(()=>{dirty=true});
+const CDN='https://cdn.jsdelivr.net/npm/d3-celestial@0.7.35/data/';
+Promise.all([fetch(CDN+'stars.6.json').then(r=>r.json()),fetch(CDN+'constellations.lines.json').then(r=>r.json())]).then(([a,b])=>{
+ STARS=a.features.filter(f=>f.properties.mag<=5.2).map(f=>[f.geometry.coordinates[0],f.geometry.coordinates[1],f.properties.mag,f.id]);
+ ORDER=STARS;LINES=b.features.flatMap(f=>f.geometry.coordinates);requestAnimationFrame(frame)}).catch(()=>{$('loc').textContent='לא הצלחתי לטעון את מפת הכוכבים – רענן את העמוד'});
+}
+</script>
+</body>
+</html>

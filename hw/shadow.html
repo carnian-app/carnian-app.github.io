@@ -35,6 +35,7 @@ input[type=range]{width:100%;accent-color:var(--light)}
 .live b{display:block;font-size:26px;font-weight:800}
 .note{font-size:13px;color:var(--mut)}
 @media(max-width:700px){.ctl,.read,.live{grid-template-columns:1fr}}
+body.embed .brand,body.embed .foot{display:none}body.embed main{padding-top:8px}
 </style>
 </head>
 <body>
@@ -89,10 +90,11 @@ input[type=range]{width:100%;accent-color:var(--light)}
     <p class="note" id="liveNote">נתונים חיים מהנסיעות האמיתיות בעמוד ההוכחה.</p>
     <p style="margin:10px 0 0">ואם רוצים לדייק עד הסוף: הצל עצמו לא מעביר מידע. כדי שמישהו יידע איפה הצל, צריך שוב אור. בדיוק כך, המפה המשותפת צריכה דיווחים, אור קטן מכל נהג, כדי שכולם יראו איפה החושך משתלם.</p>
   </div>
-  <p class="note" style="text-align:center">© 2026 HybridWays · כל הזכויות שמורות לעופר מאיר ולד (Ofer Meir Vald) · Sentio Ergo Sum (SES)</p>
+  <p class="note foot" style="text-align:center">© 2026 HybridWays · כל הזכויות שמורות לעופר מאיר ולד (Ofer Meir Vald) · Sentio Ergo Sum (SES)</p>
 </main>
 <script>
 {
+if(location.search.indexOf('embed')>-1)document.body.classList.add('embed');
 const $=id=>document.getElementById(id),C=299792.458;
 const fmt=n=>Math.round(n).toLocaleString('he-IL');
 const distKm=p=>Math.pow(10,-3+(Math.log10(384400)+3)*p/100); // 1 m .. moon

@@ -44,12 +44,23 @@ h2{font-family:var(--serif);font-size:24px;margin:4px 0 8px}
 .stars span b{color:var(--gold)}
 input[type=range]{width:220px;accent-color:var(--gold)}
 .pi{unicode-bidi:isolate;direction:ltr;display:inline-block}
+dialog#man{max-width:760px;width:calc(100% - 24px);max-height:88vh;background:#0b0d16;color:var(--ink);border:1px solid #2c3350;border-radius:20px;padding:26px 24px;line-height:1.75}
+dialog#man::backdrop{background:#000c}
+dialog#man h2{font-size:30px;line-height:1.25;margin:4px 0 14px}
+dialog#man h3{font-family:var(--serif);color:var(--gold);font-size:20px;margin:22px 0 6px}
+dialog#man p{margin:6px 0;font-size:16.5px}
+dialog#man .kick{color:var(--mut);font-size:14px;letter-spacing:.05em}
+dialog#man .sig{font-family:'Frank Ruhl Libre',serif;font-size:20px;color:var(--gold);margin:22px 0}
+dialog#man .src{color:#c7cbe0;font-size:14.5px;padding-inline-start:20px}
+dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-radius:999px;width:36px;height:36px;padding:0}
+.ibtn{background:var(--gold);color:#111;border:0;border-radius:999px;padding:6px 14px;font:800 15px Heebo,sans-serif}
+#lang{max-width:190px}
 @media(max-width:640px){.read{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <main>
-<div class="brand"><b>SES</b><span><span data-i="tag"></span> · <a href="#" id="lsw"></a></span></div>
+<div class="brand"><span class="row"><b>SES</b><button class="ibtn" id="manB">ⓘ <span data-i="man"></span></button></span><span class="row"><span data-i="tag"></span><select id="lang" aria-label="language"></select></span></div>
 <h1 data-i="h1"></h1>
 <p class="sub" data-i="sub"></p>
 
@@ -65,7 +76,7 @@ input[type=range]{width:220px;accent-color:var(--gold)}
 <canvas id="sky"></canvas>
 <div class="row" style="justify-content:center;margin-bottom:6px">
   <span class="note" data-i="spin"></span>
-  <input type="range" id="spd" min="0" max="3.6" step="0.01" value="2.78">
+  <input type="range" id="spd" min="0" max="3.6" step="0.01" value="1.78">
   <span class="note" id="spdL"></span>
 </div>
 
@@ -103,17 +114,120 @@ input[type=range]{width:220px;accent-color:var(--gold)}
 <p class="note" data-i="priv"></p>
 <p class="note" style="text-align:center" data-i="copy"></p>
 </main>
+<dialog id="man">
+<button class="x" id="manX" aria-label="close">✕</button>
+<div class="mf" data-l="he" dir="rtl">
+<p class="kick">מניפסט SES · Sentio Ergo Sum</p>
+<h2>המילים שלי ביקום יוצרות עבורי מציאות.</h2>
+
+<h3>1. אני מרגיש, משמע אני קיים</h3>
+<p>דקארט כתב ב-1637 "אני חושב, משמע אני קיים", Cogito Ergo Sum. הוא הפנה את הפנס אל החשיבה, אל מה שאפשר לפרק, למדוד ולספור. אני מסיט את הפנס: Sentio Ergo Sum, אני מרגיש, משמע אני קיים. החשיבה נותנת לעולם צורה. ההרגשה נותנת לו משמעות. מי שרק חושב, מודד את המפה. מי שמרגיש, הולך בשטח.</p>
+
+<h3>2. שני משקפיים</h3>
+<p>יש לנו שתי המיספרות, ולכל אחת משקפיים משלה ועמדה נפשית ברורה.</p>
+<p><b>המשקפיים הימניים</b> דיאלוגיים. הם הנפש: רואים את השלם, את החי, את מה שבין האנשים, את מה שעוד לא נגמר.</p>
+<p><b>המשקפיים השמאליים</b> דיכוטומיים ובינאריים: או-או, שחור-לבן, אור-חושך, 0 או 1. הם מפרקים, ממיינים, אוחזים.</p>
+<p>תבנית ימין יוצרת מציאות ימין. תבנית שמאל יוצרת מציאות שמאל. הפסיכיאטר איאן מקגילכריסט קרא להן "האדון והשליח", והזהיר שהשליח התחיל לחשוב שהוא האדון.</p>
+
+<h3>3. נוף ילדותנו</h3>
+<p>התבנית השמאלית היא צל. זה הצל של נוף ילדותנו, והוא בינארי: מה מותר ומה אסור, מי טוב ומי רע, תמיד ואף פעם. הצל הזה נכתב בנו באותיות. האור נופל על כל צורותיהן של האותיות, והן מייצרות בתוך הנפש את קשת הרגשות. התודעה צפה ומשתקפת מן ההמיספרה השמאלית, מצל נוף הילדות, אל הימנית.</p>
+
+<h3>4. מהירות החושך גדולה ממהירות האור</h3>
+<p>לאור יש מחיר ויש תקרה: 299,792 קילומטר בשנייה. לחושך אין. הזיזו יד מול פנס, והצל שלה על הירח יחליק מהר יותר מהאור. החושך לא נוסע, הוא קיים בכל מקום שבו משהו לא קרה, ולכן הוא נוכח בבת אחת. כך גם התודעה: מהירות המחשבה, מהירות החושך, נוכחת בכל המקומות בבת אחת. בפיזיקה הצל לא נושא מידע. בנפש הוא נושא את מה שחשוב באמת: את מה שלא נאמר.</p>
+
+<h3>5. השארית</h3>
+<p>בספר מלכים א' (ז', כ"ג) נכתב על הים של שלמה: עשר אמות מקצה אל קצה, ושלושים אמה סביב. פאי שווה 3. אבל המעגל לא נסגר במספרים שלמים. נשארת שארית, ‎.14159265…, שלא נגמרת לעולם. הספרות 0 עד 9 ועוד המעגל שעוטף אותן מייצרים את פאי הטרנסצנדנטי. השארית היא התדר שבין האור לחושך. שם, בין 0 ל-1, חיה התודעה.</p>
+
+<h3>6. חומר למחשבה</h3>
+<p>לכל חלקיק חומר יש חלקיק אנטי-חומר. פול דיראק חזה אותו ב-1928, וקרל אנדרסון מצא אותו ב-1932. האנטי-חומר מחביא את החומר: בזווית של 110 מעלות, בין 360 הזוויות הקוטביות, מוסתר בווקטור מקביל בכל אחד מ-360 שינויי הקוטביות, הוא לעולם לא ייראה. שם, בין שני הווקטורים, נמצאת התודעה היקומית הצילית: היטל הצל של ההמיספרה הימנית, שמשתקף מהצל שמטילה ההמיספרה השמאלית.</p>
+<p>כל נקודה שם היא חומר. כל נקודה שם היא חומר למחשבה, תרתי משמע: המחשבה היא חומר, והיא גם חומר למחשבה. היא הפרשנות הצילית של התודעה הימנית, בצל של תבנית נוף הילדות השמאלית, על פני היקום, בכל המקומות שבין חומר לאנטי-חומר.</p>
+
+<h3>7. מה SES עושה</h3>
+<p>SES היא כתיבה בלי זמן, שמשתמשת בשתי המראות על העולם.</p>
+<p>אתה כותב. השמש, במקומה האמיתי מעליך ברגע הזה, מאירה את האותיות שלך, והצל שלהן נופל אל הנקודה שמול השמש. זו בדיוק הנקודה שבה נופל הצל של כדור הארץ עצמו, מתחת לקשת הוורודה של חגורת ונוס.</p>
+<p>הכוכבים עונים: כוכב בצל המילים הוא 0, כוכב באור הוא 1, וכוכב על קו הצל הוא השארית.</p>
+<p>המשקפיים השמאליים מסמנים בשחור את מילות האו-או. המשקפיים הימניים מאירים בזהב את מילות הרגש והקשר. לכל או-או השארית מציעה מילה שבין האור לחושך. אתה בוחר את האותיות.</p>
+
+<h3>8. האמת שלך</h3>
+<p>המילים שלי ביקום יוצרות עבורי את המציאות שאני מרגיש בה: טוב ולא רע, בריא ולא חולה, עשיר ולא עני. רק תחשוב בימין על האותיות שבחרת, באמת שלך.</p>
+
+<p class="sig">Sentio Ergo Sum · עופר מאיר ולד</p>
+
+<h3>מקורות ומסע</h3>
+<ul class="src">
+<li>רנה דקארט, "מאמר על המתודה", 1637: Cogito Ergo Sum.</li>
+<li>איאן מקגילכריסט, The Master and His Emissary, 2009, ו-The Matter with Things, 2021.</li>
+<li>מלכים א' ז', כ"ג: הים של שלמה, 10 אמות קוטר ו-30 אמות היקף.</li>
+<li>פול דיראק, 1928, חיזוי האנטי-חומר; קרל אנדרסון, 1932, גילוי הפוזיטרון.</li>
+<li>אלברט איינשטיין, תורת היחסות: מהירות האור כתקרה. ובמסה "העולם כפי שאני רואה אותו", 1930: היפה ביותר שאפשר לחוות הוא המסתורין.</li>
+<li>הצל של כדור הארץ וחגורת ונוס: הנקודה שמול השמש, בשקיעה ובזריחה.</li>
+<li>מיקומי הכוכבים בעמוד: קטלוג לוויין היפרכוס של סוכנות החלל האירופית. מיקום השמש: הנוסחה האסטרונומית התקנית, למקום ולרגע שלך.</li>
+</ul>
+<p class="note">© 2026 SES · Sentio Ergo Sum · כל הזכויות שמורות לעופר מאיר ולד (Ofer Meir Vald)</p>
+</div>
+
+<div class="mf" data-l="en" dir="ltr">
+<p class="kick">The SES Manifesto · Sentio Ergo Sum</p>
+<h2>My words in the universe create my reality.</h2>
+
+<h3>1. I feel, therefore I am</h3>
+<p>In 1637 Descartes wrote "I think, therefore I am", Cogito Ergo Sum. He turned the lamp toward thinking, toward what can be taken apart, measured and counted. I turn the lamp: Sentio Ergo Sum, I feel, therefore I am. Thinking gives the world its shape. Feeling gives it its meaning. Whoever only thinks measures the map. Whoever feels walks the land.</p>
+
+<h3>2. Two lenses</h3>
+<p>We have two hemispheres, and each wears its own lenses with a clear stance of the soul.</p>
+<p><b>The right lenses</b> are dialogic. They are the soul: they see the whole, the living, what lies between people, what is not yet finished.</p>
+<p><b>The left lenses</b> are dichotomous and binary: either/or, black/white, light/dark, 0 or 1. They take apart, sort, grasp.</p>
+<p>A right template creates a right reality. A left template creates a left reality. The psychiatrist Iain McGilchrist called them "the Master and his Emissary", and warned that the emissary has begun to believe he is the master.</p>
+
+<h3>3. The landscape of our childhood</h3>
+<p>The left template is a shadow. It is the shadow of the landscape of our childhood, and it is binary: allowed or forbidden, good or bad, always or never. That shadow was written into us in letters. Light falls on every shape of the letters, and inside the soul they create the whole spectrum of feeling. Consciousness floats and is reflected from the left hemisphere, from the shadow of that childhood landscape, onto the right.</p>
+
+<h3>4. The speed of darkness is greater than the speed of light</h3>
+<p>Light has a price and a ceiling: 299,792 kilometres per second. Darkness has none. Move a hand in front of a lamp, and its shadow on the Moon will glide faster than light. Darkness does not travel; it exists wherever something did not happen, and so it is present everywhere at once. So is consciousness: the speed of thought, the speed of darkness, present in every place at once. In physics a shadow carries no information. In the soul it carries what matters most: what was never said.</p>
+
+<h3>5. The remainder</h3>
+<p>The First Book of Kings (7:23) describes Solomon's sea: ten cubits from brim to brim, thirty cubits around. Pi equals 3. But the circle never closes in whole numbers. A remainder is left, .14159265…, and it never ends. The digits 0 to 9, and the circle that surrounds them, produce transcendental pi. The remainder is the frequency between light and darkness. There, between 0 and 1, consciousness lives.</p>
+
+<h3>6. Matter for thought</h3>
+<p>Every particle of matter has a particle of antimatter. Paul Dirac predicted it in 1928, and Carl Anderson found it in 1932. Antimatter hides matter: at an angle of 110 degrees among the 360 polar angles, concealed in a parallel vector through every one of the 360 changes of polarity, it will never be seen. There, between the two vectors, lies the shadow consciousness of the universe: the projected shadow of the right hemisphere, reflected from the shadow cast by the left.</p>
+<p>Every point there is matter. Every point there is matter for thought, in both senses: thought is matter, and it is food for thought. It is the shadow-interpretation of the right consciousness, in the shadow of the left template of our childhood landscape, across the universe, in every place between matter and antimatter.</p>
+
+<h3>7. What SES does</h3>
+<p>SES is writing without time, using both mirrors on the world.</p>
+<p>You write. The Sun, at its true place above you this very moment, lights your letters, and their shadow falls on the point opposite the Sun. That is exactly where the shadow of the Earth itself falls, beneath the pink arch of the Belt of Venus.</p>
+<p>The stars answer: a star in your words' shadow is 0, a star in the light is 1, and a star on the edge of the shadow is the remainder.</p>
+<p>The left lens marks the either/or words in black. The right lens lights the words of feeling and connection in gold. For every either/or, the remainder offers a word between light and dark. You choose the letters.</p>
+
+<h3>8. Your truth</h3>
+<p>My words in the universe create the reality I feel in: good, not bad; healthy, not ill; rich, not poor. Only think, from the right, about the letters you chose, in your own truth.</p>
+
+<p class="sig">Sentio Ergo Sum · Ofer Meir Vald</p>
+
+<h3>Sources and journey</h3>
+<ul class="src">
+<li>René Descartes, Discourse on the Method, 1637: Cogito Ergo Sum.</li>
+<li>Iain McGilchrist, The Master and His Emissary, 2009, and The Matter with Things, 2021.</li>
+<li>1 Kings 7:23: Solomon's sea, 10 cubits across and 30 around.</li>
+<li>Paul Dirac, 1928, prediction of antimatter; Carl Anderson, 1932, discovery of the positron.</li>
+<li>Albert Einstein, relativity: the speed of light as a ceiling. And in "The World As I See It", 1930: the most beautiful thing we can experience is the mysterious.</li>
+<li>The Earth's shadow and the Belt of Venus: the point opposite the Sun at sunset and sunrise.</li>
+<li>Star positions on this page: the Hipparcos catalogue of the European Space Agency. Sun position: the standard astronomical formula, for your place and moment.</li>
+</ul>
+<p class="note">© 2026 SES · Sentio Ergo Sum · All rights reserved to Ofer Meir Vald</p>
+</div>
+</dialog>
+
 <script>
 const NAMES={"677":["Alpheratz","Alpheratz",97],"746":["Caph","Caph",55],"2081":["Ankaa","Ankaa",null],"3179":["Shedar","Shedar",228],"3419":["Diphda","Diphda",96],"4427":["Navi","Navi",null],"5447":["Mirach","Mirach",197],"7588":["Achernar","Achernar",139],"9640":["Almach","Almach",null],"9884":["Hamal","Hamal",66],"11767":["כוכב הצפון","Polaris",433],"14135":["Menkar","Menkar",250],"14576":["אלגול","Algol",90],"15863":["Mirfak","Mirfak",510],"21421":["אלדבראן","Aldebaran",65],"24436":["ריגל","Rigel",860],"24608":["קפלה","Capella",42.9],"25336":["בלטריקס","Bellatrix",250],"25428":["Elnath","Elnath",134],"25930":["מינטקה","Mintaka",1200],"25985":["Arneb","Arneb",null],"26311":["אלנילם","Alnilam",2000],"26727":["אלניטק","Alnitak",1260],"27366":["Saiph","Saiph",650],"27989":["בטלגז","Betelgeuse",550],"28360":["Menkalinan","Menkalinan",null],"30324":["Mirzam","Mirzam",null],"30438":["קנופוס","Canopus",310],"31681":["Alhena","Alhena",null],"32349":["סיריוס","Sirius",8.6],"33579":["Adhara","Adhara",null],"34444":["Wezen","Wezen",null],"35904":["Aludra","Aludra",null],"36850":["קסטור","Castor",51],"37279":["פרוקיון","Procyon",11.5],"37826":["פולוקס","Pollux",33.8],"39429":["Naos","Naos",null],"39953":["Regor","Regor",null],"41037":["Avior","Avior",null],"42913":["Alsephina","Alsephina",null],"44816":["Suhail","Suhail",null],"45238":["Miaplacidus","Miaplacidus",null],"45556":["Aspidiske","Aspidiske",null],"45941":["Markeb","Markeb",null],"46390":["Alphard","Alphard",177],"49669":["רגולוס","Regulus",79],"50583":["Algieba","Algieba",null],"53910":["Merak","Merak",null],"54061":["דובהה","Dubhe",123],"54872":["Zosma","Zosma",null],"57632":["Denebola","Denebola",36],"58001":["Phecda","Phecda",null],"59803":["Gienah","Gienah",null],"60718":["Acrux","Acrux",320],"61084":["Gacrux","Gacrux",null],"61932":["Muhlifain","Muhlifain",null],"62434":["Mimosa","Mimosa",280],"62956":["Alioth","Alioth",83],"65378":["מיצר","Mizar",86],"65474":["ספיקה","Spica",250],"67301":["Alkaid","Alkaid",104],"68002":["Alnair","Alnair",null],"68702":["Hadar","Hadar",390],"68933":["Menkent","Menkent",null],"69673":["ארקטורוס","Arcturus",36.7],"71681":["Toliman","Toliman",null],"71683":["אלפא קנטאורי","Rigil Kentaurus",4.37],"71860":["Men","Men",null],"72105":["Izar","Izar",null],"72607":["Kochab","Kochab",131],"76267":["Alphecca","Alphecca",null],"78401":["Dschubba","Dschubba",null],"78820":["Acrab","Acrab",null],"80763":["אנטארס","Antares",550],"81377":["Saik","Saik",null],"82273":["Atria","Atria",null],"82396":["Larawag","Larawag",null],"84012":["Sabik","Sabik",null],"85927":["Shaula","Shaula",570],"86032":["Rasalhague","Rasalhague",49],"86228":["Sargas","Sargas",null],"86670":["Mula","Mula",null],"87833":["Eltanin","Eltanin",null],"90185":["Kaus Australis","Kaus Australis",143],"91262":["וגה","Vega",25],"92855":["Nunki","Nunki",228],"93506":["Ascella","Ascella",null],"97649":["אלטאיר","Altair",16.7],"100453":["Sadr","Sadr",null],"100751":["Peacock","Peacock",null],"102098":["דנב","Deneb",2600],"102488":["Aljanah","Aljanah",null],"105199":["Alderamin","Alderamin",null],"107315":["Enif","Enif",690],"109268":["Alnair","Alnair",101],"112122":["Tiaki","Tiaki",null],"113368":["פומלהאוט","Fomalhaut",25],"113881":["Scheat","Scheat",null],"113963":["Markab","Markab",133]};
 let STARS=[],LINES=[];
 {
 const $=id=>document.getElementById(id);
 const UI={
-he:{tag:'Sentio Ergo Sum · אני מרגיש, משמע אני קיים',sw:'English',h1:'המילים שלך מטילות צל אמיתי על השמיים.',
+he:{tag:'Sentio Ergo Sum · אני מרגיש, משמע אני קיים',man:'המניפסט',h1:'המילים שלך מטילות צל אמיתי על השמיים.',
 sub:'כתוב בכל שפה. השמש, במיקום האמיתי שלה מעליך עכשיו, מאירה את האותיות שלך – והצל שלהן נופל אל הנקודה שמול השמש, בדיוק שם שבו נופל הצל של כדור הארץ עצמו. מה שבצל: 0. מה שבאור: 1. מה שבין האור לחושך – השארית.',
 ph:'כתוב כאן מה שאתה מרגיש, בכל שפה…',def:'אני מרגיש שתמיד אני לבד ואף אחד לא מבין',geo:'📍 השמיים שמעליי',pick:'או בחר מקום…',asking:'מבקש מיקום…',nogeo:'בלי מיקום – בחר מקום מהרשימה',here:'המקום שלך',
 spin:'סיבוב כדור הארץ:',real:'זמן אמיתי',kOn:'כוכבים באור · 1',kOff:'כוכבים בצל המילים · 0',kMid:'בין האור לחושך · השארית',
-sunUp:'השמש למעלה · הצל נופל על האדמה',sunDown:'השמש מתחת לאופק · הצל בשמיים',
+sunUp:'השמש למעלה · הצל של המילים נוגע באופק',sunDown:'השמש מתחת לאופק · הצל בשמיים',
 leftT:'השמיים שלך בשפת השמאל',leftN:'32 הכוכבים הבהירים מעל האופק, מהבהיר לחלש: 1 באור, 0 בצל, ½ על קו הצל.',
 fastT:'מהירות הצל של המילים שלך',fastN:'כדור הארץ מסתובב, והצל של המילים שלך נע על הכוכב. מהירות הצל = מהירות הסיבוב × המרחק. המרחקים מקורבים.',
 ly:'שנות אור',times:'פי',fromLight:'מהאור',none:'כרגע אף כוכב מוכר לא בצל של המילים שלך. כתוב עוד, או האץ את הסיבוב.',
@@ -125,11 +239,11 @@ priv:'הטקסט והמיקום נשארים בדפדפן שלך בלבד. מי�
 copy:'© 2026 SES · Sentio Ergo Sum · כל הזכויות שמורות לעופר מאיר ולד (Ofer Meir Vald)',
 dirs:['צפון','צפון-מזרח','מזרח','דרום-מזרח','דרום','דרום-מערב','מערב','צפון-מערב'],shadowTo:'הצל לכיוון',sunAlt:'גובה השמש',
 N:'צפון',S:'דרום',E:'מזרח',W:'מערב',err:'לא הצלחתי לטעון את מפת הכוכבים – רענן את העמוד'},
-en:{tag:'Sentio Ergo Sum · I feel, therefore I am',sw:'עברית',h1:'Your words cast a real shadow on the sky.',
+en:{tag:'Sentio Ergo Sum · I feel, therefore I am',man:'Manifesto',h1:'Your words cast a real shadow on the sky.',
 sub:'Write in any language. The Sun, at its true position above you right now, lights your letters – and their shadow falls on the point opposite the Sun, exactly where the shadow of the Earth itself falls. In shadow: 0. In light: 1. Between light and darkness – the remainder.',
 ph:'Write what you feel, in any language…',def:'I feel that I am always alone and no one understands',geo:'📍 The sky above me',pick:'or choose a place…',asking:'Asking for location…',nogeo:'No location – choose a place',here:'Your place',
 spin:'Earth rotation:',real:'real time',kOn:'stars in light · 1',kOff:'stars in your words’ shadow · 0',kMid:'between light and dark · remainder',
-sunUp:'Sun is up · the shadow falls on the ground',sunDown:'Sun below horizon · the shadow is in the sky',
+sunUp:'Sun is up · your words’ shadow touches the horizon',sunDown:'Sun below horizon · the shadow is in the sky',
 leftT:'Your sky in the language of the left',leftN:'The 32 brightest stars above the horizon, brightest first: 1 in light, 0 in shadow, ½ on the edge.',
 fastT:'The speed of your words’ shadow',fastN:'The Earth turns, and your words’ shadow sweeps the star. Shadow speed = rotation × distance. Distances approximate.',
 ly:'light-years',times:'×',fromLight:'the speed of light',none:'No named star is in your words’ shadow right now. Write more, or speed up the rotation.',
@@ -146,7 +260,23 @@ let LG=qs.get('lang')||((navigator.language||'').toLowerCase().startsWith('he')?
 const T=UI[LG];
 document.documentElement.lang=LG;document.documentElement.dir=LG==='he'?'rtl':'ltr';
 document.querySelectorAll('[data-i]').forEach(e=>e.textContent=T[e.dataset.i]);
-$('lsw').textContent=T.sw;$('lsw').href='?lang='+(LG==='he'?'en':'he');
+
+// manifesto
+document.querySelectorAll('#man .mf').forEach(d=>d.style.display=d.dataset.l===LG?'':'none');
+$('manB').onclick=()=>{$('man').showModal();$('man').scrollTop=0};$('manX').onclick=()=>$('man').close();
+$('man').addEventListener('click',e=>{if(e.target.id==='man'){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close()}});
+if(qs.has('manifest'))setTimeout(()=>$('manB').click(),300);
+// every language: Hebrew & English native, all others through Google Translate
+const LANGS='af ak am ar as ay az ba ban be bem bg bho bik bm bn bo br bs bua ca ce ceb ch chm ckb co crh cs cv cy da de doi dv dz ee el en eo es et eu fa ff fi fil fj fo fr fy ga gaa gd gl gn gom gu gv ha haw hi hil hmn hr hrx ht hu hy iba id ig ilo is it iw ja jam jw ka kk kl km kn ko kri ktu ku ky la lb lg li lij lmo ln lo lt ltg luo lus lv mad mai mak mam mg mh mi min mk ml mn mni-Mtei mr ms mt mwr my nd ne new nl no nr nso nus ny oc om or os pa pag pam pap pl ps pt qu rn ro rom ru rw sa sah sat scn sd se sg shn si sk sl sm sn so sq sr ss st su sus sv sw szl ta tcy te tet tg th ti tiv tk tl tn to tpi tr ts tt tum tyv udm ug uk ur uz ve vec vi war wo xh yi yo yua yue zap zh-CN zh-TW zu'.split(' ');
+let dn=null;try{dn=new Intl.DisplayNames([LG],{type:'language'})}catch(e){}
+const own=c=>{try{const n=new Intl.DisplayNames([c.replace('iw','he').replace('jw','jv')],{type:'language'}).of(c.replace('iw','he').replace('jw','jv'));return n&&n!==c?n:''}catch(e){return ''}};
+const opts=LANGS.map(c=>{const o=own(c),l=dn?(dn.of(c.replace('iw','he').replace('jw','jv'))||c):c;return [c,(o&&o!==l?o+' · ':'')+l]}).sort((a,b)=>a[1].localeCompare(b[1]));
+$('lang').innerHTML='<option value="'+LG+'">🌐 '+(LG==='he'?'עברית':'English')+' · '+LANGS.length+(LG==='he'?' שפות':' languages')+'</option>'+opts.map(([c,n])=>'<option value="'+c+'">'+n+'</option>').join('');
+$('lang').onchange=e=>{const c=e.target.value;if(c===LG)return;
+ if(c==='iw'||c==='he'){location.href='https://carnian-app.github.io/ses/?lang=he';return}
+ if(c==='en'){location.href='https://carnian-app.github.io/ses/?lang=en';return}
+ location.href='https://carnian-app-github-io.translate.goog/ses/?lang=en&_x_tr_sl=en&_x_tr_tl='+encodeURIComponent(c)+'&_x_tr_hl='+encodeURIComponent(c)};
+
 const t=$('t');t.placeholder=T.ph;t.value=T.def;
 const CITIES=[[31.778,35.235,'ירושלים','Jerusalem'],[32.085,34.781,'תל אביב','Tel Aviv'],[40.713,-74.006,'ניו יורק','New York'],[51.507,-0.128,'לונדון','London'],[48.857,2.352,'פריז','Paris'],[55.756,37.617,'מוסקבה','Moscow'],[30.044,31.236,'קהיר','Cairo'],[28.614,77.209,'ניו דלהי','New Delhi'],[39.904,116.407,'בייג׳ינג','Beijing'],[35.676,139.650,'טוקיו','Tokyo'],[-23.551,-46.633,'סאו פאולו','São Paulo'],[-33.869,151.209,'סידני','Sydney'],[-1.286,36.817,'ניירובי','Nairobi']];
 $('city').innerHTML='<option value="">'+T.pick+'</option>'+CITIES.map((c,i)=>'<option value="'+i+'">'+(LG==='he'?c[2]:c[3])+'</option>').join('');
@@ -238,8 +368,8 @@ function frame(now){
  $('spdL').textContent=mult<=1?T.real:'×'+mult.toLocaleString(LG);
  const lst=lstDeg(simT);
  const [sra,sde]=sunRaDec(simT);const [sAlt,sAz]=altaz(sra,sde,lst);
- const aAlt=Math.max(-10*rad,-sAlt),aAz=sAz+Math.PI;           // anti-solar point
- const [ax,ay]=xy(aAlt,aAz);
+ const aAlt=-sAlt,aAz=sAz+Math.PI;           // anti-solar point
+ const [ax,ay]=xy(Math.max(aAlt,20*rad),aAz);                 // keep the whole shadow on the dome
  const key=Math.round(ax/(4*dpr))+','+Math.round(ay/(4*dpr));if(key!==lastCenter){lastCenter=key;dirty=true}
  if(dirty){MC=drawMask(ax,ay);MD=MC?mx.getImageData(0,0,W,W).data:null;dirty=false}
  const M=MC,md=MD;

@@ -66,8 +66,8 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
 #lang{max-width:190px}
 .skyW{position:relative;max-width:720px;margin:10px auto}
 .skyW #sky{margin:0 auto}
-#vid{position:absolute;left:50%;top:50%;width:42%;aspect-ratio:16/9;transform:translate(-50%,-50%);opacity:.23;pointer-events:none;border-radius:14px;overflow:hidden}
-#vid iframe{width:100%;height:100%;border:0}
+#vid{position:absolute;inset:0;opacity:.23;pointer-events:none;border-radius:50%;overflow:hidden}
+#vid iframe{position:absolute;top:0;left:50%;width:178%;height:100%;transform:translateX(-50%);border:0}
 #snd{position:absolute;top:6%;inset-inline-end:6%;z-index:3;width:42px;height:42px;border-radius:50%;background:#0d1019cc;border:1px solid #2c3350;font-size:18px;padding:0;cursor:pointer}
 #sealO{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none;text-align:center;width:80%}
 .wax2{display:flex;align-items:center;gap:2px;padding:8px 14px;border-radius:999px;background:#8E1F1Ae6;box-shadow:inset 0 0 0 3px #B5372F,0 4px 18px #0008;font:700 24px 'Frank Ruhl Libre',serif;color:#F3D7C7}
@@ -75,7 +75,7 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
 .hrt svg{width:100%;height:100%}
 .hrt b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding-bottom:5px;font:800 11px Heebo,sans-serif;color:#8E1F1A}
 @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.18)}30%{transform:scale(1)}45%{transform:scale(1.1)}}
-#sec{font:500 clamp(15px,2.4vw,20px)/1.3 var(--serif);color:#fff;text-shadow:0 1px 8px #000,0 0 3px #000;transition:opacity .6s}
+#sec{font:600 clamp(18px,3vw,26px)/1.3 var(--serif);color:#fff;text-shadow:0 1px 8px #000,0 0 3px #000;transition:opacity .6s}
 #secL{font:600 11px Heebo,sans-serif;color:#ffe3ecdd;text-shadow:0 1px 4px #000;transition:opacity .6s}
 @media(max-width:640px){.read{grid-template-columns:1fr 1fr}}
 </style>
@@ -415,6 +415,9 @@ function secShow(){const [n,p]=SECRET[secI];const a=$('sec'),b=$('secL');a.style
 secShow();setInterval(secShow,3200);
 let sndOn=false;const ytc=(f,a)=>{try{$('yt').contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:a||[]}),'*')}catch(e){}};
 $('snd').onclick=()=>{sndOn=!sndOn;if(sndOn){ytc('unMute');ytc('setVolume',[12]);ytc('playVideo')}else ytc('mute');$('snd').textContent=sndOn?'🔈':'🔇'};
+// soft sound starts with the first touch, click or key anywhere (browsers forbid sound before that)
+const firstTouch=()=>{if(!sndOn)$('snd').click();['pointerdown','keydown','touchstart'].forEach(e=>removeEventListener(e,firstTouch,true))};
+['pointerdown','keydown','touchstart'].forEach(e=>addEventListener(e,firstTouch,true));
 let lastHz=-1;
 const mixc=(a,b,k)=>'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*k)).join(',')+')';
 function frame(now){

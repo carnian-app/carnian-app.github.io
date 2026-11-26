@@ -68,6 +68,7 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
 .skyW #sky{margin:0 auto}
 #vid{position:absolute;inset:0;opacity:.23;pointer-events:none;border-radius:50%;overflow:hidden}
 #vid iframe{position:absolute;top:0;left:50%;width:178%;height:100%;transform:translateX(-50%);border:0}
+#tapTip{position:absolute;top:15%;left:50%;transform:translateX(-50%);z-index:4;pointer-events:none;background:#0d1019d9;border:1px solid #ffd76a66;color:#ffe7a8;border-radius:999px;padding:8px 16px;font:600 15px Heebo,sans-serif;white-space:nowrap;animation:beat 2.4s ease-in-out infinite}
 #snd{position:absolute;top:6%;inset-inline-end:6%;z-index:3;width:42px;height:42px;border-radius:50%;background:#0d1019cc;border:1px solid #2c3350;font-size:18px;padding:0;cursor:pointer}
 #sealO{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none;text-align:center;width:80%}
 .wax2{display:flex;align-items:center;gap:2px;padding:8px 14px;border-radius:999px;background:#8E1F1Ae6;box-shadow:inset 0 0 0 3px #B5372F,0 4px 18px #0008;font:700 24px 'Frank Ruhl Libre',serif;color:#F3D7C7}
@@ -415,13 +416,19 @@ function secShow(){const [n,p]=SECRET[secI];const a=$('sec'),b=$('secL');a.style
 secShow();setInterval(secShow,3200);
 let sndOn=false,YP=null;
 // official YouTube player API: the most reliable way to unmute on phones
-window.onYouTubeIframeAPIReady=()=>{try{YP=new YT.Player('yt',{events:{onReady:e=>{e.target.mute();e.target.playVideo()}}})}catch(e){}};
+// phones (and in-app browsers) only allow sound when the tap lands on the video itself
+const MOB=matchMedia('(pointer:coarse)').matches;
+if(MOB){const f=$('yt');f.src=f.src.replace('autoplay=1&mute=1&','');$('vid').style.pointerEvents='auto';
+ const tip=document.createElement('div');tip.id='tapTip';tip.textContent=LG==='he'?'🔈 נגיעה בשמיים מפעילה את המוזיקה':'🔈 Tap the sky to play the music';document.querySelector('.skyW').appendChild(tip)}
+window.onYouTubeIframeAPIReady=()=>{try{YP=new YT.Player('yt',{events:{
+ onReady:e=>{if(!MOB){e.target.mute();e.target.playVideo()}},
+ onStateChange:e=>{if(e.data===1){e.target.setVolume(12);if(MOB&&!sndOn){e.target.unMute();sndOn=true;$('snd').textContent='🔈';$('vid').style.pointerEvents='none';const k=$('tapTip');k&&k.remove()}}}}})}catch(e){}};
 {const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';document.head.appendChild(s)}
 const ytc=(f,a)=>{try{if(YP&&YP[f]){YP[f].apply(YP,a||[]);return}$('yt').contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:a||[]}),'*')}catch(e){}};
 $('snd').onclick=()=>{sndOn=!sndOn;if(sndOn){ytHello();ytc('playVideo');ytc('unMute');ytc('setVolume',[12]);setTimeout(()=>{ytc('unMute');ytc('setVolume',[12])},400)}else ytc('mute');$('snd').textContent=sndOn?'🔈':'🔇'};
 // soft sound starts with the first touch, click or key anywhere (browsers forbid sound before that)
 const firstTouch=()=>{if(!sndOn)$('snd').click();['click','keydown','touchend'].forEach(e=>removeEventListener(e,firstTouch,true))};
-['click','keydown','touchend'].forEach(e=>addEventListener(e,firstTouch,true));
+if(!matchMedia('(pointer:coarse)').matches)['click','keydown','touchend'].forEach(e=>addEventListener(e,firstTouch,true));
 // handshake so the YouTube player accepts commands (needed on phones)
 const ytHello=()=>{try{$('yt').contentWindow.postMessage(JSON.stringify({event:'listening',id:'yt'}),'*')}catch(e){}};$('yt').addEventListener('load',()=>{ytHello();setTimeout(ytHello,1500)});ytHello();
 let lastHz=-1;

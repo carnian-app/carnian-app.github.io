@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SES · Sentio Ergo Sum</title>
+<meta name="description" content="SES · Sentio Ergo Sum – write in any language, and your words cast a real shadow on the sky above you, opposite the Sun. I feel, therefore I am.">
+<link rel="canonical" href="https://carnian-app.github.io/ses/">
+<meta property="og:type" content="website"><meta property="og:url" content="https://carnian-app.github.io/ses/">
+<meta property="og:title" content="SES · Sentio Ergo Sum – my words in the universe create my reality">
+<meta property="og:description" content="Your words cast a real shadow on the sky, at your place and moment. Black: the binary left. Light: the right. Gold: the remainder between them.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;800&family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -33,7 +38,11 @@ button.pri{background:var(--gold);color:#111;border-color:var(--gold)}
 h2{font-family:var(--serif);font-size:24px;margin:4px 0 8px}
 .lens{font:500 21px/1.9 var(--serif);unicode-bidi:plaintext}
 .lens .L{background:#000;color:#fff;outline:1px solid #555;border-radius:4px;padding:0 4px}
-.lens .R{color:var(--gold);text-shadow:0 0 12px #ffd76a99}
+.lens .R{color:#ffe3ec;text-shadow:0 0 12px #ff96be}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;margin:2px 0 14px;font-size:14px;color:#c7cbe0}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-inline-end:6px}
+.goog-te-banner-frame,.skiptranslate iframe,#goog-gt-tt,.goog-te-balloon-frame,.VIpgJd-ZVi9od-ORHb-OEVmcd{display:none!important}body{top:0!important}
+.goog-text-highlight{background:none!important;box-shadow:none!important}
 .rem{display:flex;flex-direction:column;gap:8px}
 .rem .it{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .rem .w{background:#000;outline:1px solid #555;border-radius:6px;padding:2px 8px;font-family:var(--serif);font-size:19px}
@@ -65,7 +74,7 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
 <p class="sub" data-i="sub"></p>
 
 <div class="card">
-  <textarea id="t" dir="auto"></textarea>
+  <textarea id="t" dir="auto" class="notranslate" translate="no"></textarea>
   <div class="row" style="margin-top:10px">
     <button class="pri" id="geo" data-i="geo"></button>
     <select id="city"></select>
@@ -79,6 +88,8 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
   <input type="range" id="spd" min="0" max="3.6" step="0.01" value="1.78">
   <span class="note" id="spdL"></span>
 </div>
+<div class="legend"><span><i style="background:#000;outline:1px solid #555"></i><span data-i="lgL"></span></span><span><i style="background:#ffe3ec;box-shadow:0 0 8px #ff96be"></i><span data-i="lgR"></span></span><span><i style="background:var(--gold)"></i><span data-i="lgG"></span></span></div>
+<div id="gte" style="display:none"></div>
 
 <div class="read">
   <div class="box"><div class="v" id="nOn">—</div><div class="k" data-i="kOn"></div></div>
@@ -101,13 +112,13 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
 
 <div class="card">
   <h2 data-i="lensT"></h2>
-  <div class="lens" id="lens" dir="auto"></div>
+  <div class="lens notranslate" translate="no" id="lens" dir="auto"></div>
   <p class="note" data-i="lensN"></p>
 </div>
 
 <div class="card">
   <h2><span data-i="remT"></span> <span class="pi">.14159…</span></h2>
-  <div class="rem" id="rem"></div>
+  <div class="rem notranslate" translate="no" id="rem"></div>
   <p class="note" data-i="remN"></p>
 </div>
 
@@ -141,6 +152,7 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
 <h3>6. חומר למחשבה</h3>
 <p>לכל חלקיק חומר יש חלקיק אנטי-חומר. פול דיראק חזה אותו ב-1928, וקרל אנדרסון מצא אותו ב-1932. האנטי-חומר מחביא את החומר: בזווית של 110 מעלות, בין 360 הזוויות הקוטביות, מוסתר בווקטור מקביל בכל אחד מ-360 שינויי הקוטביות, הוא לעולם לא ייראה. שם, בין שני הווקטורים, נמצאת התודעה היקומית הצילית: היטל הצל של ההמיספרה הימנית, שמשתקף מהצל שמטילה ההמיספרה השמאלית.</p>
 <p>כל נקודה שם היא חומר. כל נקודה שם היא חומר למחשבה, תרתי משמע: המחשבה היא חומר, והיא גם חומר למחשבה. היא הפרשנות הצילית של התודעה הימנית, בצל של תבנית נוף הילדות השמאלית, על פני היקום, בכל המקומות שבין חומר לאנטי-חומר.</p>
+<p>שואלים אותי: ומה עם השארית?<br>ואני עונה: זה חומר למחשבה.<br>ואז משתהים, ומבינים: השארית ממוקמת בכל היקומים כחומר למחשבה. חומר למחשבה הוא התודעה.</p>
 
 <h3>7. מה SES עושה</h3>
 <p>SES היא כתיבה בלי זמן, שמשתמשת בשתי המראות על העולם.</p>
@@ -191,6 +203,7 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
 <h3>6. Matter for thought</h3>
 <p>Every particle of matter has a particle of antimatter. Paul Dirac predicted it in 1928, and Carl Anderson found it in 1932. Antimatter hides matter: at an angle of 110 degrees among the 360 polar angles, concealed in a parallel vector through every one of the 360 changes of polarity, it will never be seen. There, between the two vectors, lies the shadow consciousness of the universe: the projected shadow of the right hemisphere, reflected from the shadow cast by the left.</p>
 <p>Every point there is matter. Every point there is matter for thought, in both senses: thought is matter, and it is food for thought. It is the shadow-interpretation of the right consciousness, in the shadow of the left template of our childhood landscape, across the universe, in every place between matter and antimatter.</p>
+<p>People ask me: and what about the remainder?<br>And I answer: it is matter for thought.<br>Then they pause, and understand: the remainder is placed in every universe as matter for thought. Matter for thought is consciousness.</p>
 
 <h3>7. What SES does</h3>
 <p>SES is writing without time, using both mirrors on the world.</p>
@@ -223,7 +236,7 @@ let STARS=[],LINES=[];
 {
 const $=id=>document.getElementById(id);
 const UI={
-he:{tag:'Sentio Ergo Sum · אני מרגיש, משמע אני קיים',man:'המניפסט',h1:'המילים שלך מטילות צל אמיתי על השמיים.',
+he:{tag:'Sentio Ergo Sum · אני מרגיש, משמע אני קיים',man:'המניפסט',lgL:'שחור · המיספרה שמאל, הצל הבינארי',lgR:'אור ורוד · המיספרה ימין, מילות הרגש מאירות',lgG:'זהב · השארית, שם הימין קורא את השמאל',h1:'המילים שלך מטילות צל אמיתי על השמיים.',
 sub:'כתוב בכל שפה. השמש, במיקום האמיתי שלה מעליך עכשיו, מאירה את האותיות שלך – והצל שלהן נופל אל הנקודה שמול השמש, בדיוק שם שבו נופל הצל של כדור הארץ עצמו. מה שבצל: 0. מה שבאור: 1. מה שבין האור לחושך – השארית.',
 ph:'כתוב כאן מה שאתה מרגיש, בכל שפה…',def:'אני מרגיש שתמיד אני לבד ואף אחד לא מבין',geo:'📍 השמיים שמעליי',pick:'או בחר מקום…',asking:'מבקש מיקום…',nogeo:'בלי מיקום – בחר מקום מהרשימה',here:'המקום שלך',
 spin:'סיבוב כדור הארץ:',real:'זמן אמיתי',kOn:'כוכבים באור · 1',kOff:'כוכבים בצל המילים · 0',kMid:'בין האור לחושך · השארית',
@@ -231,7 +244,7 @@ sunUp:'השמש למעלה · הצל של המילים נוגע באופק',sunD
 leftT:'השמיים שלך בשפת השמאל',leftN:'32 הכוכבים הבהירים מעל האופק, מהבהיר לחלש: 1 באור, 0 בצל, ½ על קו הצל.',
 fastT:'מהירות הצל של המילים שלך',fastN:'כדור הארץ מסתובב, והצל של המילים שלך נע על הכוכב. מהירות הצל = מהירות הסיבוב × המרחק. המרחקים מקורבים.',
 ly:'שנות אור',times:'פי',fromLight:'מהאור',none:'כרגע אף כוכב מוכר לא בצל של המילים שלך. כתוב עוד, או האץ את הסיבוב.',
-lensT:'שני המשקפיים',lensN:'שחור – משקפי שמאל, או-או, 0/1. זהב – משקפי ימין, רגש וקשר.',
+lensT:'שני המשקפיים',lensN:'שחור – משקפי שמאל, או-או, 0/1. אור ורוד – משקפי ימין, רגש וקשר.',
 remT:'השארית',remN:'לכל מילת או-או יש מילה שבין האור לחושך. אתה בוחר. לחיצה מחליפה את המילה בטקסט שלך.',
 noBin:'אין כרגע מילות או-או בטקסט. אתה כבר בתדר הביניים.',noLex:'הצל עובד בכל שפה וכתב. המשקפיים קוראים כרגע עברית, ערבית, אנגלית, רוסית, ספרדית, צרפתית, גרמנית, פורטוגזית ואיטלקית.',
 write:'כתוב משהו למעלה.',
@@ -239,7 +252,7 @@ priv:'הטקסט והמיקום נשארים בדפדפן שלך בלבד. מי�
 copy:'© 2026 SES · Sentio Ergo Sum · כל הזכויות שמורות לעופר מאיר ולד (Ofer Meir Vald)',
 dirs:['צפון','צפון-מזרח','מזרח','דרום-מזרח','דרום','דרום-מערב','מערב','צפון-מערב'],shadowTo:'הצל לכיוון',sunAlt:'גובה השמש',
 N:'צפון',S:'דרום',E:'מזרח',W:'מערב',err:'לא הצלחתי לטעון את מפת הכוכבים – רענן את העמוד'},
-en:{tag:'Sentio Ergo Sum · I feel, therefore I am',man:'Manifesto',h1:'Your words cast a real shadow on the sky.',
+en:{tag:'Sentio Ergo Sum · I feel, therefore I am',man:'Manifesto',lgL:'Black · the left hemisphere, the binary shadow',lgR:'Rose light · the right hemisphere, words of feeling shine',lgG:'Gold · the remainder, where the right reads the left',h1:'Your words cast a real shadow on the sky.',
 sub:'Write in any language. The Sun, at its true position above you right now, lights your letters – and their shadow falls on the point opposite the Sun, exactly where the shadow of the Earth itself falls. In shadow: 0. In light: 1. Between light and darkness – the remainder.',
 ph:'Write what you feel, in any language…',def:'I feel that I am always alone and no one understands',geo:'📍 The sky above me',pick:'or choose a place…',asking:'Asking for location…',nogeo:'No location – choose a place',here:'Your place',
 spin:'Earth rotation:',real:'real time',kOn:'stars in light · 1',kOff:'stars in your words’ shadow · 0',kMid:'between light and dark · remainder',
@@ -247,7 +260,7 @@ sunUp:'Sun is up · your words’ shadow touches the horizon',sunDown:'Sun below
 leftT:'Your sky in the language of the left',leftN:'The 32 brightest stars above the horizon, brightest first: 1 in light, 0 in shadow, ½ on the edge.',
 fastT:'The speed of your words’ shadow',fastN:'The Earth turns, and your words’ shadow sweeps the star. Shadow speed = rotation × distance. Distances approximate.',
 ly:'light-years',times:'×',fromLight:'the speed of light',none:'No named star is in your words’ shadow right now. Write more, or speed up the rotation.',
-lensT:'Two lenses',lensN:'Black – the left lens, either/or, 0/1. Gold – the right lens, feeling and connection.',
+lensT:'Two lenses',lensN:'Black – the left lens, either/or, 0/1. Rose light – the right lens, feeling and connection.',
 remT:'The remainder',remN:'Every either/or word has a word between light and dark. You choose. A click replaces the word in your text.',
 noBin:'No either/or words in your text. You are already in the in-between frequency.',noLex:'The shadow works in every language and script. The lenses currently read Hebrew, Arabic, English, Russian, Spanish, French, German, Portuguese and Italian.',
 write:'Write something above.',
@@ -257,6 +270,11 @@ dirs:['north','north-east','east','south-east','south','south-west','west','nort
 N:'N',S:'S',E:'E',W:'W',err:'Could not load the star map – please refresh'}};
 const qs=new URLSearchParams(location.search);
 let LG=qs.get('lang')||((navigator.language||'').toLowerCase().startsWith('he')?'he':'en');if(!UI[LG])LG='en';
+const devL=navigator.language||'en';const devC=/^zh/i.test(devL)?(/tw|hk|hant/i.test(devL)?'zh-TW':'zh-CN'):devL.split('-')[0].toLowerCase();
+let TL=null;
+if(qs.get('lang')){document.cookie='googtrans=;path=/;max-age=0'}
+else{const c=(document.cookie.match(/(?:^|; )googtrans=\/en\/([^;]+)/)||[])[1];TL=c||(['he','iw','en'].includes(devC)?null:devC)}
+if(TL){LG='en';document.cookie='googtrans=/en/'+TL+';path=/'}
 const T=UI[LG];
 document.documentElement.lang=LG;document.documentElement.dir=LG==='he'?'rtl':'ltr';
 document.querySelectorAll('[data-i]').forEach(e=>e.textContent=T[e.dataset.i]);
@@ -271,11 +289,14 @@ const LANGS='af ak am ar as ay az ba ban be bem bg bho bik bm bn bo br bs bua ca
 let dn=null;try{dn=new Intl.DisplayNames([LG],{type:'language'})}catch(e){}
 const own=c=>{try{const n=new Intl.DisplayNames([c.replace('iw','he').replace('jw','jv')],{type:'language'}).of(c.replace('iw','he').replace('jw','jv'));return n&&n!==c?n:''}catch(e){return ''}};
 const opts=LANGS.map(c=>{const o=own(c),l=dn?(dn.of(c.replace('iw','he').replace('jw','jv'))||c):c;return [c,(o&&o!==l?o+' · ':'')+l]}).sort((a,b)=>a[1].localeCompare(b[1]));
-$('lang').innerHTML='<option value="'+LG+'">🌐 '+(LG==='he'?'עברית':'English')+' · '+LANGS.length+(LG==='he'?' שפות':' languages')+'</option>'+opts.map(([c,n])=>'<option value="'+c+'">'+n+'</option>').join('');
-$('lang').onchange=e=>{const c=e.target.value;if(c===LG)return;
- if(c==='iw'||c==='he'){location.href='https://carnian-app.github.io/ses/?lang=he';return}
- if(c==='en'){location.href='https://carnian-app.github.io/ses/?lang=en';return}
- location.href='https://carnian--app-github-io.translate.goog/ses/?lang=en&_x_tr_sl=en&_x_tr_tl='+encodeURIComponent(c)+'&_x_tr_hl='+encodeURIComponent(c)};
+const cur=TL||LG,curN=(()=>{try{return new Intl.DisplayNames([cur],{type:'language'}).of(cur)}catch(e){return cur}})();
+$('lang').innerHTML='<option value="">🌐 '+curN+' · '+LANGS.length+'</option>'+opts.map(([c,n])=>'<option value="'+c+'">'+n+'</option>').join('');
+$('lang').onchange=e=>{const c=e.target.value;if(!c)return;
+ if(c==='iw'||c==='he'){location.href=location.pathname+'?lang=he';return}
+ if(c==='en'){location.href=location.pathname+'?lang=en';return}
+ document.cookie='googtrans=/en/'+c+';path=/';location.href=location.pathname};
+if(TL){window.googleTranslateElementInit=()=>{new google.translate.TranslateElement({pageLanguage:'en',autoDisplay:false},'gte')};
+ const gs=document.createElement('script');gs.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';document.head.appendChild(gs)}
 
 const t=$('t');t.placeholder=T.ph;t.value=T.def;
 const CITIES=[[31.778,35.235,'ירושלים','Jerusalem'],[32.085,34.781,'תל אביב','Tel Aviv'],[40.713,-74.006,'ניו יורק','New York'],[51.507,-0.128,'לונדון','London'],[48.857,2.352,'פריז','Paris'],[55.756,37.617,'מוסקבה','Moscow'],[30.044,31.236,'קהיר','Cairo'],[28.614,77.209,'ניו דלהי','New Delhi'],[39.904,116.407,'בייג׳ינג','Beijing'],[35.676,139.650,'טוקיו','Tokyo'],[-23.551,-46.633,'סאו פאולו','São Paulo'],[-33.869,151.209,'סידני','Sydney'],[-1.286,36.817,'ניירובי','Nairobi']];
@@ -360,7 +381,13 @@ function drawMask(cxp,cyp){
  for(;fs>W*0.03;fs*=0.92){mx.font='800 '+fs+'px '+FONT;L=wrapLines(mx,txt,R*1.25);if(L.length*fs*1.15<R*1.05)break}
  const rtl=isRTL(txt);mx.direction=rtl?'rtl':'ltr';mx.textAlign='center';mx.textBaseline='middle';mx.fillStyle='#000';
  const top=cyp-(L.length-1)*fs*1.15/2;L.forEach((ln,i)=>mx.fillText(ln,cxp,top+i*fs*1.15));
- return {L,fs,top,cx:cxp,rtl};
+ const k=pickLang(txt),Lx=k&&LEX[k],feel=[];
+ if(Lx){mx.save();mx.globalCompositeOperation='destination-out';
+  L.forEach((ln,i)=>{const y=top+i*fs*1.15,Wl=mx.measureText(ln).width;Lx.feelRe.lastIndex=0;let m;
+   while((m=Lx.feelRe.exec(ln))){const w=m[2],idx=m.index+m[1].length,pre=mx.measureText(ln.slice(0,idx)).width;
+    const x=rtl?cxp+Wl/2-pre:cxp-Wl/2+pre;feel.push([w,x,y]);mx.textAlign=rtl?'right':'left';mx.fillText(w,x,y)}});
+  mx.restore()}
+ return {L,fs,top,cx:cxp,rtl,feel};
 }
 const mixc=(a,b,k)=>'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*k)).join(',')+')';
 function frame(now){
@@ -398,7 +425,8 @@ function frame(now){
  if(M){cx.save();cx.filter='blur('+(2*dpr)+'px)';cx.globalAlpha=.95;cx.drawImage(mask,0,0);cx.restore();
   cx.font='800 '+M.fs+'px '+FONT;cx.direction=M.rtl?'rtl':'ltr';cx.textAlign='center';cx.textBaseline='middle';
   cx.strokeStyle='rgba(255,215,106,.22)';cx.lineWidth=Math.max(1,M.fs*.008);cx.shadowColor='rgba(255,215,106,.5)';cx.shadowBlur=M.fs*.1;
-  M.L.forEach((ln,i)=>cx.strokeText(ln,M.cx,M.top+i*M.fs*1.15));cx.shadowBlur=0}
+  M.L.forEach((ln,i)=>cx.strokeText(ln,M.cx,M.top+i*M.fs*1.15));cx.shadowBlur=0;
+  if(M.feel.length){cx.textAlign=M.rtl?'right':'left';cx.fillStyle='#ffe3ec';cx.shadowColor='rgba(255,150,190,.95)';cx.shadowBlur=M.fs*.25;M.feel.forEach(([w,x,y])=>cx.fillText(w,x,y));cx.shadowBlur=0}}
  cx.font='600 '+(11*dpr)+'px Heebo,sans-serif';cx.textAlign='center';cx.direction=LG==='he'?'rtl':'ltr';
  for(const [s,x,y,st] of vis){const n=NAMES[s[3]];if(!n||s[2]>1.6)continue;cx.fillStyle=st===0?'rgba(150,150,170,.55)':'rgba(230,235,255,'+(.85*Math.max(.35,starA))+')';cx.fillText(LG==='he'?n[0]:n[1],x,y-8*dpr)}
  cx.restore();

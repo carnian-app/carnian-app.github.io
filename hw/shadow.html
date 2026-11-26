@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HybridWays · מהירות החושך</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07080d;--ink:#eef0f6;--mut:#9aa0ad;--light:#ffd76a;--rose:#f2a3b5;--dusk:#3b4a78;--card:#11131c;--line:#252a3a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Heebo,system-ui,sans-serif}
+main{max-width:980px;margin:0 auto;padding:clamp(18px,3vw,40px) max(4vw,16px)}
+.brand{font-weight:800;font-size:20px}.brand span{color:#d7261e;font-size:14px;margin-inline-start:8px;font-weight:600}
+.brand a{float:left;font-size:14px;color:var(--light)}
+h1{font-size:clamp(30px,5vw,52px);line-height:1.05;margin:10px 0 6px;font-weight:800}
+h1 b{color:var(--light)}
+.sub{color:var(--mut);margin:0 0 18px;max-width:62ch}
+.stage{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(to bottom,#2a3155 0%,#3b4a78 38%,#c98aa0 54%,#f2a3b5 60%,#3b4a78 61%,#1a2038 100%)}
+svg{display:block;width:100%;height:auto}
+.ctl{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;margin:16px 0}
+.ctl label{font-size:14px;color:var(--mut);display:block}.ctl b{color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--light)}
+.read{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0 22px}
+.read div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.read b{display:block;font-size:clamp(22px,3.4vw,34px);font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.read span{font-size:13px;color:var(--mut)}
+#verdict{font-weight:800;font-size:18px;margin:4px 0 20px;min-height:28px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}
+.card h2{margin:0 0 8px;font-size:20px}
+.card ul{margin:0;padding-inline-start:20px}.card li{margin:6px 0}
+.l{color:var(--light);font-weight:700}.s{color:#9fb3ff;font-weight:700}.r{color:var(--rose);font-weight:700}
+.live{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.live div{border-radius:12px;padding:12px;border:1px solid var(--line)}
+.live .a{background:#2a2410}.live .b{background:#121a33}
+.live b{display:block;font-size:26px;font-weight:800}
+.note{font-size:13px;color:var(--mut)}
+@media(max-width:700px){.ctl,.read,.live{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">HybridWays<span>Air costs · הדגמה סוריאליסטית</span><a href="bench.html">לעמוד המשקיעים ←</a></div>
+  <h1>מהירות החושך <b>&gt;</b> מהירות האור</h1>
+  <p class="sub">הזיזו יד מול פנס. הצל שלה על קיר רחוק, למשל על הירח, יחליק מהר יותר מהאור. נסו בעצמכם.</p>
+
+  <div class="stage"><svg id="sv" viewBox="0 0 900 380" role="img" aria-label="פנס, יד וצל על הירח">
+    <defs>
+      <linearGradient id="beam" x1="1" x2="0"><stop offset="0" stop-color="#ffd76a" stop-opacity=".55"/><stop offset="1" stop-color="#ffd76a" stop-opacity=".05"/></linearGradient>
+      <radialGradient id="moon" cx=".45" cy=".4"><stop offset="0" stop-color="#f4f1e6"/><stop offset="1" stop-color="#b9b4a6"/></radialGradient>
+    </defs>
+    <g id="moonG"><circle cx="110" cy="190" r="120" fill="url(#moon)"/><circle cx="70" cy="150" r="14" fill="#a9a497" opacity=".6"/><circle cx="140" cy="250" r="20" fill="#a9a497" opacity=".5"/><circle cx="150" cy="130" r="9" fill="#a9a497" opacity=".6"/></g>
+    <polygon id="cone" points="800,190 230,40 230,340" fill="url(#beam)"/>
+    <ellipse id="shadow" cx="110" cy="190" rx="26" ry="60" fill="#0a0d1c" opacity=".88"/>
+    <g id="hand"><rect x="-9" y="-34" width="18" height="68" rx="9" fill="#e8b48f"/><rect x="-13" y="-8" width="26" height="40" rx="10" fill="#e0a882"/></g>
+    <g><rect x="805" y="172" width="70" height="36" rx="6" fill="#2b2f3d"/><rect x="795" y="176" width="14" height="28" rx="3" fill="#ffd76a"/><text x="840" y="230" text-anchor="middle" font-size="14" fill="#eef0f6">פנס</text></g>
+    <text id="wallLbl" x="110" y="350" text-anchor="middle" font-size="14" fill="#eef0f6">הירח · 384,400 ק"מ</text>
+    <text x="640" y="350" text-anchor="middle" font-size="13" fill="#ffd76a">חגורת ונוס: הצל של כדור הארץ, עטוף בוורוד</text>
+  </svg></div>
+
+  <div class="ctl">
+    <div><label>מהירות תנועת היד: <b id="wv"></b></label><input id="w" type="range" min="0.2" max="10" step="0.1" value="2"></div>
+    <div><label>המרחק לקיר: <b id="dv"></b></label><input id="d" type="range" min="0" max="100" step="1" value="100"></div>
+  </div>
+  <div class="read">
+    <div><b id="vs">—</b><span>מהירות הצל על הקיר</span></div>
+    <div><b>299,792 ק"מ/ש'</b><span>מהירות האור</span></div>
+    <div><b id="ratio">—</b><span>הצל לעומת האור</span></div>
+  </div>
+  <div id="verdict"></div>
+
+  <div class="card"><h2>למה איינשטיין רגוע</h2>
+    <ul>
+      <li>הצל הוא לא "דבר" שנע. כל נקודה בו היא פשוט מקום שהאור <b>לא</b> הגיע אליו.</li>
+      <li>שום מידע ושום אנרגיה לא עוברים מנקודה לנקודה בתוך הצל. לכן שום דבר אמיתי לא שובר את מהירות האור.</li>
+      <li>החושך לא כפוף לחוק הזה, כי הוא לא נוסע. הוא קיים במקום שבו משהו לא קרה.</li>
+    </ul></div>
+
+  <div class="card"><h2>ומה זה אומר על HybridWays</h2>
+    <ul>
+      <li><span class="l">האור הוא הנסיעה עצמה.</span> שבבים שעובדים, חשמל ומשאית שנוסעת. לאור יש מחיר ויש תקרת מהירות.</li>
+      <li><span class="s">הצל הוא מה שלא נשלח.</span> הנתונים שנשארים אצל סוכן הנתונים שלך, והמשאית שלא הוזמנה כי קטנוע הספיק. לחושך הזה אין עלות ואין תקרת מהירות, כי הוא לא נוסע.</li>
+      <li><span class="r">חגורת ונוס</span> היא הרגע שבו רואים את הצל של כדור הארץ, את מה שבדרך כלל בלתי נראה. כמו מפת הנהגים: היא מראה לכולם איפה <b>לא</b> צריך את המשאית.</li>
+    </ul>
+    <p style="margin:12px 0 0">הערך של HybridWays הוא לא באור, אלא בצל: בכל נסיעה יקרה שלא קרתה, ובכל פרט אישי שלא יצא ממך. <b>הצל מהיר מהאור, כי הוא מה שחסכת מלשלוח.</b></p>
+    <div class="live">
+      <div class="a"><span class="note">אור: מה ששולם בפועל על הנסיעות האמיתיות</span><b id="lightPaid">—</b></div>
+      <div class="b"><span class="note">צל: מה שלא נשלח למשאית ולא שולם</span><b id="shadowSaved">—</b></div>
+    </div>
+    <p class="note" id="liveNote">נתונים חיים מהנסיעות האמיתיות בעמוד ההוכחה.</p>
+    <p style="margin:10px 0 0">ואם רוצים לדייק עד הסוף: הצל עצמו לא מעביר מידע. כדי שמישהו יידע איפה הצל, צריך שוב אור. בדיוק כך, המפה המשותפת צריכה דיווחים, אור קטן מכל נהג, כדי שכולם יראו איפה החושך משתלם.</p>
+  </div>
+  <p class="note" style="text-align:center">© 2026 HybridWays · כל הזכויות שמורות לעופר מאיר ולד (Ofer Meir Vald) · Sentio Ergo Sum (SES)</p>
+</main>
+<script>
+{
+const $=id=>document.getElementById(id),C=299792.458;
+const fmt=n=>Math.round(n).toLocaleString('he-IL');
+const distKm=p=>Math.pow(10,-3+(Math.log10(384400)+3)*p/100); // 1 m .. moon
+function label(km){if(km<1)return fmt(km*1000)+' מטר';if(km>=384000)return 'הירח · 384,400 ק"מ';return fmt(km)+' ק"מ'}
+let t=0;
+function upd(){const w=+$('w').value,km=distKm(+$('d').value),v=w*km;
+  $('wv').textContent=w.toFixed(1)+' רדיאנים לשנייה (תנועת יד)';$('dv').textContent=label(km);$('wallLbl').textContent=label(km);
+  $('vs').textContent=fmt(v)+' ק"מ/ש\'';const r=v/C;$('ratio').textContent=r>=1?'פי '+r.toFixed(r>=10?0:1)+' מהאור':(r*100).toFixed(r<0.01?4:1)+'% מהאור';
+  $('verdict').textContent=r>=1?'🌑 הצל מהיר מהאור. ושום דבר לא נשבר.':'🔦 עוד לא. קחו את הקיר רחוק יותר, או הזיזו את היד מהר יותר.';
+  $('verdict').style.color=r>=1?'#9fb3ff':'#ffd76a'}
+['w','d'].forEach(k=>$(k).addEventListener('input',upd));upd();
+function frame(){t+=0.016;const w=+$('w').value,a=Math.sin(t*w*0.8);
+  const hy=190+a*70;$('hand').setAttribute('transform','translate(520,'+hy.toFixed(1)+')');
+  const sy=190+a*(70*(800-110)/(800-520));$('shadow').setAttribute('cy',Math.max(85,Math.min(295,sy)).toFixed(1));
+  requestAnimationFrame(frame)}
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches)requestAnimationFrame(frame);else $('hand').setAttribute('transform','translate(520,190)');
+(async()=>{try{const s=await fetch('https://tlvugvpvoenhzdheutxi.supabase.co/functions/v1/hybridways').then(r=>r.json());const USD=3.05;
+  const paid=+s.cost_usd*USD,saved=Math.max(0,(+s.toll_cost_usd-+s.cost_usd)*USD);
+  $('lightPaid').textContent='₪'+paid.toFixed(3);$('shadowSaved').textContent='₪'+saved.toFixed(3);
+  $('liveNote').textContent='נתונים חיים מ-'+s.trips+' נסיעות אמיתיות בעמוד ההוכחה: הצל הוא '+(+s.toll_cost_usd>0?Math.round(saved/(+s.toll_cost_usd*USD)*100):0)+'% ממה שהיה עולה הכול במשאית.'}catch(e){}})();
+}
+</script>
+</body>
+</html>

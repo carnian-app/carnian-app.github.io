@@ -421,7 +421,7 @@ let sndOn=false,YP=null;
 // official YouTube player API: the most reliable way to unmute on phones
 // phones (and in-app browsers) only allow sound when the tap lands on the video itself
 const MOB=matchMedia('(pointer:coarse)').matches; // phones: the video waits for the 🔈 button, which starts it with sound
-if(MOB){const f=$('yt');f.src=f.src.replace('autoplay=1&mute=1&','')}
+if(MOB){const f=$('yt');f.src=f.src.replace('autoplay=1&mute=1&','');$('vid').style.pointerEvents='auto'}
 window.onYouTubeIframeAPIReady=()=>{try{YP=new YT.Player('yt',{events:{
  onReady:e=>{if(!MOB){e.target.mute();e.target.playVideo()}},
  onStateChange:e=>{if(e.data===1){e.target.setVolume(12);if(MOB&&!sndOn){e.target.unMute();sndOn=true;$('snd').textContent='🔈';$('vid').style.pointerEvents='none';const k=$('tapTip');k&&k.remove()}}}}})}catch(e){}};

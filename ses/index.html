@@ -3,217 +3,293 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SES · אני מרגיש, משמע אני קיים</title>
+<title>SES · Sentio Ergo Sum</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;800&family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07080d;--ink:#eef0f6;--mut:#9aa1b5;--gold:#ffd76a;--line:#22273a;--card:#0d1019}
+:root{--bg:#07080d;--ink:#eef0f6;--mut:#9aa1b5;--gold:#ffd76a;--line:#22273a;--card:#0d1019;--serif:'Frank Ruhl Libre','Noto Serif','Noto Serif CJK SC','Noto Naskh Arabic',Georgia,serif}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;line-height:1.6}
 main{max-width:860px;margin:0 auto;padding:28px 18px 60px}
-.brand{display:flex;justify-content:space-between;align-items:baseline;color:var(--mut);font-size:14px}
+.brand{display:flex;justify-content:space-between;align-items:baseline;gap:10px;color:var(--mut);font-size:14px;flex-wrap:wrap}
 .brand b{color:var(--gold);font-family:'Frank Ruhl Libre',serif;font-size:22px;letter-spacing:.06em}
-h1{font-family:'Frank Ruhl Libre',serif;font-weight:800;font-size:clamp(30px,6vw,50px);line-height:1.15;margin:18px 0 6px}
+.brand a{color:var(--mut)}
+h1{font-family:var(--serif);font-weight:800;font-size:clamp(30px,6vw,50px);line-height:1.15;margin:18px 0 6px}
 .sub{color:var(--mut);margin:0 0 20px;font-size:17px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:14px 0}
-textarea{width:100%;min-height:120px;background:#05060a;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px;font:500 21px/1.5 'Frank Ruhl Libre',serif;resize:vertical}
+textarea{width:100%;min-height:120px;background:#05060a;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px;font:500 21px/1.5 var(--serif);resize:vertical;unicode-bidi:plaintext}
 textarea:focus{outline:2px solid #ffd76a55}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 button,select{background:#151a28;color:var(--ink);border:1px solid #2c3350;border-radius:10px;padding:8px 12px;font:600 14px Heebo,sans-serif;cursor:pointer}
 button.pri{background:var(--gold);color:#111;border-color:var(--gold)}
 .loc{color:var(--mut);font-size:14px}
 #sky{width:100%;aspect-ratio:1;display:block;border-radius:50%;margin:10px auto;max-width:720px;touch-action:none}
-.read{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.read{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .box{background:#05060a;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.box .v{font:800 26px Heebo,sans-serif;font-variant-numeric:tabular-nums;direction:ltr;text-align:right}
+.box .v{font:800 24px Heebo,sans-serif;font-variant-numeric:tabular-nums}
 .box .k{color:var(--mut);font-size:13px}
 .bits{font:600 15px/1.4 ui-monospace,Menlo,monospace;direction:ltr;text-align:left;letter-spacing:.12em;word-break:break-all;color:#cfd5e6}
 .bits i{font-style:normal;color:var(--gold)}
-h2{font-family:'Frank Ruhl Libre',serif;font-size:24px;margin:4px 0 8px}
-.lens{font:500 21px/1.9 'Frank Ruhl Libre',serif}
+h2{font-family:var(--serif);font-size:24px;margin:4px 0 8px}
+.lens{font:500 21px/1.9 var(--serif);unicode-bidi:plaintext}
 .lens .L{background:#000;color:#fff;outline:1px solid #555;border-radius:4px;padding:0 4px}
 .lens .R{color:var(--gold);text-shadow:0 0 12px #ffd76a99}
 .rem{display:flex;flex-direction:column;gap:8px}
 .rem .it{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.rem .w{background:#000;outline:1px solid #555;border-radius:6px;padding:2px 8px;font-family:'Frank Ruhl Libre',serif;font-size:19px}
-.rem button{font-family:'Frank Ruhl Libre',serif;font-size:17px;font-weight:500}
+.rem .w{background:#000;outline:1px solid #555;border-radius:6px;padding:2px 8px;font-family:var(--serif);font-size:19px}
+.rem button{font-family:var(--serif);font-size:17px;font-weight:500}
 .note{color:var(--mut);font-size:13px}
 .stars{display:flex;flex-wrap:wrap;gap:8px}
 .stars span{background:#05060a;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:14px}
 .stars span b{color:var(--gold)}
 input[type=range]{width:220px;accent-color:var(--gold)}
+.pi{unicode-bidi:isolate;direction:ltr;display:inline-block}
 @media(max-width:640px){.read{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <main>
-<div class="brand"><b>SES</b><span>Sentio Ergo Sum · אני מרגיש, משמע אני קיים</span></div>
-<h1>האותיות שלך מטילות צל על השמיים שמעליך.</h1>
-<p class="sub">כתוב. כל אות היא אור שמטיל צל על הכוכבים האמיתיים שמעל המקום שבו אתה עומד, עכשיו. מה שבצל: 0. מה שבאור: 1. ומה שבין האור לחושך – השארית.</p>
+<div class="brand"><b>SES</b><span><span data-i="tag"></span> · <a href="#" id="lsw"></a></span></div>
+<h1 data-i="h1"></h1>
+<p class="sub" data-i="sub"></p>
 
 <div class="card">
-  <textarea id="t" placeholder="כתוב כאן מה שאתה מרגיש…">אני מרגיש שתמיד אני לבד ואף אחד לא מבין</textarea>
+  <textarea id="t" dir="auto"></textarea>
   <div class="row" style="margin-top:10px">
-    <button class="pri" id="geo">📍 השמיים שמעליי</button>
-    <select id="city">
-      <option value="">או בחר מקום…</option>
-      <option value="31.778,35.235,ירושלים">ירושלים</option>
-      <option value="32.085,34.781,תל אביב">תל אביב</option>
-      <option value="40.713,-74.006,ניו יורק">ניו יורק</option>
-      <option value="51.507,-0.128,לונדון">לונדון</option>
-      <option value="35.676,139.650,טוקיו">טוקיו</option>
-      <option value="-33.869,151.209,סידני">סידני</option>
-    </select>
+    <button class="pri" id="geo" data-i="geo"></button>
+    <select id="city"></select>
     <span class="loc" id="loc"></span>
   </div>
 </div>
 
 <canvas id="sky"></canvas>
 <div class="row" style="justify-content:center;margin-bottom:6px">
-  <span class="note">סיבוב כדור הארץ:</span>
+  <span class="note" data-i="spin"></span>
   <input type="range" id="spd" min="0" max="3.6" step="0.01" value="2.78">
   <span class="note" id="spdL"></span>
 </div>
 
 <div class="read">
-  <div class="box"><div class="v" id="nOn">—</div><div class="k">כוכבים באור · 1</div></div>
-  <div class="box"><div class="v" id="nOff">—</div><div class="k">כוכבים בצל האותיות · 0</div></div>
-  <div class="box"><div class="v" id="nMid">—</div><div class="k">בין האור לחושך · השארית</div></div>
+  <div class="box"><div class="v" id="nOn">—</div><div class="k" data-i="kOn"></div></div>
+  <div class="box"><div class="v" id="nOff">—</div><div class="k" data-i="kOff"></div></div>
+  <div class="box"><div class="v" id="nMid">—</div><div class="k" data-i="kMid"></div></div>
+  <div class="box"><div class="v" id="sunV" style="font-size:18px">—</div><div class="k" id="sunK"></div></div>
 </div>
 
 <div class="card">
-  <h2>השמיים שלך בשפת השמאל</h2>
+  <h2 data-i="leftT"></h2>
   <div class="bits" id="bits"></div>
-  <p class="note">32 הכוכבים הבהירים מעל האופק, מהבהיר לחלש: 1 באור, 0 בצל, <span style="color:var(--gold)">½</span> על קו הצל.</p>
+  <p class="note" data-i="leftN"></p>
 </div>
 
 <div class="card">
-  <h2>מהירות הצל של המילים שלך</h2>
+  <h2 data-i="fastT"></h2>
   <div class="stars" id="fast"></div>
-  <p class="note">כדור הארץ מסתובב, והצל של האותיות שלך נע על הכוכב. מהירות הצל = מהירות הסיבוב × המרחק. המרחקים מקורבים.</p>
+  <p class="note" data-i="fastN"></p>
 </div>
 
 <div class="card">
-  <h2>שני המשקפיים</h2>
-  <div class="lens" id="lens"></div>
-  <p class="note"><span style="background:#000;outline:1px solid #555;padding:0 4px;border-radius:3px">שחור</span> – משקפי שמאל, או-או, 0/1. &nbsp; <span style="color:var(--gold)">זהב</span> – משקפי ימין, רגש וקשר.</p>
+  <h2 data-i="lensT"></h2>
+  <div class="lens" id="lens" dir="auto"></div>
+  <p class="note" data-i="lensN"></p>
 </div>
 
 <div class="card">
-  <h2>השארית ‎.14159…</h2>
+  <h2><span data-i="remT"></span> <span class="pi">.14159…</span></h2>
   <div class="rem" id="rem"></div>
-  <p class="note">לכל מילת או-או יש מילה שבין האור לחושך. אתה בוחר. לחיצה מחליפה את המילה בטקסט שלך.</p>
+  <p class="note" data-i="remN"></p>
 </div>
 
-<p class="note">הטקסט והמיקום נשארים בדפדפן שלך בלבד. מיקומי הכוכבים אמיתיים ומחושבים לרגע ולמקום שלך.</p>
-<p class="note" style="text-align:center">© 2026 SES · Sentio Ergo Sum · כל הזכויות שמורות לעופר מאיר ולד (Ofer Meir Vald)</p>
+<p class="note" data-i="priv"></p>
+<p class="note" style="text-align:center" data-i="copy"></p>
 </main>
 <script>
 const NAMES={"677":["Alpheratz","Alpheratz",97],"746":["Caph","Caph",55],"2081":["Ankaa","Ankaa",null],"3179":["Shedar","Shedar",228],"3419":["Diphda","Diphda",96],"4427":["Navi","Navi",null],"5447":["Mirach","Mirach",197],"7588":["Achernar","Achernar",139],"9640":["Almach","Almach",null],"9884":["Hamal","Hamal",66],"11767":["כוכב הצפון","Polaris",433],"14135":["Menkar","Menkar",250],"14576":["אלגול","Algol",90],"15863":["Mirfak","Mirfak",510],"21421":["אלדבראן","Aldebaran",65],"24436":["ריגל","Rigel",860],"24608":["קפלה","Capella",42.9],"25336":["בלטריקס","Bellatrix",250],"25428":["Elnath","Elnath",134],"25930":["מינטקה","Mintaka",1200],"25985":["Arneb","Arneb",null],"26311":["אלנילם","Alnilam",2000],"26727":["אלניטק","Alnitak",1260],"27366":["Saiph","Saiph",650],"27989":["בטלגז","Betelgeuse",550],"28360":["Menkalinan","Menkalinan",null],"30324":["Mirzam","Mirzam",null],"30438":["קנופוס","Canopus",310],"31681":["Alhena","Alhena",null],"32349":["סיריוס","Sirius",8.6],"33579":["Adhara","Adhara",null],"34444":["Wezen","Wezen",null],"35904":["Aludra","Aludra",null],"36850":["קסטור","Castor",51],"37279":["פרוקיון","Procyon",11.5],"37826":["פולוקס","Pollux",33.8],"39429":["Naos","Naos",null],"39953":["Regor","Regor",null],"41037":["Avior","Avior",null],"42913":["Alsephina","Alsephina",null],"44816":["Suhail","Suhail",null],"45238":["Miaplacidus","Miaplacidus",null],"45556":["Aspidiske","Aspidiske",null],"45941":["Markeb","Markeb",null],"46390":["Alphard","Alphard",177],"49669":["רגולוס","Regulus",79],"50583":["Algieba","Algieba",null],"53910":["Merak","Merak",null],"54061":["דובהה","Dubhe",123],"54872":["Zosma","Zosma",null],"57632":["Denebola","Denebola",36],"58001":["Phecda","Phecda",null],"59803":["Gienah","Gienah",null],"60718":["Acrux","Acrux",320],"61084":["Gacrux","Gacrux",null],"61932":["Muhlifain","Muhlifain",null],"62434":["Mimosa","Mimosa",280],"62956":["Alioth","Alioth",83],"65378":["מיצר","Mizar",86],"65474":["ספיקה","Spica",250],"67301":["Alkaid","Alkaid",104],"68002":["Alnair","Alnair",null],"68702":["Hadar","Hadar",390],"68933":["Menkent","Menkent",null],"69673":["ארקטורוס","Arcturus",36.7],"71681":["Toliman","Toliman",null],"71683":["אלפא קנטאורי","Rigil Kentaurus",4.37],"71860":["Men","Men",null],"72105":["Izar","Izar",null],"72607":["Kochab","Kochab",131],"76267":["Alphecca","Alphecca",null],"78401":["Dschubba","Dschubba",null],"78820":["Acrab","Acrab",null],"80763":["אנטארס","Antares",550],"81377":["Saik","Saik",null],"82273":["Atria","Atria",null],"82396":["Larawag","Larawag",null],"84012":["Sabik","Sabik",null],"85927":["Shaula","Shaula",570],"86032":["Rasalhague","Rasalhague",49],"86228":["Sargas","Sargas",null],"86670":["Mula","Mula",null],"87833":["Eltanin","Eltanin",null],"90185":["Kaus Australis","Kaus Australis",143],"91262":["וגה","Vega",25],"92855":["Nunki","Nunki",228],"93506":["Ascella","Ascella",null],"97649":["אלטאיר","Altair",16.7],"100453":["Sadr","Sadr",null],"100751":["Peacock","Peacock",null],"102098":["דנב","Deneb",2600],"102488":["Aljanah","Aljanah",null],"105199":["Alderamin","Alderamin",null],"107315":["Enif","Enif",690],"109268":["Alnair","Alnair",101],"112122":["Tiaki","Tiaki",null],"113368":["פומלהאוט","Fomalhaut",25],"113881":["Scheat","Scheat",null],"113963":["Markab","Markab",133]};
 let STARS=[],LINES=[];
-
 {
 const $=id=>document.getElementById(id);
-const t=$('t'),cv=$('sky'),cx=cv.getContext('2d');
-const mask=document.createElement('canvas'),mx=mask.getContext('2d',{willReadFrequently:true});
-let lat=31.778,lon=35.235,place='ירושלים',simT=Date.now(),last=performance.now();
-const rad=Math.PI/180;
-function setLoc(a,b,n){lat=a;lon=b;place=n;$('loc').textContent=n+' · '+a.toFixed(2)+'°, '+b.toFixed(2)+'°'}
-setLoc(lat,lon,place);
-$('geo').onclick=()=>{if(!navigator.geolocation){$('loc').textContent='המכשיר לא נותן מיקום – בחר מקום';return}
- $('loc').textContent='מבקש מיקום…';
- navigator.geolocation.getCurrentPosition(p=>setLoc(p.coords.latitude,p.coords.longitude,'המקום שלך'),()=>{$('loc').textContent='בלי מיקום – בחר מקום מהרשימה'},{timeout:10000})};
-$('city').onchange=e=>{if(!e.target.value)return;const [a,b,n]=e.target.value.split(',');setLoc(+a,+b,n)};
+const UI={
+he:{tag:'Sentio Ergo Sum · אני מרגיש, משמע אני קיים',sw:'English',h1:'המילים שלך מטילות צל אמיתי על השמיים.',
+sub:'כתוב בכל שפה. השמש, במיקום האמיתי שלה מעליך עכשיו, מאירה את האותיות שלך – והצל שלהן נופל אל הנקודה שמול השמש, בדיוק שם שבו נופל הצל של כדור הארץ עצמו. מה שבצל: 0. מה שבאור: 1. מה שבין האור לחושך – השארית.',
+ph:'כתוב כאן מה שאתה מרגיש, בכל שפה…',def:'אני מרגיש שתמיד אני לבד ואף אחד לא מבין',geo:'📍 השמיים שמעליי',pick:'או בחר מקום…',asking:'מבקש מיקום…',nogeo:'בלי מיקום – בחר מקום מהרשימה',here:'המקום שלך',
+spin:'סיבוב כדור הארץ:',real:'זמן אמיתי',kOn:'כוכבים באור · 1',kOff:'כוכבים בצל המילים · 0',kMid:'בין האור לחושך · השארית',
+sunUp:'השמש למעלה · הצל נופל על האדמה',sunDown:'השמש מתחת לאופק · הצל בשמיים',
+leftT:'השמיים שלך בשפת השמאל',leftN:'32 הכוכבים הבהירים מעל האופק, מהבהיר לחלש: 1 באור, 0 בצל, ½ על קו הצל.',
+fastT:'מהירות הצל של המילים שלך',fastN:'כדור הארץ מסתובב, והצל של המילים שלך נע על הכוכב. מהירות הצל = מהירות הסיבוב × המרחק. המרחקים מקורבים.',
+ly:'שנות אור',times:'פי',fromLight:'מהאור',none:'כרגע אף כוכב מוכר לא בצל של המילים שלך. כתוב עוד, או האץ את הסיבוב.',
+lensT:'שני המשקפיים',lensN:'שחור – משקפי שמאל, או-או, 0/1. זהב – משקפי ימין, רגש וקשר.',
+remT:'השארית',remN:'לכל מילת או-או יש מילה שבין האור לחושך. אתה בוחר. לחיצה מחליפה את המילה בטקסט שלך.',
+noBin:'אין כרגע מילות או-או בטקסט. אתה כבר בתדר הביניים.',noLex:'הצל עובד בכל שפה וכתב. המשקפיים קוראים כרגע עברית, ערבית, אנגלית, רוסית, ספרדית, צרפתית, גרמנית, פורטוגזית ואיטלקית.',
+write:'כתוב משהו למעלה.',
+priv:'הטקסט והמיקום נשארים בדפדפן שלך בלבד. מיקומי הכוכבים והשמש מחושבים לרגע ולמקום שלך.',
+copy:'© 2026 SES · Sentio Ergo Sum · כל הזכויות שמורות לעופר מאיר ולד (Ofer Meir Vald)',
+dirs:['צפון','צפון-מזרח','מזרח','דרום-מזרח','דרום','דרום-מערב','מערב','צפון-מערב'],shadowTo:'הצל לכיוון',sunAlt:'גובה השמש',
+N:'צפון',S:'דרום',E:'מזרח',W:'מערב',err:'לא הצלחתי לטעון את מפת הכוכבים – רענן את העמוד'},
+en:{tag:'Sentio Ergo Sum · I feel, therefore I am',sw:'עברית',h1:'Your words cast a real shadow on the sky.',
+sub:'Write in any language. The Sun, at its true position above you right now, lights your letters – and their shadow falls on the point opposite the Sun, exactly where the shadow of the Earth itself falls. In shadow: 0. In light: 1. Between light and darkness – the remainder.',
+ph:'Write what you feel, in any language…',def:'I feel that I am always alone and no one understands',geo:'📍 The sky above me',pick:'or choose a place…',asking:'Asking for location…',nogeo:'No location – choose a place',here:'Your place',
+spin:'Earth rotation:',real:'real time',kOn:'stars in light · 1',kOff:'stars in your words’ shadow · 0',kMid:'between light and dark · remainder',
+sunUp:'Sun is up · the shadow falls on the ground',sunDown:'Sun below horizon · the shadow is in the sky',
+leftT:'Your sky in the language of the left',leftN:'The 32 brightest stars above the horizon, brightest first: 1 in light, 0 in shadow, ½ on the edge.',
+fastT:'The speed of your words’ shadow',fastN:'The Earth turns, and your words’ shadow sweeps the star. Shadow speed = rotation × distance. Distances approximate.',
+ly:'light-years',times:'×',fromLight:'the speed of light',none:'No named star is in your words’ shadow right now. Write more, or speed up the rotation.',
+lensT:'Two lenses',lensN:'Black – the left lens, either/or, 0/1. Gold – the right lens, feeling and connection.',
+remT:'The remainder',remN:'Every either/or word has a word between light and dark. You choose. A click replaces the word in your text.',
+noBin:'No either/or words in your text. You are already in the in-between frequency.',noLex:'The shadow works in every language and script. The lenses currently read Hebrew, Arabic, English, Russian, Spanish, French, German, Portuguese and Italian.',
+write:'Write something above.',
+priv:'Your text and location never leave your browser. Star and Sun positions are computed for your moment and place.',
+copy:'© 2026 SES · Sentio Ergo Sum · All rights reserved to Ofer Meir Vald',
+dirs:['north','north-east','east','south-east','south','south-west','west','north-west'],shadowTo:'shadow toward',sunAlt:'Sun altitude',
+N:'N',S:'S',E:'E',W:'W',err:'Could not load the star map – please refresh'}};
+const qs=new URLSearchParams(location.search);
+let LG=qs.get('lang')||((navigator.language||'').toLowerCase().startsWith('he')?'he':'en');if(!UI[LG])LG='en';
+const T=UI[LG];
+document.documentElement.lang=LG;document.documentElement.dir=LG==='he'?'rtl':'ltr';
+document.querySelectorAll('[data-i]').forEach(e=>e.textContent=T[e.dataset.i]);
+$('lsw').textContent=T.sw;$('lsw').href='?lang='+(LG==='he'?'en':'he');
+const t=$('t');t.placeholder=T.ph;t.value=T.def;
+const CITIES=[[31.778,35.235,'ירושלים','Jerusalem'],[32.085,34.781,'תל אביב','Tel Aviv'],[40.713,-74.006,'ניו יורק','New York'],[51.507,-0.128,'לונדון','London'],[48.857,2.352,'פריז','Paris'],[55.756,37.617,'מוסקבה','Moscow'],[30.044,31.236,'קהיר','Cairo'],[28.614,77.209,'ניו דלהי','New Delhi'],[39.904,116.407,'בייג׳ינג','Beijing'],[35.676,139.650,'טוקיו','Tokyo'],[-23.551,-46.633,'סאו פאולו','São Paulo'],[-33.869,151.209,'סידני','Sydney'],[-1.286,36.817,'ניירובי','Nairobi']];
+$('city').innerHTML='<option value="">'+T.pick+'</option>'+CITIES.map((c,i)=>'<option value="'+i+'">'+(LG==='he'?c[2]:c[3])+'</option>').join('');
 
-// lenses
-const BIN={'תמיד':['לעתים קרובות','הרבה פעמים'],'אף פעם':['עד עכשיו לא','עוד לא'],'אף אחד':['עוד לא מצאתי מי','מעטים'],'כולם':['הרבה אנשים','חלק'],'הכל':['הרבה','חלק גדול'],'כלום':['מעט','עוד לא הרבה'],'חייב':['רוצה','בוחר'],'חייבת':['רוצה','בוחרת'],'אסור':['עדיף שלא','אני בוחר שלא'],'רק':['בעיקר','קודם כל'],'לגמרי':['במידה רבה','כמעט'],'בכלל':['כמעט','עדיין'],'אי אפשר':['עוד לא מצאתי איך','קשה'],'אין סיכוי':['זה קשה','עוד לא ברור'],'נכשלתי':['עוד לא הצלחתי','למדתי'],'אף פעם לא':['עד עכשיו לא','עוד לא'],'שום דבר':['מעט','עוד לא הרבה'],'נגמר':['משתנה','עובר'],'לנצח':['לזמן ארוך','עכשיו']};
-const FEEL=['מרגיש','מרגישה','אוהב','אוהבת','אהבה','שמח','שמחה','עצוב','עצובה','כואב','כאב','פחד','מפחד','מתגעגע','געגוע','תקווה','חסד','רחמים','לב','נשמה','אבא','אמא','בת','בנות','ילד','ילדה','בית','חבר','חברה','תודה','שלום','אור','יחד','ביחד','קשר','חום','חיבוק','דמעה','צחוק','יופי','מבין','מבינה','רוך','אמונה','אלוהים','משפחה','נוגע','קרוב'];
-const PRE='(?:[ושהבלכמ]{0,3})';
-const binKeys=Object.keys(BIN).sort((a,b)=>b.length-a.length);
+const cv=$('sky'),cx=cv.getContext('2d');
+const mask=document.createElement('canvas'),mx=mask.getContext('2d',{willReadFrequently:true});
+let lat=31.778,lon=35.235,simT=Date.now(),last=performance.now();
+const rad=Math.PI/180;
+function setLoc(a,b,n){lat=a;lon=b;$('loc').textContent=n+' · '+a.toFixed(2)+'°, '+b.toFixed(2)+'°';dirty=true}
+$('geo').onclick=()=>{if(!navigator.geolocation){$('loc').textContent=T.nogeo;return}$('loc').textContent=T.asking;
+ navigator.geolocation.getCurrentPosition(p=>setLoc(p.coords.latitude,p.coords.longitude,T.here),()=>{$('loc').textContent=T.nogeo},{timeout:10000})};
+$('city').onchange=e=>{if(e.target.value==='')return;const c=CITIES[+e.target.value];setLoc(c[0],c[1],LG==='he'?c[2]:c[3])};
+
+// ---------- lenses, several languages ----------
+const LEX={
+he:{pre:'[ושהבלכמ]{0,3}',bin:{'תמיד':['לעתים קרובות','הרבה פעמים'],'אף פעם':['עד עכשיו לא','עוד לא'],'אף אחד':['עוד לא מצאתי מי','מעטים'],'כולם':['הרבה אנשים','חלק'],'הכל':['הרבה','חלק גדול'],'כלום':['מעט','עוד לא הרבה'],'חייב':['רוצה','בוחר'],'חייבת':['רוצה','בוחרת'],'אסור':['עדיף שלא','אני בוחר שלא'],'רק':['בעיקר','קודם כל'],'לגמרי':['במידה רבה','כמעט'],'בכלל':['כמעט','עדיין'],'אי אפשר':['עוד לא מצאתי איך','קשה'],'אין סיכוי':['זה קשה','עוד לא ברור'],'נכשלתי':['עוד לא הצלחתי','למדתי'],'שום דבר':['מעט','עוד לא הרבה'],'נגמר':['משתנה','עובר'],'לנצח':['לזמן ארוך','עכשיו']},
+feel:['מרגיש','מרגישה','אוהב','אוהבת','אהבה','שמח','שמחה','עצוב','עצובה','כואב','כאב','פחד','מפחד','מתגעגע','געגוע','תקווה','חסד','רחמים','לב','נשמה','אבא','אמא','בת','בנות','ילד','ילדה','בית','חבר','חברה','תודה','שלום','אור','יחד','ביחד','קשר','חום','חיבוק','דמעה','צחוק','יופי','מבין','מבינה','רוך','אמונה','אלוהים','משפחה','קרוב']},
+ar:{pre:'(?:و|ف|ب|ل){0,2}',bin:{'دائما':['غالبا','كثيرا'],'أبدا':['ليس بعد','حتى الآن لا'],'لا أحد':['لم أجد بعد من','قليلون'],'الجميع':['كثير من الناس','البعض'],'كل شيء':['الكثير','جزء كبير'],'لا شيء':['القليل','ليس الكثير بعد'],'يجب':['أريد','أختار'],'مستحيل':['لم أجد الطريقة بعد','صعب'],'فقط':['غالبا','أولا']},
+feel:['أشعر','حب','أحب','سعيد','حزين','ألم','خوف','أمل','قلب','روح','أب','أم','ابنة','ابن','بيت','صديق','شكرا','سلام','نور','معا','عائلة','الله']},
+en:{pre:'',bin:{'always':['often','many times'],'never':['not yet','not so far'],'nobody':["I haven't found who yet",'few'],'no one':["I haven't found who yet",'few'],'everyone':['many people','some'],'everybody':['many people','some'],'everything':['a lot','much'],'nothing':['little','not much yet'],'must':['want to','choose to'],'have to':['want to','choose to'],'only':['mostly','first of all'],'completely':['largely','almost'],'impossible':["I haven't found how yet",'hard'],"can't":["haven't found how yet",'find it hard to'],'failed':["haven't succeeded yet",'learned'],'forever':['for a long time','for now']},
+feel:['feel','feeling','love','happy','sad','hurt','pain','fear','miss','hope','heart','soul','father','mother','dad','mom','daughter','son','child','home','friend','thanks','thank','peace','light','together','warm','hug','tears','laugh','beauty','understand','understands','faith','god','family','close']},
+ru:{pre:'',bin:{'всегда':['часто','много раз'],'никогда':['пока нет','ещё не'],'никто':['я ещё не нашёл кто','немногие'],'все':['многие','некоторые'],'всё':['многое','большая часть'],'ничего':['немного','пока немного'],'должен':['хочу','выбираю'],'нельзя':['лучше не','я выбираю не'],'невозможно':['ещё не нашёл как','трудно'],'только':['в основном','прежде всего']},
+feel:['чувствую','люблю','любовь','рад','грустно','боль','страх','скучаю','надежда','сердце','душа','отец','мать','мама','папа','дочь','сын','дом','друг','спасибо','мир','свет','вместе','семья','бог']},
+es:{pre:'',bin:{'siempre':['a menudo','muchas veces'],'nunca':['todavía no','hasta ahora no'],'nadie':['aún no encontré quién','pocos'],'todos':['mucha gente','algunos'],'todo':['mucho','gran parte'],'nada':['poco','todavía poco'],'tengo que':['quiero','elijo'],'imposible':['aún no encontré cómo','difícil']},
+feel:['siento','amor','amo','feliz','triste','dolor','miedo','extraño','esperanza','corazón','alma','padre','madre','hija','hijo','casa','hogar','amigo','gracias','paz','luz','juntos','familia','dios']},
+fr:{pre:'',bin:{'toujours':['souvent','bien des fois'],'jamais':['pas encore',"jusqu'ici non"],'personne':["je n'ai pas encore trouvé qui",'peu'],'tout le monde':['beaucoup de gens','certains'],'tout':['beaucoup','une grande partie'],'rien':['peu','pas encore grand-chose'],'dois':['veux','choisis'],'impossible':['pas encore trouvé comment','difficile'],'seulement':['surtout',"d'abord"]},
+feel:['sens','ressens','amour','aime','heureux','triste','douleur','peur','manque','espoir','cœur','âme','père','mère','fille','fils','maison','ami','merci','paix','lumière','ensemble','famille','dieu']},
+de:{pre:'',bin:{'immer':['oft','viele Male'],'nie':['noch nicht','bisher nicht'],'niemals':['noch nicht','bisher nicht'],'niemand':['ich habe noch nicht gefunden wen','wenige'],'alle':['viele Menschen','manche'],'alles':['vieles','ein großer Teil'],'nichts':['wenig','noch nicht viel'],'muss':['will','wähle'],'unmöglich':['noch nicht gefunden wie','schwer'],'nur':['vor allem','zuerst']},
+feel:['fühle','liebe','glücklich','traurig','schmerz','angst','vermisse','hoffnung','herz','seele','vater','mutter','tochter','sohn','zuhause','freund','danke','frieden','licht','zusammen','familie','gott']},
+pt:{pre:'',bin:{'sempre':['muitas vezes','frequentemente'],'nunca':['ainda não','até agora não'],'ninguém':['ainda não encontrei quem','poucos'],'todos':['muita gente','alguns'],'tudo':['muito','grande parte'],'nada':['pouco','ainda pouco'],'tenho que':['quero','escolho'],'impossível':['ainda não encontrei como','difícil']},
+feel:['sinto','amor','amo','feliz','triste','dor','medo','saudade','esperança','coração','alma','pai','mãe','filha','filho','casa','amigo','obrigado','obrigada','paz','luz','juntos','família','deus']},
+it:{pre:'',bin:{'sempre':['spesso','molte volte'],'mai':['non ancora','finora no'],'nessuno':['non ho ancora trovato chi','pochi'],'tutti':['molte persone','alcuni'],'tutto':['molto','gran parte'],'niente':['poco','non ancora molto'],'devo':['voglio','scelgo'],'impossibile':['non ho ancora trovato come','difficile']},
+feel:['sento','amore','amo','felice','triste','dolore','paura','manca','speranza','cuore','anima','padre','madre','figlia','figlio','casa','amico','grazie','pace','luce','insieme','famiglia','dio']}};
 const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-const binRe=new RegExp('(^|[^\\u0590-\\u05FF])('+PRE+')('+binKeys.map(esc).join('|')+')(?=$|[^\\u0590-\\u05FF])','g');
-const feelRe=new RegExp('(^|[^\\u0590-\\u05FF])('+PRE+'(?:'+FEEL.map(esc).join('|')+'))(?=$|[^\\u0590-\\u05FF])','g');
+const NL='[^\\p{L}\\p{M}\\u0027\\u2019]';
+for(const k in LEX){const L=LEX[k],keys=Object.keys(L.bin).sort((a,b)=>b.length-a.length);
+ L.binRe=new RegExp('(^|'+NL+')('+(L.pre||'')+')('+keys.map(esc).join('|')+')(?=$|'+NL+')','giu');
+ L.feelRe=new RegExp('(^|'+NL+')((?:'+(L.pre||'')+')(?:'+L.feel.map(esc).join('|')+'))(?=$|'+NL+')','giu')}
+function pickLang(s){let best=null,bs=0;for(const k in LEX){const L=LEX[k];const n=(s.match(L.binRe)||[]).length*2+(s.match(L.feelRe)||[]).length;if(n>bs){bs=n;best=k}}
+ if(!best){if(/[֐-׿]/.test(s))best='he';else if(/[؀-ۿ]/.test(s))best='ar';else if(/[Ѐ-ӿ]/.test(s))best='ru'}return best}
 const html=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
 function lenses(){
- const s=t.value;let h=html(s);
- h=h.replace(binRe,(m,a,p,w)=>a+'<span class="L">'+p+w+'</span>');
- h=h.replace(feelRe,(m,a,w)=>a+'<span class="R">'+w+'</span>');
- $('lens').innerHTML=h||'<span class="note">כתוב משהו למעלה.</span>';
- const rem=$('rem');rem.innerHTML='';const seen=new Set();let m;binRe.lastIndex=0;
- while((m=binRe.exec(s))){const p=m[2],w=m[3],full=p+w;if(seen.has(full))continue;seen.add(full);
-  const it=document.createElement('div');it.className='it';it.innerHTML='<span class="w">'+html(full)+'</span><span class="note">←</span>';
-  BIN[w].forEach(alt=>{const b=document.createElement('button');b.textContent=p+alt;b.onclick=()=>{
-    const re=new RegExp('(^|[^\\u0590-\\u05FF])'+esc(full)+'(?=$|[^\\u0590-\\u05FF])');t.value=t.value.replace(re,(x,a)=>a+p+alt);lenses();dirty=true};it.appendChild(b)});
+ const s=t.value;const k=pickLang(s);const L=k&&LEX[k];let h=html(s);
+ if(L){h=h.replace(L.binRe,(m,a,p,w)=>a+'<span class="L">'+p+w+'</span>');h=h.replace(L.feelRe,(m,a,w)=>a+'<span class="R">'+w+'</span>')}
+ $('lens').innerHTML=h||'<span class="note">'+T.write+'</span>';
+ const rem=$('rem');rem.innerHTML='';
+ if(!L){rem.innerHTML='<span class="note">'+(s.trim()?T.noLex:T.write)+'</span>';return}
+ const seen=new Set();let m;L.binRe.lastIndex=0;
+ while((m=L.binRe.exec(s))){const p=m[2],w=m[3],full=p+w;if(seen.has(full.toLowerCase()))continue;seen.add(full.toLowerCase());
+  const key=Object.keys(L.bin).find(x=>x.toLowerCase()===w.toLowerCase());if(!key)continue;
+  const it=document.createElement('div');it.className='it';it.innerHTML='<span class="w" dir="auto">'+html(full)+'</span><span class="note">'+(LG==='he'?'←':'→')+'</span>';
+  L.bin[key].forEach(alt=>{const b=document.createElement('button');b.dir='auto';b.textContent=p+alt;b.onclick=()=>{
+    const re=new RegExp('(^|'+NL+')'+esc(full)+'(?=$|'+NL+')','u');t.value=t.value.replace(re,(x,a)=>a+p+alt);lenses();dirty=true};it.appendChild(b)});
   rem.appendChild(it)}
- if(!rem.children.length)rem.innerHTML='<span class="note">אין כרגע מילות או-או בטקסט. אתה כבר בתדר הביניים.</span>';
+ if(!rem.children.length)rem.innerHTML='<span class="note">'+T.noBin+'</span>';
 }
-t.addEventListener('input',()=>{lenses();dirty=true});lenses();
+t.addEventListener('input',()=>{lenses();dirty=true});
 
-// sky
-let W=0,R=0,C=0,dpr=1;
-function size(){dpr=Math.min(2,devicePixelRatio||1);const w=cv.clientWidth;W=Math.round(w*dpr);cv.width=cv.height=W;mask.width=mask.height=W;R=W*0.48;C=W/2}
-addEventListener('resize',()=>{size();dirty=true});size();
-function lstDeg(ms){const jd=ms/86400000+2440587.5;let g=280.46061837+360.98564736629*(jd-2451545);return ((g+lon)%360+360)%360}
-function proj(ra,dec,lst){const ha=(lst-ra)*rad,d=dec*rad,l=lat*rad;
- const sa=Math.sin(d)*Math.sin(l)+Math.cos(d)*Math.cos(l)*Math.cos(ha);const alt=Math.asin(Math.max(-1,Math.min(1,sa)));
- const az=Math.atan2(-Math.sin(ha)*Math.cos(d),Math.cos(l)*Math.sin(d)-Math.sin(l)*Math.cos(d)*Math.cos(ha));
- const r=R*Math.tan((Math.PI/2-alt)/2);return [C-r*Math.sin(az),C-r*Math.cos(az),alt]}
-function wrapLines(ctx,txt,maxW){const words=txt.split(/\s+/).filter(Boolean),L=[];let cur='';
- for(const w of words){const tr=cur?cur+' '+w:w;if(ctx.measureText(tr).width>maxW&&cur){L.push(cur);cur=w}else cur=tr}if(cur)L.push(cur);return L}
-let MC=null,MD=null,dirty=true;
-function drawMask(){
+// ---------- sky ----------
+let W=0,R=0,C=0,dpr=1,MC=null,MD=null,dirty=true,lastCenter='';
+function size(){dpr=Math.min(2,devicePixelRatio||1);const w=cv.clientWidth;W=Math.round(w*dpr);cv.width=cv.height=W;mask.width=mask.height=W;R=W*0.48;C=W/2;dirty=true}
+addEventListener('resize',size);size();
+const jd=ms=>ms/86400000+2440587.5;
+function lstDeg(ms){const g=280.46061837+360.98564736629*(jd(ms)-2451545);return ((g+lon)%360+360)%360}
+function sunRaDec(ms){const n=jd(ms)-2451545;const L=(280.460+0.9856474*n)*rad,g=(357.528+0.9856003*n)*rad;
+ const lam=L+(1.915*Math.sin(g)+0.020*Math.sin(2*g))*rad,eps=(23.439-0.0000004*n)*rad;
+ return [Math.atan2(Math.cos(eps)*Math.sin(lam),Math.cos(lam))/rad,Math.asin(Math.sin(eps)*Math.sin(lam))/rad]}
+function altaz(ra,dec,lst){const ha=(lst-ra)*rad,d=dec*rad,l=lat*rad;
+ const alt=Math.asin(Math.max(-1,Math.min(1,Math.sin(d)*Math.sin(l)+Math.cos(d)*Math.cos(l)*Math.cos(ha))));
+ const az=Math.atan2(-Math.sin(ha)*Math.cos(d),Math.cos(l)*Math.sin(d)-Math.sin(l)*Math.cos(d)*Math.cos(ha));return [alt,az]}
+function xy(alt,az){const r=R*Math.tan((Math.PI/2-alt)/2);return [C-r*Math.sin(az),C-r*Math.cos(az)]}
+function proj(ra,dec,lst){const [a,z]=altaz(ra,dec,lst);const [x,y]=xy(a,z);return [x,y,a]}
+const isRTL=s=>{const m=s.match(/[\p{L}]/u);return !!(m&&/[֐-ࣿיִ-﷿ﹰ-﻿]/.test(m[0]))};
+function toks(s){if(window.Intl&&Intl.Segmenter){try{return [...new Intl.Segmenter(undefined,{granularity:'word'}).segment(s)].map(x=>x.segment)}catch(e){}}return s.split(/(\s+)/)}
+function wrapLines(ctx,txt,maxW){const L=[];let cur='';for(const w of toks(txt)){const tr=cur+w;if(ctx.measureText(tr.trim()).width>maxW&&cur.trim()){L.push(cur.trim());cur=w.trimStart()}else cur=tr}if(cur.trim())L.push(cur.trim());return L}
+const FONT='"Frank Ruhl Libre","Noto Serif","Noto Serif CJK SC","Noto Naskh Arabic",Georgia,serif';
+function drawMask(cxp,cyp){
  mx.clearRect(0,0,W,W);let txt=t.value.trim();if(!txt)return null;
  if(txt.length>140)txt='…'+txt.slice(-140);
- let fs=W*0.2,L;
- for(;fs>W*0.035;fs*=0.92){mx.font='800 '+fs+'px "Frank Ruhl Libre",serif';L=wrapLines(mx,txt,R*1.5);if(L.length*fs*1.15<R*1.35)break}
- mx.direction='rtl';mx.textAlign='center';mx.textBaseline='middle';mx.fillStyle='#000';
- const top=C-(L.length-1)*fs*1.15/2;L.forEach((ln,i)=>mx.fillText(ln,C,top+i*fs*1.15));
- return {L,fs,top};
+ let fs=W*0.16,L;
+ for(;fs>W*0.03;fs*=0.92){mx.font='800 '+fs+'px '+FONT;L=wrapLines(mx,txt,R*1.25);if(L.length*fs*1.15<R*1.05)break}
+ const rtl=isRTL(txt);mx.direction=rtl?'rtl':'ltr';mx.textAlign='center';mx.textBaseline='middle';mx.fillStyle='#000';
+ const top=cyp-(L.length-1)*fs*1.15/2;L.forEach((ln,i)=>mx.fillText(ln,cxp,top+i*fs*1.15));
+ return {L,fs,top,cx:cxp,rtl};
 }
-let ORDER=[];
+const mixc=(a,b,k)=>'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*k)).join(',')+')';
 function frame(now){
  const dt=now-last;last=now;const mult=Math.round(Math.pow(10,+$('spd').value));simT+=dt*mult;
- $('spdL').textContent=mult<=1?'זמן אמיתי':'×'+mult.toLocaleString('he-IL');
+ $('spdL').textContent=mult<=1?T.real:'×'+mult.toLocaleString(LG);
  const lst=lstDeg(simT);
- // sky
+ const [sra,sde]=sunRaDec(simT);const [sAlt,sAz]=altaz(sra,sde,lst);
+ const aAlt=Math.max(-10*rad,-sAlt),aAz=sAz+Math.PI;           // anti-solar point
+ const [ax,ay]=xy(aAlt,aAz);
+ const key=Math.round(ax/(4*dpr))+','+Math.round(ay/(4*dpr));if(key!==lastCenter){lastCenter=key;dirty=true}
+ if(dirty){MC=drawMask(ax,ay);MD=MC?mx.getImageData(0,0,W,W).data:null;dirty=false}
+ const M=MC,md=MD;
+ const day=Math.max(0,Math.min(1,(sAlt/rad+10)/12));           // 0 night .. 1 day
  cx.clearRect(0,0,W,W);cx.save();cx.beginPath();cx.arc(C,C,R,0,7);cx.clip();
- const g=cx.createRadialGradient(C,C,0,C,C,R);g.addColorStop(0,'#0b1024');g.addColorStop(.82,'#141a3a');g.addColorStop(.93,'#3a2a52');g.addColorStop(1,'#a8657a');
+ const g=cx.createRadialGradient(C,C,0,C,C,R);
+ g.addColorStop(0,mixc([11,16,36],[58,110,180],day));g.addColorStop(.85,mixc([20,26,58],[110,160,215],day));g.addColorStop(1,mixc([40,32,70],[190,215,240],day));
  cx.fillStyle=g;cx.fillRect(0,0,W,W);
- cx.strokeStyle='rgba(140,160,220,.16)';cx.lineWidth=1*dpr;
+ // Earth's shadow + Belt of Venus, opposite the Sun, around twilight
+ const tw=Math.max(0,1-Math.abs(sAlt/rad+2)/8);
+ if(tw>0){const [hx,hy]=xy(0,aAz);const bg=cx.createRadialGradient(hx,hy,0,hx,hy,R*1.1);
+  bg.addColorStop(0,'rgba(40,50,110,'+(.55*tw)+')');bg.addColorStop(.25,'rgba(236,150,175,'+(.55*tw)+')');bg.addColorStop(.6,'rgba(236,150,175,0)');cx.fillStyle=bg;cx.fillRect(0,0,W,W)}
+ const starA=1-day*0.8;
+ cx.strokeStyle='rgba(140,160,220,'+(.16*starA)+')';cx.lineWidth=1*dpr;
  for(const seg of LINES){cx.beginPath();let on=false;for(const [ra,de] of seg){const [x,y,a]=proj(ra,de,lst);if(a<0){on=false;continue}on?cx.lineTo(x,y):cx.moveTo(x,y);on=true}cx.stroke()}
- if(dirty){MC=drawMask();MD=MC?mx.getImageData(0,0,W,W).data:null;dirty=false}const M=MC,md=MD;
  const px=(x,y)=>{x|=0;y|=0;if(x<0||y<0||x>=W||y>=W)return 0;return md[(y*W+x)*4+3]>127?1:0};
  const E=3*dpr;const shade=(x,y)=>{if(!md)return 0;let n=0;for(const [dx,dy] of [[0,0],[E,0],[-E,0],[0,E],[0,-E]])n+=px(x+dx,y+dy);return n/5};
  let on=0,off=0,mid=0;const vis=[];
  for(const s of STARS){const [x,y,a]=proj(s[0],s[1],lst);if(a<0)continue;const sh=shade(x,y);const st=sh>.82?0:sh<.18?1:.5;
-  if(st===1)on++;else if(st===0)off++;else mid++;vis.push([s,x,y,st]);
-  if(st===0)continue;const r=Math.max(.6,3.4-s[2]*.55)*dpr;cx.fillStyle=st===.5?'#ffd76a':'#fff';cx.globalAlpha=Math.min(1,1.15-s[2]*.15);
+  if(st===1)on++;else if(st===0)off++;else mid++;vis.push([s,x,y,st]);if(st===0)continue;
+  const r=Math.max(.6,3.4-s[2]*.55)*dpr;cx.fillStyle=st===.5?'#ffd76a':'#fff';cx.globalAlpha=Math.min(1,1.15-s[2]*.15)*(st===.5?1:starA);
   cx.beginPath();cx.arc(x,y,r,0,7);cx.fill()}
  cx.globalAlpha=1;
- // shadow of letters
+ // the Sun
+ if(sAlt>-0.02){const [sx,sy]=xy(sAlt,sAz);const sg=cx.createRadialGradient(sx,sy,0,sx,sy,R*.25);sg.addColorStop(0,'rgba(255,245,210,1)');sg.addColorStop(.08,'rgba(255,225,140,.9)');sg.addColorStop(1,'rgba(255,215,106,0)');cx.fillStyle=sg;cx.fillRect(0,0,W,W)}
  if(M){cx.save();cx.filter='blur('+(2*dpr)+'px)';cx.globalAlpha=.95;cx.drawImage(mask,0,0);cx.restore();
-  cx.font='800 '+M.fs+'px "Frank Ruhl Libre",serif';cx.direction='rtl';cx.textAlign='center';cx.textBaseline='middle';
+  cx.font='800 '+M.fs+'px '+FONT;cx.direction=M.rtl?'rtl':'ltr';cx.textAlign='center';cx.textBaseline='middle';
   cx.strokeStyle='rgba(255,215,106,.22)';cx.lineWidth=Math.max(1,M.fs*.008);cx.shadowColor='rgba(255,215,106,.5)';cx.shadowBlur=M.fs*.1;
-  M.L.forEach((ln,i)=>cx.strokeText(ln,C,M.top+i*M.fs*1.15));cx.shadowBlur=0}
- // names
- cx.font='600 '+(11*dpr)+'px Heebo,sans-serif';cx.textAlign='center';cx.direction='rtl';
- for(const [s,x,y,st] of vis){const n=NAMES[s[3]];if(!n||s[2]>1.6)continue;cx.fillStyle=st===0?'rgba(150,150,170,.55)':'rgba(230,235,255,.85)';cx.fillText(n[0],x,y-8*dpr)}
+  M.L.forEach((ln,i)=>cx.strokeText(ln,M.cx,M.top+i*M.fs*1.15));cx.shadowBlur=0}
+ cx.font='600 '+(11*dpr)+'px Heebo,sans-serif';cx.textAlign='center';cx.direction=LG==='he'?'rtl':'ltr';
+ for(const [s,x,y,st] of vis){const n=NAMES[s[3]];if(!n||s[2]>1.6)continue;cx.fillStyle=st===0?'rgba(150,150,170,.55)':'rgba(230,235,255,'+(.85*Math.max(.35,starA))+')';cx.fillText(LG==='he'?n[0]:n[1],x,y-8*dpr)}
  cx.restore();
- // horizon ring + cardinal
  cx.strokeStyle='#2c3350';cx.lineWidth=2*dpr;cx.beginPath();cx.arc(C,C,R,0,7);cx.stroke();
  cx.fillStyle='#9aa1b5';cx.font='700 '+(13*dpr)+'px Heebo,sans-serif';cx.textAlign='center';cx.textBaseline='middle';
- [['צפון',C,C-R-10*dpr],['דרום',C,C+R+10*dpr],['מזרח',C-R-0*dpr+18*dpr,C],['מערב',C+R-18*dpr,C]].forEach(([n,x,y])=>cx.fillText(n,x,y));
+ [[T.N,C,C-R-10*dpr],[T.S,C,C+R+10*dpr],[T.E,C-R+18*dpr,C],[T.W,C+R-18*dpr,C]].forEach(([n,x,y])=>cx.fillText(n,x,y));
  $('nOn').textContent=on;$('nOff').textContent=off;$('nMid').textContent=mid;
+ const dirName=T.dirs[Math.round((((aAz/rad)%360+360)%360)/45)%8];
+ $('sunV').textContent=T.shadowTo+' '+dirName;$('sunK').textContent=(sAlt>0?T.sunUp:T.sunDown)+' · '+T.sunAlt+' '+Math.round(sAlt/rad)+'°';
  const top32=vis.slice().sort((a,b)=>a[0][2]-b[0][2]).slice(0,32);
  $('bits').innerHTML=top32.map(v=>v[3]===.5?'<i>½</i>':v[3]).join('');
  const fast=vis.filter(v=>v[3]!==1&&NAMES[v[0][3]]&&NAMES[v[0][3]][2]).sort((a,b)=>NAMES[a[0][3]][2]-NAMES[b[0][3]][2]).slice(0,8);
- $('fast').innerHTML=fast.length?fast.map(v=>{const n=NAMES[v[0][3]];return '<span>'+n[0]+' · '+n[2]+' שנות אור · הצל <b>פי '+Math.round(n[2]*2301*Math.cos(v[0][1]*rad)).toLocaleString('he-IL')+'</b> מהאור</span>'}).join(''):'<span class="note" style="border:0">כרגע אף כוכב מוכר לא בצל של המילים שלך. כתוב עוד, או חכה שהשמיים יסתובבו.</span>';
+ $('fast').innerHTML=fast.length?fast.map(v=>{const n=NAMES[v[0][3]];const k=Math.round(n[2]*2301*Math.cos(v[0][1]*rad)).toLocaleString(LG);
+   return '<span>'+(LG==='he'?n[0]:n[1])+' · '+n[2]+' '+T.ly+' · <b>'+(LG==='he'?'פי '+k:k+'×')+'</b> '+T.fromLight+'</span>'}).join(''):'<span class="note" style="border:0">'+T.none+'</span>';
  requestAnimationFrame(frame)}
+setLoc(lat,lon,LG==='he'?'ירושלים':'Jerusalem');lenses();
 document.fonts&&document.fonts.ready.then(()=>{dirty=true});
 const CDN='https://cdn.jsdelivr.net/npm/d3-celestial@0.7.35/data/';
 Promise.all([fetch(CDN+'stars.6.json').then(r=>r.json()),fetch(CDN+'constellations.lines.json').then(r=>r.json())]).then(([a,b])=>{
  STARS=a.features.filter(f=>f.properties.mag<=5.2).map(f=>[f.geometry.coordinates[0],f.geometry.coordinates[1],f.properties.mag,f.id]);
- ORDER=STARS;LINES=b.features.flatMap(f=>f.geometry.coordinates);requestAnimationFrame(frame)}).catch(()=>{$('loc').textContent='לא הצלחתי לטעון את מפת הכוכבים – רענן את העמוד'});
+ LINES=b.features.flatMap(f=>f.geometry.coordinates);requestAnimationFrame(frame)}).catch(()=>{$('loc').textContent=T.err});
 }
 </script>
 </body>

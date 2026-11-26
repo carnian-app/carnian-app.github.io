@@ -68,6 +68,7 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
 .skyW #sky{margin:0 auto}
 #vid{position:absolute;inset:0;opacity:.23;pointer-events:none;border-radius:50%;overflow:hidden}
 #vid iframe{position:absolute;top:0;left:50%;width:178%;height:100%;transform:translateX(-50%);border:0}
+@media(max-width:640px){#sealO{position:static;transform:none;width:100%;margin:12px auto 0}#vid{inset:auto;top:0;left:0;width:100%;aspect-ratio:1}#sec{color:#fff}}
 #tapTip{position:absolute;top:15%;left:50%;transform:translateX(-50%);z-index:4;pointer-events:none;background:#0d1019d9;border:1px solid #ffd76a66;color:#ffe7a8;border-radius:999px;padding:8px 16px;font:600 15px Heebo,sans-serif;white-space:nowrap;animation:beat 2.4s ease-in-out infinite}
 #snd{position:absolute;top:6%;inset-inline-end:6%;z-index:3;width:42px;height:42px;border-radius:50%;background:#0d1019cc;border:1px solid #2c3350;font-size:18px;padding:0;cursor:pointer}
 #sealO{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none;text-align:center;width:80%}
@@ -467,7 +468,7 @@ function frame(now){
  if(sAlt>-0.02){const [sx,sy]=xy(sAlt,sAz);const sg=cx.createRadialGradient(sx,sy,0,sx,sy,R*.25);sg.addColorStop(0,'rgba(255,245,210,1)');sg.addColorStop(.08,'rgba(255,225,140,.9)');sg.addColorStop(1,'rgba(255,215,106,0)');cx.fillStyle=sg;cx.fillRect(0,0,W,W)}
  if(M){cx.save();cx.filter='blur('+(2*dpr)+'px)';cx.globalAlpha=.95;cx.drawImage(mask,0,0);cx.restore();
   cx.font='800 '+M.fs+'px '+FONT;cx.direction=M.rtl?'rtl':'ltr';cx.textAlign='center';cx.textBaseline='middle';
-  cx.strokeStyle='rgba(255,215,106,.22)';cx.lineWidth=Math.max(1,M.fs*.008);cx.shadowColor='rgba(255,215,106,.5)';cx.shadowBlur=M.fs*.1;
+  cx.strokeStyle='rgba(255,215,106,.75)';cx.lineWidth=Math.max(1.5,M.fs*.022);cx.shadowColor='rgba(255,215,106,.7)';cx.shadowBlur=M.fs*.14;
   M.L.forEach((ln,i)=>cx.strokeText(ln,M.cx,M.top+i*M.fs*1.15));cx.shadowBlur=0;
   if(M.feel.length){cx.textAlign=M.rtl?'right':'left';cx.fillStyle='#ffe3ec';cx.shadowColor='rgba(255,150,190,.95)';cx.shadowBlur=M.fs*.25;M.feel.forEach(([w,x,y])=>cx.fillText(w,x,y));cx.shadowBlur=0}}
  cx.font='600 '+(11*dpr)+'px Heebo,sans-serif';cx.textAlign='center';cx.direction=LG==='he'?'rtl':'ltr';

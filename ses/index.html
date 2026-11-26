@@ -166,8 +166,8 @@ function drawMask(){
  if(txt.length>140)txt='…'+txt.slice(-140);
  let fs=W*0.2,L;
  for(;fs>W*0.035;fs*=0.92){mx.font='800 '+fs+'px "Frank Ruhl Libre",serif';L=wrapLines(mx,txt,R*1.5);if(L.length*fs*1.15<R*1.35)break}
- mx.direction='rtl';mx.textAlign='center';mx.textBaseline='middle';mx.filter='blur('+(fs*0.06)+'px)';mx.fillStyle='#000';
- const top=C-(L.length-1)*fs*1.15/2;L.forEach((ln,i)=>mx.fillText(ln,C,top+i*fs*1.15));mx.filter='none';
+ mx.direction='rtl';mx.textAlign='center';mx.textBaseline='middle';mx.fillStyle='#000';
+ const top=C-(L.length-1)*fs*1.15/2;L.forEach((ln,i)=>mx.fillText(ln,C,top+i*fs*1.15));
  return {L,fs,top};
 }
 let ORDER=[];
@@ -182,17 +182,18 @@ function frame(now){
  cx.strokeStyle='rgba(140,160,220,.16)';cx.lineWidth=1*dpr;
  for(const seg of LINES){cx.beginPath();let on=false;for(const [ra,de] of seg){const [x,y,a]=proj(ra,de,lst);if(a<0){on=false;continue}on?cx.lineTo(x,y):cx.moveTo(x,y);on=true}cx.stroke()}
  if(dirty){MC=drawMask();MD=MC?mx.getImageData(0,0,W,W).data:null;dirty=false}const M=MC,md=MD;
- const shade=(x,y)=>{if(!md)return 0;const i=((y|0)*W+(x|0))*4+3;return (md[i]||0)/255};
+ const px=(x,y)=>{x|=0;y|=0;if(x<0||y<0||x>=W||y>=W)return 0;return md[(y*W+x)*4+3]>127?1:0};
+ const E=3*dpr;const shade=(x,y)=>{if(!md)return 0;let n=0;for(const [dx,dy] of [[0,0],[E,0],[-E,0],[0,E],[0,-E]])n+=px(x+dx,y+dy);return n/5};
  let on=0,off=0,mid=0;const vis=[];
  for(const s of STARS){const [x,y,a]=proj(s[0],s[1],lst);if(a<0)continue;const sh=shade(x,y);const st=sh>.82?0:sh<.18?1:.5;
   if(st===1)on++;else if(st===0)off++;else mid++;vis.push([s,x,y,st]);
-  const r=Math.max(.6,3.4-s[2]*.55)*dpr;cx.fillStyle=st===.5?'#ffd76a':'#fff';cx.globalAlpha=Math.min(1,1.15-s[2]*.15);
+  if(st===0)continue;const r=Math.max(.6,3.4-s[2]*.55)*dpr;cx.fillStyle=st===.5?'#ffd76a':'#fff';cx.globalAlpha=Math.min(1,1.15-s[2]*.15);
   cx.beginPath();cx.arc(x,y,r,0,7);cx.fill()}
  cx.globalAlpha=1;
  // shadow of letters
- if(M){cx.globalAlpha=.93;cx.drawImage(mask,0,0);cx.globalAlpha=1;
+ if(M){cx.save();cx.filter='blur('+(2*dpr)+'px)';cx.globalAlpha=.95;cx.drawImage(mask,0,0);cx.restore();
   cx.font='800 '+M.fs+'px "Frank Ruhl Libre",serif';cx.direction='rtl';cx.textAlign='center';cx.textBaseline='middle';
-  cx.strokeStyle='rgba(255,215,106,.35)';cx.lineWidth=Math.max(1,M.fs*.012);cx.shadowColor='rgba(255,215,106,.6)';cx.shadowBlur=M.fs*.12;
+  cx.strokeStyle='rgba(255,215,106,.22)';cx.lineWidth=Math.max(1,M.fs*.008);cx.shadowColor='rgba(255,215,106,.5)';cx.shadowBlur=M.fs*.1;
   M.L.forEach((ln,i)=>cx.strokeText(ln,C,M.top+i*M.fs*1.15));cx.shadowBlur=0}
  // names
  cx.font='600 '+(11*dpr)+'px Heebo,sans-serif';cx.textAlign='center';cx.direction='rtl';

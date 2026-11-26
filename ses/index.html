@@ -240,7 +240,7 @@ const $=id=>document.getElementById(id);
 const UI={
 he:{tag:'Sentio Ergo Sum · אני מרגיש, משמע אני קיים',man:'המניפסט',lgL:'שחור · המיספרה שמאל, הצל הבינארי',lgR:'אור ורוד · המיספרה ימין, מילות הרגש מאירות',lgG:'זהב · השארית, שם הימין קורא את השמאל',h1:'המילים שלך מטילות צל אמיתי על השמיים.',
 sub:'כתוב בכל שפה. השמש, במיקום האמיתי שלה מעליך עכשיו, מאירה את האותיות שלך – והצל שלהן נופל אל הנקודה שמול השמש, בדיוק שם שבו נופל הצל של כדור הארץ עצמו. מה שבצל: 0. מה שבאור: 1. מה שבין האור לחושך – השארית.',
-ph:'כתוב כאן מה שאתה מרגיש, בכל שפה…',def:'אני מרגיש שתמיד אני לבד ואף אחד לא מבין',geo:'📍 השמיים שמעליי',pick:'או בחר מקום…',asking:'מבקש מיקום…',nogeo:'בלי מיקום – בחר מקום מהרשימה',here:'המקום שלך',
+ph:'כתוב כאן מה שאתה מרגיש, בכל שפה…',def:'אני מרגיש שתמיד אני לבד ואף אחד לא מבין',geo:'📍 השמיים שמעליי',pick:'או בחר מדינה',asking:'מבקש מיקום…',nogeo:'בלי מיקום – בחר מקום מהרשימה',here:'המקום שלך',
 spin:'סיבוב כדור הארץ:',real:'זמן אמיתי',kOn:'כוכבים באור · 1',kOff:'כוכבים בצל המילים · 0',kMid:'בין האור לחושך · השארית',
 sunUp:'השמש למעלה · הצל של המילים נוגע באופק',sunDown:'השמש מתחת לאופק · הצל בשמיים',
 leftT:'השמיים שלך בשפת השמאל',leftN:'32 הכוכבים הבהירים מעל האופק, מהבהיר לחלש: 1 באור, 0 בצל, ½ על קו הצל.',
@@ -256,7 +256,7 @@ dirs:['צפון','צפון-מזרח','מזרח','דרום-מזרח','דרום','
 N:'צפון',S:'דרום',E:'מזרח',W:'מערב',err:'לא הצלחתי לטעון את מפת הכוכבים – רענן את העמוד'},
 en:{tag:'Sentio Ergo Sum · I feel, therefore I am',man:'Manifesto',lgL:'Black · the left hemisphere, the binary shadow',lgR:'Rose light · the right hemisphere, words of feeling shine',lgG:'Gold · the remainder, where the right reads the left',h1:'Your words cast a real shadow on the sky.',
 sub:'Write in any language. The Sun, at its true position above you right now, lights your letters – and their shadow falls on the point opposite the Sun, exactly where the shadow of the Earth itself falls. In shadow: 0. In light: 1. Between light and darkness – the remainder.',
-ph:'Write what you feel, in any language…',def:'I feel that I am always alone and no one understands',geo:'📍 The sky above me',pick:'or choose a place…',asking:'Asking for location…',nogeo:'No location – choose a place',here:'Your place',
+ph:'Write what you feel, in any language…',def:'I feel that I am always alone and no one understands',geo:'📍 The sky above me',pick:'or choose a country',asking:'Asking for location…',nogeo:'No location – choose a place',here:'Your place',
 spin:'Earth rotation:',real:'real time',kOn:'stars in light · 1',kOff:'stars in your words’ shadow · 0',kMid:'between light and dark · remainder',
 sunUp:'Sun is up · your words’ shadow touches the horizon',sunDown:'Sun below horizon · the shadow is in the sky',
 leftT:'Your sky in the language of the left',leftN:'The 32 brightest stars above the horizon, brightest first: 1 in light, 0 in shadow, ½ on the edge.',
@@ -301,8 +301,12 @@ if(TL){window.googleTranslateElementInit=()=>{new google.translate.TranslateElem
  const gs=document.createElement('script');gs.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';document.head.appendChild(gs)}
 
 const t=$('t');t.placeholder=T.ph;t.value=T.def;
-const CITIES=[[31.778,35.235,'ירושלים','Jerusalem'],[32.085,34.781,'תל אביב','Tel Aviv'],[40.713,-74.006,'ניו יורק','New York'],[51.507,-0.128,'לונדון','London'],[48.857,2.352,'פריז','Paris'],[55.756,37.617,'מוסקבה','Moscow'],[30.044,31.236,'קהיר','Cairo'],[28.614,77.209,'ניו דלהי','New Delhi'],[39.904,116.407,'בייג׳ינג','Beijing'],[35.676,139.650,'טוקיו','Tokyo'],[-23.551,-46.633,'סאו פאולו','São Paulo'],[-33.869,151.209,'סידני','Sydney'],[-1.286,36.817,'ניירובי','Nairobi']];
-$('city').innerHTML='<option value="">'+T.pick+'</option>'+CITIES.map((c,i)=>'<option value="'+i+'">'+(LG==='he'?c[2]:c[3])+'</option>').join('');
+const CTRY='AF:33,65;AO:-12.5,18.5;AL:41,20;AD:42.5,1.5;AE:24,54;AR:-34,-64;AM:40,45;AG:17.05,-61.8;AU:-27,133;AT:47.33,13.33;AZ:40.5,47.5;BI:-3.5,30;BE:50.83,4;BJ:9.5,2.25;BF:13,-2;BD:24,90;BG:43,25;BH:26,50.55;BS:24.25,-76;BA:44,18;BY:53,28;BZ:17.25,-88.75;BO:-17,-65;BR:-10,-55;BB:13.17,-59.53;BN:4.5,114.67;BT:27.5,90.5;BW:-22,24;CF:7,21;CA:60,-95;CH:47,8;CL:-30,-71;CN:35,105;CI:8,-5;CM:6,12;CD:0,25;CG:-1,15;CO:4,-72;KM:-12.17,44.25;CV:16,-24;CR:10,-84;CU:21.5,-80;CY:35,33;CZ:49.75,15.5;DE:51,9;DJ:11.5,43;DM:15.42,-61.33;DK:56,10;DO:19,-70.67;DZ:28,3;EC:-2,-77.5;EG:27,30;ER:15,39;ES:40,-4;EE:59,26;ET:8,38;FI:64,26;FJ:-18,175;FR:46,2;FM:6.92,158.25;GA:-1,11.75;GB:54,-2;GE:42,43.5;GH:8,-2;GN:11,-10;GM:13.47,-16.57;GW:12,-15;GQ:2,10;GR:39,22;GD:12.12,-61.67;GT:15.5,-90.25;GY:5,-59;HN:15,-86.5;HR:45.17,15.5;HT:19,-72.42;HU:47,20;ID:-5,120;IN:20,77;IE:53,-8;IR:32,53;IQ:33,44;IS:65,-18;IL:31.47,35.13;IT:42.83,12.83;JM:18.25,-77.5;JO:31,36;JP:36,138;KZ:48,68;KE:1,38;KG:41,75;KH:13,105;KI:1.42,173;KN:17.33,-62.75;KR:37,127.5;XK:42.67,21.17;KW:29.5,45.75;LA:18,105;LB:33.83,35.83;LR:6.5,-9.5;LY:25,17;LC:13.88,-60.97;LI:47.27,9.53;LK:7,81;LS:-29.5,28.5;LT:56,24;LU:49.75,6.17;LV:57,25;MA:32,-5;MC:43.73,7.4;MD:47,29;MG:-20,47;MV:3.25,73;MX:23,-102;MH:9,168;MK:41.83,22;ML:17,-4;MT:35.83,14.58;MM:22,98;ME:42.5,19.3;MN:46,105;MZ:-18.25,35;MR:20,-12;MU:-20.28,57.55;MW:-13.5,34;MY:2.5,112.5;NA:-22,17;NE:16,8;NG:10,8;NI:13,-85;NL:52.5,5.75;NO:62,10;NP:28,84;NR:-0.53,166.92;NZ:-41,174;OM:21,57;PK:30,70;PA:9,-80;PE:-10,-76;PH:13,122;PW:7.5,134.5;PG:-6,147;PL:52,20;KP:40,127;PT:39.5,-8;PY:-23,-58;PS:31.9,35.2;QA:25.5,51.25;RO:46,25;RU:60,100;RW:-2,30;SA:25,45;SD:15,30;SN:14,-14;SG:1.37,103.8;SB:-8,159;SL:8.5,-11.5;SV:13.83,-88.92;SM:43.77,12.42;SO:10,49;RS:44,21;SS:7,30;ST:1,7;SR:4,-56;SK:48.67,19.5;SI:46.12,14.82;SE:62,15;SZ:-26.5,31.5;SC:-4.58,55.67;SY:35,38;TD:15,19;TG:8,1.17;TH:15,100;TJ:39,71;TM:40,60;TL:-8.83,125.92;TO:-20,-175;TT:11,-61;TN:34,9;TR:39,35;TV:-8,178;TW:23.5,121;TZ:-6,35;UG:1,32;UA:49,32;UY:-33,-56;US:38,-97;UZ:41,64;VA:41.9,12.45;VC:13.25,-61.2;VE:8,-66;VN:16.17,107.83;VU:-16,167;WS:-13.58,-172.33;YE:15,48;ZA:-29,24;ZM:-15,30;ZW:-20,30'.split(';').map(x=>{const [c,ll]=x.split(':'),[a,b]=ll.split(',');return [c,+a,+b]});
+let RN=null;try{RN=new Intl.DisplayNames([LG],{type:'region'})}catch(e){}
+const cName=c=>{try{return (RN&&RN.of(c))||c}catch(e){return c}};
+const flag=c=>c==='XK'?'🏳️':String.fromCodePoint(...[...c].map(ch=>127397+ch.charCodeAt(0)));
+const CO=CTRY.map(x=>[x[0],cName(x[0])]).sort((a,b)=>a[1].localeCompare(b[1],LG));
+$('city').innerHTML='<option value="">🌍 '+T.pick+' · '+CTRY.length+'</option>'+CO.map(([c,n])=>'<option value="'+c+'">'+flag(c)+' '+n+'</option>').join('');
 
 const cv=$('sky'),cx=cv.getContext('2d');
 const mask=document.createElement('canvas'),mx=mask.getContext('2d',{willReadFrequently:true});
@@ -311,7 +315,7 @@ const rad=Math.PI/180;
 function setLoc(a,b,n){lat=a;lon=b;$('loc').textContent=n+' · '+a.toFixed(2)+'°, '+b.toFixed(2)+'°';dirty=true}
 $('geo').onclick=()=>{if(!navigator.geolocation){$('loc').textContent=T.nogeo;return}$('loc').textContent=T.asking;
  navigator.geolocation.getCurrentPosition(p=>setLoc(p.coords.latitude,p.coords.longitude,T.here),()=>{$('loc').textContent=T.nogeo},{timeout:10000})};
-$('city').onchange=e=>{if(e.target.value==='')return;const c=CITIES[+e.target.value];setLoc(c[0],c[1],LG==='he'?c[2]:c[3])};
+$('city').onchange=e=>{const c=CTRY.find(x=>x[0]===e.target.value);if(!c)return;setLoc(c[1],c[2],cName(c[0]))};
 
 // ---------- lenses, several languages ----------
 const LEX={
@@ -398,7 +402,7 @@ function frame(now){
  const lst=lstDeg(simT);
  const [sra,sde]=sunRaDec(simT);const [sAlt,sAz]=altaz(sra,sde,lst);
  const aAlt=-sAlt,aAz=sAz+Math.PI;           // anti-solar point
- const [ax,ay]=xy(Math.max(aAlt,20*rad),aAz);                 // keep the whole shadow on the dome
+ let [ax,ay]=xy(Math.max(aAlt,20*rad),aAz);{const dx=ax-C,dy=ay-C,dd=Math.hypot(dx,dy),mx0=R*0.3;if(dd>mx0){ax=C+dx*mx0/dd;ay=C+dy*mx0/dd}}   // whole text stays inside the dome, toward the anti-solar side                 // keep the whole shadow on the dome
  const key=Math.round(ax/(4*dpr))+','+Math.round(ay/(4*dpr));if(key!==lastCenter){lastCenter=key;dirty=true}
  if(dirty){MC=drawMask(ax,ay);MD=MC?mx.getImageData(0,0,W,W).data:null;dirty=false}
  const M=MC,md=MD;

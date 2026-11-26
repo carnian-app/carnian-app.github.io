@@ -413,7 +413,11 @@ const SECRET=[["Abkhaz","Ажәақәа ҵәахны ипсуп"],["Aboriginal (
 let secI=Math.max(0,SECRET.findIndex(x=>x[0]===(LG==='he'?'Hebrew':'English')));
 function secShow(){const [n,p]=SECRET[secI];const a=$('sec'),b=$('secL');a.style.opacity=b.style.opacity=0;setTimeout(()=>{a.textContent=p;b.textContent=(secI+1)+'/197 · '+n;a.style.opacity=b.style.opacity=1},600);secI=(secI+1)%SECRET.length}
 secShow();setInterval(secShow,3200);
-let sndOn=false;const ytc=(f,a)=>{try{$('yt').contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:a||[]}),'*')}catch(e){}};
+let sndOn=false,YP=null;
+// official YouTube player API: the most reliable way to unmute on phones
+window.onYouTubeIframeAPIReady=()=>{try{YP=new YT.Player('yt',{events:{onReady:e=>{e.target.mute();e.target.playVideo()}}})}catch(e){}};
+{const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';document.head.appendChild(s)}
+const ytc=(f,a)=>{try{if(YP&&YP[f]){YP[f].apply(YP,a||[]);return}$('yt').contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:a||[]}),'*')}catch(e){}};
 $('snd').onclick=()=>{sndOn=!sndOn;if(sndOn){ytHello();ytc('playVideo');ytc('unMute');ytc('setVolume',[12]);setTimeout(()=>{ytc('unMute');ytc('setVolume',[12])},400)}else ytc('mute');$('snd').textContent=sndOn?'🔈':'🔇'};
 // soft sound starts with the first touch, click or key anywhere (browsers forbid sound before that)
 const firstTouch=()=>{if(!sndOn)$('snd').click();['click','keydown','touchend'].forEach(e=>removeEventListener(e,firstTouch,true))};

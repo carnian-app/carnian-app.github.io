@@ -414,10 +414,12 @@ let secI=Math.max(0,SECRET.findIndex(x=>x[0]===(LG==='he'?'Hebrew':'English')));
 function secShow(){const [n,p]=SECRET[secI];const a=$('sec'),b=$('secL');a.style.opacity=b.style.opacity=0;setTimeout(()=>{a.textContent=p;b.textContent=(secI+1)+'/197 · '+n;a.style.opacity=b.style.opacity=1},600);secI=(secI+1)%SECRET.length}
 secShow();setInterval(secShow,3200);
 let sndOn=false;const ytc=(f,a)=>{try{$('yt').contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:a||[]}),'*')}catch(e){}};
-$('snd').onclick=()=>{sndOn=!sndOn;if(sndOn){ytc('unMute');ytc('setVolume',[12]);ytc('playVideo')}else ytc('mute');$('snd').textContent=sndOn?'🔈':'🔇'};
+$('snd').onclick=()=>{sndOn=!sndOn;if(sndOn){ytHello();ytc('playVideo');ytc('unMute');ytc('setVolume',[12]);setTimeout(()=>{ytc('unMute');ytc('setVolume',[12])},400)}else ytc('mute');$('snd').textContent=sndOn?'🔈':'🔇'};
 // soft sound starts with the first touch, click or key anywhere (browsers forbid sound before that)
-const firstTouch=()=>{if(!sndOn)$('snd').click();['pointerdown','keydown','touchstart'].forEach(e=>removeEventListener(e,firstTouch,true))};
-['pointerdown','keydown','touchstart'].forEach(e=>addEventListener(e,firstTouch,true));
+const firstTouch=()=>{if(!sndOn)$('snd').click();['click','keydown','touchend'].forEach(e=>removeEventListener(e,firstTouch,true))};
+['click','keydown','touchend'].forEach(e=>addEventListener(e,firstTouch,true));
+// handshake so the YouTube player accepts commands (needed on phones)
+const ytHello=()=>{try{$('yt').contentWindow.postMessage(JSON.stringify({event:'listening',id:'yt'}),'*')}catch(e){}};$('yt').addEventListener('load',()=>{ytHello();setTimeout(ytHello,1500)});ytHello();
 let lastHz=-1;
 const mixc=(a,b,k)=>'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*k)).join(',')+')';
 function frame(now){
@@ -426,7 +428,7 @@ function frame(now){
  const lst=lstDeg(simT);
  const [sra,sde]=sunRaDec(simT);const [sAlt,sAz]=altaz(sra,sde,lst);
  const aAlt=-sAlt,aAz=sAz+Math.PI;           // anti-solar point
- let [ax,ay]=xy(Math.max(aAlt,20*rad),aAz);{const dx=ax-C,dy=ay-C,dd=Math.hypot(dx,dy),mx0=R*0.3;if(dd>mx0){ax=C+dx*mx0/dd;ay=C+dy*mx0/dd}}   // whole text stays inside the dome, toward the anti-solar side                 // keep the whole shadow on the dome
+ let [ax,ay]=xy(Math.max(aAlt,20*rad),aAz);{const dx=ax-C,dy=ay-C,dd=Math.hypot(dx,dy),mx0=cv.clientWidth<560?R*0.06:R*0.3;if(dd>mx0){ax=C+dx*mx0/dd;ay=C+dy*mx0/dd}}   // whole text stays inside the dome, toward the anti-solar side                 // keep the whole shadow on the dome
  const key=Math.round(ax/(4*dpr))+','+Math.round(ay/(4*dpr));if(key!==lastCenter){lastCenter=key;dirty=true}
  if(dirty){MC=drawMask(ax,ay);MD=MC?mx.getImageData(0,0,W,W).data:null;dirty=false}
  const M=MC,md=MD;

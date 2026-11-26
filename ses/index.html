@@ -428,7 +428,7 @@ window.onYouTubeIframeAPIReady=()=>{try{YP=new YT.Player('yt',{events:{
 {const s=document.createElement('script');s.src='https://www.youtube.com/iframe_api';document.head.appendChild(s)}
 const ytc=(f,a)=>{try{if(YP&&YP[f]){YP[f].apply(YP,a||[]);return}$('yt').contentWindow.postMessage(JSON.stringify({event:'command',func:f,args:a||[]}),'*')}catch(e){}};
 // Instagram / Facebook / TikTok in-app browsers block sound from embedded videos: the 🔈 button reopens the page in the phone's real browser
-const UA=navigator.userAgent||'',INAPP=/Instagram|FBAN|FBAV|FB_IAB|musical_ly|BytedanceWebview|TikTok/i.test(UA);
+const UA=navigator.userAgent||'',INAPP=/Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|musical_ly|BytedanceWebview|TikTok|Snapchat|LinkedInApp|Twitter|Pinterest|Threads|Barcelona|Line\/|KAKAOTALK|WeChat|MicroMessenger|; wv\)/i.test(UA);
 if(INAPP)$('snd').textContent='🔈';
 $('snd').onclick=()=>{if(INAPP){const u='https://carnian-app.github.io/ses/';
  if(/Android/i.test(UA)){location.href='intent://carnian-app.github.io/ses/#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url='+encodeURIComponent(u)+';end';return}

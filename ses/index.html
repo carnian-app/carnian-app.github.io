@@ -10,8 +10,8 @@
 <meta property="og:image" content="https://carnian-app.github.io/s/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:title" content="SES · Sentio Ergo Sum – my words in the universe create my reality">
-<meta property="og:description" content="Your words cast a real shadow on the sky, at your place and moment. Black: the binary left. Light: the right. Gold: the remainder between them.">
+<meta property="og:title" content="מכתב חתום · SES · מילים חיות בסתר">
+<meta property="og:description" content="לחצו כדי לשבור את חותם הנר, לקרוא את המילים ולראות אותן מטילות צל על השמיים שלכם · Sentio Ergo Sum">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;800&family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -382,7 +382,7 @@ function lenses(){
 }
 t.addEventListener('input',()=>{lenses();dirty=true});
 // a sealed letter from WhatsApp opens here with the sender's words already casting their shadow
-{const q=new URLSearchParams(location.search).get('t');if(q){const w=q.slice(0,600);t.value=w;setTimeout(()=>{lenses();dirty=true},0);
+{const P=new URLSearchParams(location.search);let q=P.get('t');const qw=P.get('w');if(qw){try{const b=atob(qw.replace(/-/g,'+').replace(/_/g,'/'));q=new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0)))}catch(e){}}if(q){const w=q.slice(0,600);t.value=w;setTimeout(()=>{lenses();dirty=true},0);
  // the letter arrives sealed in wax: tap to break the seal, read the words, then see them cast on your own sky
  const ov=document.createElement('div');ov.id='letO';
  ov.style.cssText='position:fixed;inset:0;z-index:99;background:radial-gradient(circle at 50% 40%,#1a1420,#050507 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center;font-family:inherit;transition:opacity .6s';
@@ -397,7 +397,8 @@ t.addEventListener('input',()=>{lenses();dirty=true});
    ov.appendChild(card);ov.appendChild(b)},450)}}}
 // send the words sealed (S♥S) to WhatsApp; this page stays open behind it
 document.getElementById('sealB').onclick=()=>{const w=(t.value||'').trim();if(!w){t.focus();return}
- const link=location.origin+'/ses/?t='+encodeURIComponent(w.slice(0,600));
+ const bytes=new TextEncoder().encode(w.slice(0,600));let bin='';bytes.forEach(x=>bin+=String.fromCharCode(x));
+ const link=location.origin+'/ses/?w='+btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
  const msg=w+'\n\nSES · \u05de\u05d9\u05dc\u05d9\u05dd \u05d7\u05d9\u05d5\u05ea \u05d1\u05e1\u05ea\u05e8 \u2014 \u05de\u05db\u05ea\u05d1 \u05d7\u05ea\u05d5\u05dd:\n'+link;
  const u='https://wa.me/?text='+encodeURIComponent(msg);
  // phones and in-app browsers (Instagram, TikTok, Facebook) block pop-ups, so go straight to WhatsApp; the page stays one step back

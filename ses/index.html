@@ -85,7 +85,7 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
 </head>
 <body>
 <main>
-<div class="brand"><span class="row"><b>SES</b><button class="ibtn" id="manB">ⓘ <span data-i="man"></span></button><a class="ibtn" id="letB" href="../s/" style="text-decoration:none">✉️ <span>מכתב מהלב</span></a></span><span class="row"><span data-i="tag"></span><select id="lang" aria-label="language"></select></span></div>
+<div class="brand"><span class="row"><b>SES</b><button class="ibtn" id="manB">ⓘ <span data-i="man"></span></button><button class="ibtn" id="sealB" type="button">✉️ <span>שלח חתום בוואטסאפ</span></button></span><span class="row"><span data-i="tag"></span><select id="lang" aria-label="language"></select></span></div>
 <h1 data-i="h1"></h1>
 <p class="sub" data-i="sub"></p>
 
@@ -102,7 +102,7 @@ dialog#man .x{position:sticky;top:0;float:inline-end;background:#151a28;border-r
 <div id="sealO" class="notranslate" translate="no"><div class="wax2"><span>S</span><span class="hrt" id="hrt"><svg viewBox="0 0 32 29" aria-hidden="true"><path d="M16 28C6 20 0 14 0 8a8 8 0 0 1 16-3 8 8 0 0 1 16 3c0 6-6 12-16 20z" fill="#F3D7C7"/></svg><b id="hz">0</b></span><span>S</span></div><div id="sec" dir="auto"></div><div id="secL"></div></div></div>
 <div class="row" style="justify-content:center;margin-bottom:6px">
   <span class="note" data-i="spin"></span>
-  <input type="range" id="spd" min="0" max="3.6" step="0.01" value="1.78">
+  <input type="range" id="spd" min="0" max="3.6" step="0.01" value="2.6">
   <span class="note" id="spdL"></span>
 </div>
 <div class="legend"><span><i style="background:#000;outline:1px solid #555"></i><span data-i="lgL"></span></span><span><i style="background:#ffe3ec;box-shadow:0 0 8px #ff96be"></i><span data-i="lgR"></span></span><span><i style="background:var(--gold)"></i><span data-i="lgG"></span></span></div>
@@ -378,6 +378,13 @@ function lenses(){
  if(!rem.children.length)rem.innerHTML='<span class="note">'+T.noBin+'</span>';
 }
 t.addEventListener('input',()=>{lenses();dirty=true});
+// a sealed letter from WhatsApp opens here with the sender's words already casting their shadow
+{const q=new URLSearchParams(location.search).get('t');if(q){t.value=q.slice(0,600);setTimeout(()=>{lenses();dirty=true},0)}}
+// send the words sealed (S♥S) to WhatsApp; this page stays open behind it
+document.getElementById('sealB').onclick=()=>{const w=(t.value||'').trim();if(!w){t.focus();return}
+ const link=location.origin+'/ses/?t='+encodeURIComponent(w.slice(0,600));
+ const msg='✉️ '+w+'\n\nS♥S · מילים חיות בסתר\n🌌 '+link;
+ window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank','noopener')};
 
 // ---------- sky ----------
 let W=0,R=0,C=0,dpr=1,MC=null,MD=null,dirty=true,lastCenter='';

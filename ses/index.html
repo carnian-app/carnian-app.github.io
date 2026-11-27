@@ -399,7 +399,9 @@ t.addEventListener('input',()=>{lenses();dirty=true});
 document.getElementById('sealB').onclick=()=>{const w=(t.value||'').trim();if(!w){t.focus();return}
  const link=location.origin+'/ses/?t='+encodeURIComponent(w.slice(0,600));
  const msg=w+'\n\nSES · \u05de\u05d9\u05dc\u05d9\u05dd \u05d7\u05d9\u05d5\u05ea \u05d1\u05e1\u05ea\u05e8 \u2014 \u05de\u05db\u05ea\u05d1 \u05d7\u05ea\u05d5\u05dd:\n'+link;
- window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank','noopener')};
+ const u='https://wa.me/?text='+encodeURIComponent(msg);
+ // phones and in-app browsers (Instagram, TikTok, Facebook) block pop-ups, so go straight to WhatsApp; the page stays one step back
+ if(matchMedia('(pointer:coarse)').matches){location.href=u}else{const wnd=window.open(u,'_blank');if(!wnd)location.href=u}};
 
 // ---------- sky ----------
 let W=0,R=0,C=0,dpr=1,MC=null,MD=null,dirty=true,lastCenter='';

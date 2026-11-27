@@ -387,19 +387,20 @@ t.addEventListener('input',()=>{lenses();dirty=true});
  const ov=document.createElement('div');ov.id='letO';
  ov.style.cssText='position:fixed;inset:0;z-index:99;background:radial-gradient(circle at 50% 40%,#1a1420,#050507 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center;font-family:inherit;transition:opacity .6s';
  const seal='<svg viewBox="0 0 120 120" width="150" height="150" style="filter:drop-shadow(0 6px 18px #0009)"><circle cx="60" cy="60" r="54" fill="#8E1F1A"/><circle cx="60" cy="60" r="44" fill="none" stroke="#c0453b" stroke-width="3"/><text x="60" y="72" text-anchor="middle" font-size="34" font-weight="700" fill="#f3d9c4" font-family="Frank Ruhl Libre,serif">S\u2665S</text></svg>';
- ov.innerHTML='<div id="letS" style="cursor:pointer;transition:transform .5s,opacity .5s">'+seal+'</div><div style="color:#d8b26a;font-size:18px">\u05de\u05db\u05ea\u05d1 \u05d7\u05ea\u05d5\u05dd \u00b7 \u05dc\u05d7\u05e6\u05d5 \u05e2\u05dc \u05d4\u05d7\u05d5\u05ea\u05dd \u05dc\u05e4\u05ea\u05d9\u05d7\u05d4</div>';
+ ov.innerHTML='<div id="letS" style="cursor:pointer;transition:transform .5s,opacity .5s">'+seal+'</div><div style="color:#d8b26a;font-size:18px">'+(LG==='he'?'\u05de\u05db\u05ea\u05d1 \u05d7\u05ea\u05d5\u05dd \u00b7 \u05dc\u05d7\u05e6\u05d5 \u05e2\u05dc \u05d4\u05d7\u05d5\u05ea\u05dd \u05dc\u05e4\u05ea\u05d9\u05d7\u05d4':'Sealed letter \u00b7 tap the seal to open')+'</div>';
  document.body.appendChild(ov);
  ov.querySelector('#letS').onclick=()=>{const s=ov.querySelector('#letS');s.style.transform='scale(1.4) rotate(18deg)';s.style.opacity='0';
   setTimeout(()=>{ov.innerHTML='';const card=document.createElement('div');card.style.cssText='max-width:520px;width:100%;background:#f4ead8;color:#2a1a12;border-radius:6px;padding:28px 24px;box-shadow:0 10px 40px #000a;font-size:21px;line-height:1.6;white-space:pre-wrap';card.dir='auto';card.textContent=w;
    const sm=document.createElement('div');sm.innerHTML=seal.replace('width="150" height="150"','width="64" height="64"');sm.style.marginTop='14px';card.appendChild(sm);
-   const b=document.createElement('button');b.className='pri';b.style.cssText='font-size:17px;padding:12px 18px;border-radius:999px;cursor:pointer';b.textContent='\u05e8\u05d0\u05d5 \u05d0\u05ea \u05d4\u05de\u05d9\u05dc\u05d9\u05dd \u05de\u05d8\u05d9\u05dc\u05d5\u05ea \u05e6\u05dc \u05e2\u05dc \u05d4\u05e9\u05de\u05d9\u05d9\u05dd \u05e9\u05dc\u05db\u05dd';
+   const b=document.createElement('button');b.className='pri';b.style.cssText='font-size:17px;padding:12px 18px;border-radius:999px;cursor:pointer';b.textContent=LG!=='he'?'See your words cast a shadow on your own sky':'\u05e8\u05d0\u05d5 \u05d0\u05ea \u05d4\u05de\u05d9\u05dc\u05d9\u05dd \u05de\u05d8\u05d9\u05dc\u05d5\u05ea \u05e6\u05dc \u05e2\u05dc \u05d4\u05e9\u05de\u05d9\u05d9\u05dd \u05e9\u05dc\u05db\u05dd';
    b.onclick=()=>{ov.style.opacity='0';setTimeout(()=>ov.remove(),600);dirty=true};
    ov.appendChild(card);ov.appendChild(b)},450)}}}
 // send the words sealed (S♥S) to WhatsApp; this page stays open behind it
+if(LG!=='he'){const s=document.querySelector('#sealB span');if(s)s.textContent='Send sealed on WhatsApp'}
 document.getElementById('sealB').onclick=()=>{const w=(t.value||'').trim();if(!w){t.focus();return}
  const bytes=new TextEncoder().encode(w.slice(0,600));let bin='';bytes.forEach(x=>bin+=String.fromCharCode(x));
- const link=location.origin+'/ses/?w='+btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
- const msg=w+'\n\nSES · \u05de\u05d9\u05dc\u05d9\u05dd \u05d7\u05d9\u05d5\u05ea \u05d1\u05e1\u05ea\u05e8 \u2014 \u05de\u05db\u05ea\u05d1 \u05d7\u05ea\u05d5\u05dd:\n'+link;
+ const link=location.origin+(LG==='he'?'/ses/':'/ses/en/')+'?w='+btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+ const msg=LG!=='he'?w+'\n\nSES · Words living in secret — a sealed letter:\n'+link:w+'\n\nSES · \u05de\u05d9\u05dc\u05d9\u05dd \u05d7\u05d9\u05d5\u05ea \u05d1\u05e1\u05ea\u05e8 \u2014 \u05de\u05db\u05ea\u05d1 \u05d7\u05ea\u05d5\u05dd:\n'+link;
  const u='https://wa.me/?text='+encodeURIComponent(msg);
  // phones and in-app browsers (Instagram, TikTok, Facebook) block pop-ups, so go straight to WhatsApp; the page stays one step back
  if(matchMedia('(pointer:coarse)').matches){location.href=u}else{const wnd=window.open(u,'_blank');if(!wnd)location.href=u}};
